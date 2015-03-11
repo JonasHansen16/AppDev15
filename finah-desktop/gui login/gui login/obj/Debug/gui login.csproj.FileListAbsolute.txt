@@ -1,0 +1,13 @@
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\bin\Debug\gui login.exe.config
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\bin\Debug\gui login.exe
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\bin\Debug\gui login.pdb
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login.csprojResolveAssemblyReference.cache
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\MainWindow.baml
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\MainWindow.g.cs
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\App.g.cs
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login_MarkupCompile.cache
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login.g.resources
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui_login.Properties.Resources.resources
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login.csproj.GenerateResource.Cache
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login.exe
+c:\users\11301172\documents\visual studio 2013\Projects\gui login\gui login\obj\Debug\gui login.pdb
