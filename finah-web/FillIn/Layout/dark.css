@@ -1,0 +1,42 @@
+body{
+    background: rgb(45, 45, 48);
+    color: white;
+}
+
+header{
+    background: rgb(0,122,204);
+    border-color: rgb(104,33,122);
+}
+
+a{
+    color: white;
+}
+
+.navcontainer:hover{
+    background: rgb(104,33,122);
+}
+
+.currentnavcontainer{
+    background: rgb(45, 45, 48);
+    border-color: rgb(104,33,122);
+    //border-color: white;
+}
+
+.currentnavcontainer:hover{
+    background: rgb(104,33,122);
+}
+
+.errorbox{
+    background: rgb(9,65,103);
+    //border-color: rgb(104,33,122);
+    border-color: rgb(255, 45, 45);
+}
+
+.error{
+    color: white;
+}
+
+main{
+    background: rgb(9,65,103);
+    border-color: white;
+}
