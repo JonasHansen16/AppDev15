@@ -7,6 +7,10 @@
     </head>
     <body>
         <?php
+        /// START INCLUDES AND REQUIRES \\\
+        
+        require '../res/db.php';
+        
         /// START FUNCTION DECLARATION \\\
         
         /**
@@ -33,7 +37,14 @@
         /// START MAIN SCRIPT \\\
         
         // CONNECT TO DATABASE \\
-        $db = true;
+        $conn = new mysqli($DBHOST, $DBUSER, $DBPASS);
+        
+        if($conn->connect_error)
+            $db = false;
+        else{
+            $conn->select_db($DBNAME);
+            $db = true;
+        }
         
         
         // AUTH USER \\
