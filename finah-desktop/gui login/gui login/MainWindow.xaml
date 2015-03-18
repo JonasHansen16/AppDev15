@@ -4,18 +4,18 @@
         Title="MainWindow" Height="400" Width="600">
     <Grid>
         <Image x:Name="image"  HorizontalAlignment="Left" Height="100" Margin="240,20,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.105,0.209" ToolTip="userimage" Source="C:\Users\11301172\documents\visual studio 2013\Projects\gui login\gui login\user-account.jpg">
-            
-               
+
+
         </Image>
-        <GroupBox Header="Log in" Margin="120,140,120,20">
+        <GroupBox Header="Log in" Margin="100,140,100,20">
             <Canvas>
-                <Button Content="Wachtwoord vergeten" HorizontalAlignment="Left" VerticalAlignment="Top" Width="141" RenderTransformOrigin="-0.19,-7.079" Canvas.Left="103" Canvas.Top="153"/>
-                <Button x:Name="registerButton" Content="Registreren" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.137,0.28" Canvas.Left="39" Canvas.Top="121"/>
+                <Button Content="Wachtwoord vergeten" HorizontalAlignment="Left" VerticalAlignment="Top" Width="141" RenderTransformOrigin="-0.19,-7.079" Canvas.Left="115" Canvas.Top="126"/>
+                <Button x:Name="registerButton" Content="Registreren" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.137,0.28" Canvas.Left="20" Canvas.Top="126"/>
                 <PasswordBox HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="59"/>
-                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="2"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="39" Canvas.Top="9"/>
+                <TextBox HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="13"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="44" Canvas.Top="20"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="44" Canvas.Top="66"/>
-                <Button x:Name="logInButton" Content="log in" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="224" Canvas.Top="116"/>
+                <Button x:Name="logInButton" Content="log in" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="282" Canvas.Top="126"/>
             </Canvas>
         </GroupBox>
 
