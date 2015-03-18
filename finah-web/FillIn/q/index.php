@@ -7,36 +7,142 @@
     </head>
     <body>
         <?php
-        /// START INCLUDES AND REQUIRES \\\
+        /// START GLOBAL INCLUDES AND REQUIRES \\\
         
-        require '../res/db.php';
+        require '../db/db.php';
+        
+        /// START CLASS DECLARATION \\\
+        
+        class question
+        {
+            public $id;
+            public $title;
+            public $text;
+        }
+        
         
         /// START FUNCTION DECLARATION \\\
         
         /**
-         * Checks whether or not the questionnaire specified by the id and hash
-         * parameters exists or not. If the questionnaire exists, $_POST['hid']
-         * will be set for the duration of the session. The current value of 
-         * $_POST['hid'] will be lost upon calling this function.
-         * @param type $id The id of the questionnaire.
-         * @param type $hash The hash of the questionnaire.
-         * @return boolean True if the questionnaire exists, false otherwise.
+         * Checks whether or not the client specified by the id and hash
+         * parameters exists or not. If the client exists, $_POST['hid']
+         * and $_POST['hhash'] will be set for the duration of the session. 
+         * The current value of $_POST['hid'] and $_POST['hhash'] will be lost 
+         * upon calling this function.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @return True if the client exists; false otherwise.
          */
-        function checkHash($id, $hash){
+        function checkHash($id, $hash, mysqli $dbconn){
+            require '../db/qexists.php';
+            
+            $stmt = $dbconn->prepare($EXISTSQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $result = $stmt->execute();
+            
+            if($result->num_rows <= 0)            
+                return false;
+            
+            $_POST['hid'] = $id;
+            $_POST['hhash'] = $hash;
+            return true;
+        }
+        
+        //TODO: ADD START
+        /**
+         * Sets the variables $GLOBALS['done'] and $GLOBALS['start'] if the 
+         * client is done with his questionnaire or if he is at the start of it,
+         * respectively. Will set both of these to TRUE if the requested client
+         * does not exist.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         */
+        function getStartOrDone($id, $hash, mysqli $dbconn){
+            require '../db/qstartdone.php';
+            
+            $stmt = $dbconn->prepare($STARTDONE);
+            $stmt->bind_param("is", $id, $hash);
+            $result = $stmt->execute();
+            
+            // ERROR STATE: REQUESTED CLIENT DOES NOT EXIST
+            if($result->num_rows <= 0)
+            {
+                $GLOBALS['done'] = true;
+                $GLOBALS['start'] = true;
+                return;
+            }            
+            
+            $row = $result->fetch_assoc();
+            
+            $GLOBALS['done'] = $row['done'];
+            $GLOBALS['start'] = false;
+            
             return true;
         }
         
         /**
-         * Returns the next unanswered question of the given questionnaire
-         * @param type $id
+         * Returns the next unanswered question of the given questionnaire.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @return question An object containing the title, the text and the id 
+         * of the first unanswered question. Will be NULL if there are no more
+         * questions.
          */
-        function getNextUnansweredQuestion($id, $hash){
+        function getNextUnansweredQuestion($id, $hash, mysqli $dbconn){
+            require '../db/qnext.php';
             
+            $stmt = $dbconn->prepare($NEXTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $result = $stmt->execute();
+            
+            if($result->num_rows <= 0)            
+                return null;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = new question();
+            $output->id = $row['id'];
+            $output->title = $row['title'];
+            $output->text = $row['text'];
+            return output;
+        }
+        
+        function printDone(){
+            ?>
+        <!--Temporarily an errorbox; change to something prettier later-->
+        <div class="errorbox">
+            <h2 class="errortitle">
+                Gefeliciteerd!
+            </h2>
+            <p class="error">
+                U heeft de vragenlijst successvol vervolledigd.
+            </p>
+        </div>
+            <?php
+        }
+        
+        /**
+         * Sets the 'done' value of the client with id $id and hash $hash to
+         * true.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         */
+        function setDone($id, $hash, mysqli $dbconn){
+            require '../db/qsetdone.php';
+            
+            $stmt = $dbconn->prepare($SETDONE);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
         }
         
         /// START MAIN SCRIPT \\\
         
         // CONNECT TO DATABASE \\
+        
         $conn = new mysqli($DBHOST, $DBUSER, $DBPASS);
         
         if($conn->connect_error)
@@ -52,19 +158,20 @@
         // If we do not have a database connection, we can not proceed.
         if(!$db)
             $pass = false;
-        // If no uid is set, we can not proceed.
-        else if(!isset($_GET['uid']))
+        // If no uid is set, or the uid is not a number or if the hash is not 
+        // set, we can not proceed.
+        else if(!isset($_GET['uid']) || !is_int($_GET['uid']) || !isset($_GET['hash']))
             $pass = false;
-        // If we already have an open session with the current uid, we can
-        // simply continue that session.
-        else if(isset($_POST['hid']) && $_POST['hid'] == $_GET['uid'])
+        // If we already have an open session with the current uid and hash, 
+        // we can simply continue that session.
+        else if(isset($_POST['hid']) && $_POST['hid'] == $_GET['uid'] && isset($_POST['hhash']) && $_POST['hhash'] == $_GET['hash'])
             $pass = true;
-        // If we do not have an open session, yet we do have a uid, we need to
-        // check the validity of the hash. This will also create a user session.
-        else if(isset($_GET['hash']) && checkHash($_GET['uid'], $_GET['hash']))
+        // If we do not have an open session, yet we do have a uid and a hash, 
+        // we need to check the validity of the hash. 
+        // This will also create a user session.
+        else if(checkHash($_GET['uid'], $_GET['hash'], $conn))
             $pass = true;
-        // If we do not have an open session, and either the hash is not set or
-        // the hash lookup fails, we are not authorized to access the questions.
+        // If the hash lookup fails, we are not authorized to access the questions.
         else
             $pass = false;
         ?>
@@ -123,11 +230,52 @@
         </div>
                
         <?php 
-            }
-            
-            // If we are allowed to pass, we display the next question.
-            else if($pass){
+            }            
+            // If we are allowed to pass,
+            else{
+                // we check whether we are done or perhaps just beginning.
+                getStartOrDone($_POST['hid'], $_POST['hhash'], $conn);
                 
+                // If we are done, we display an appropriate message.
+                if($GLOBALS['done']){
+                    printDone();
+                }
+                // Same for if we are beginning.
+                else if($GLOBALS['start']){
+                    //TODO: IMPLEMENT
+                } 
+                // If we are not done, and not starting, we fetch the next 
+                // question.
+                else {
+                    $question = getNextUnansweredQuestion($_POST['hid'], $_POST['hhash'], $conn);
+                    // If we didn't get a new question, that means we're done.
+                    // We update the database and display an appropriate message.
+                    if(is_null($question)){
+                        setDone();
+                        printDone();
+                    }
+                    // Else we finally display the question.
+                    else{
+                        ?>
+        
+        <!--Temporarily an errorbox; change to something prettier later-->
+        <div class="errorbox">
+            <h2 class="errortitle">
+                <?php echo($question->title);?>
+            </h2>
+            <p class="error">
+                <?php echo($question->text);?>
+            </p>
+        </div>
+                        <?php
+                    }
+                }
+                
+                
+                    
+                    
+                
+               
             }
         ?> 
          
