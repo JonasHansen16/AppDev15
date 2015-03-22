@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Machine: 127.0.0.1
--- Gegenereerd op: 10 mrt 2015 om 19:21
+-- Gegenereerd op: 22 mrt 2015 om 16:12
 -- Serverversie: 5.6.17
 -- PHP-versie: 5.5.12
 
@@ -46,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `answer` (
 
 CREATE TABLE IF NOT EXISTS `client` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `start` tinyint(1) NOT NULL,
   `formid` int(11) NOT NULL,
   `age` int(11) DEFAULT NULL,
   `function` varchar(20) DEFAULT NULL,
@@ -67,8 +68,8 @@ CREATE TABLE IF NOT EXISTS `form` (
   `userid` int(11) NOT NULL,
   `memo` varchar(100) DEFAULT NULL,
   `category` varchar(20) DEFAULT NULL,
-  `clientrelatie` varchar(20) DEFAULT NULL,
-  `voltooid` tinyint(1) DEFAULT NULL,
+  `relation` varchar(20) DEFAULT NULL,
+  `completed` tinyint(1) DEFAULT NULL,
   `checkedreport` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `airid` (`airid`),
@@ -83,12 +84,21 @@ CREATE TABLE IF NOT EXISTS `form` (
 
 CREATE TABLE IF NOT EXISTS `question` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `theme` varchar(20) DEFAULT NULL,
+  `theme` varchar(50) DEFAULT NULL,
   `title` varchar(20) DEFAULT NULL,
   `text` varchar(100) DEFAULT NULL,
   `image` blob,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `question`
+--
+
+INSERT INTO `question` (`id`, `theme`, `title`, `text`, `image`) VALUES
+(1, 'Leren en toepassen van kennis', 'title', 'Iets nieuws leren\r\n(zoals het leren\r\nomgaan m\r\net bijv. een nieuwe\r\nGSM, vaatwasmachine of\r\nafstands', NULL),
+(2, 'Leren en toepassen van kennis', 'title', 'Zich kunnen concentreren zonder\r\nte worden afgeleid (zoals het\r\nvolgen van een gesprek in een\r\ndrukk', NULL),
+(3, 'Algemene taken en activiteiten', 'title', 'Uitvoeren van dagelijkse\r\nroutinehandelingen (zoals zich\r\nwassen, ontbijten', NULL);
 
 -- --------------------------------------------------------
 
@@ -116,10 +126,17 @@ CREATE TABLE IF NOT EXISTS `questionnaire` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `title` varchar(30) NOT NULL,
   `description` varchar(100) NOT NULL,
-  `inleiding` varchar(150) NOT NULL,
+  `intro` varchar(150) NOT NULL,
   `enabled` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Gegevens worden geëxporteerd voor tabel `questionnaire`
+--
+
+INSERT INTO `questionnaire` (`id`, `title`, `description`, `intro`, `enabled`) VALUES
+(1, 'Functioneringsinstrument', 'Meetinstrument voor het functioneren van personen met NAH op vlak van activiteiten en participatie\r\n', 'introduction', 1);
 
 -- --------------------------------------------------------
 
@@ -136,6 +153,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `password` varchar(20) NOT NULL,
   `admin` tinyint(1) NOT NULL,
   `enabled` tinyint(1) NOT NULL,
+  `beroep` varchar(25) DEFAULT NULL,
   `denied` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
