@@ -39,9 +39,10 @@
             
             $stmt = $dbconn->prepare($EXISTSQUERY);
             $stmt->bind_param("is", $id, $hash);
-            $result = $stmt->execute();
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            if($result->num_rows <= 0)            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)            
                 return false;
             
             $_POST['hid'] = $id;
@@ -62,12 +63,13 @@
         function getStartOrDone($id, $hash, mysqli $dbconn){
             require '../db/qstartdone.php';
             
-            $stmt = $dbconn->prepare($STARTDONE);
+            $stmt = $dbconn->prepare($STARTDONEQUERY);
             $stmt->bind_param("is", $id, $hash);
-            $result = $stmt->execute();
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            // ERROR STATE: REQUESTED CLIENT DOES NOT EXIST
-            if($result->num_rows <= 0)
+            // ERROR STATE: CLIENT DOES NOT EXIST
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)            
             {
                 $GLOBALS['done'] = true;
                 $GLOBALS['start'] = true;
@@ -78,8 +80,6 @@
             
             $GLOBALS['done'] = $row['done'];
             $GLOBALS['start'] = false;
-            
-            return true;
         }
         
         /**
@@ -96,9 +96,10 @@
             
             $stmt = $dbconn->prepare($NEXTQUERY);
             $stmt->bind_param("is", $id, $hash);
-            $result = $stmt->execute();
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            if($result->num_rows <= 0)            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
                 return null;
             
             $row = $result->fetch_assoc();
@@ -107,7 +108,8 @@
             $output->id = $row['id'];
             $output->title = $row['title'];
             $output->text = $row['text'];
-            return output;
+            
+            return $output;
         }
         
         function printDone(){
@@ -134,7 +136,7 @@
         function setDone($id, $hash, mysqli $dbconn){
             require '../db/qsetdone.php';
             
-            $stmt = $dbconn->prepare($SETDONE);
+            $stmt = $dbconn->prepare($SETDONEQUERY);
             $stmt->bind_param("is", $id, $hash);
             $stmt->execute();
         }
@@ -143,7 +145,7 @@
         
         // CONNECT TO DATABASE \\
         
-        $conn = new mysqli($DBHOST, $DBUSER, $DBPASS);
+        $conn = new mysqli($DBHOST, $DBUSER, $DBPASS, $DBNAME, $DBPORT);
         
         if($conn->connect_error)
             $db = false;
@@ -152,15 +154,15 @@
             $db = true;
         }
         
-        
         // AUTH USER \\
         
         // If we do not have a database connection, we can not proceed.
-        if(!$db)
+        if(!$db) {
             $pass = false;
+        }
         // If no uid is set, or the uid is not a number or if the hash is not 
         // set, we can not proceed.
-        else if(!isset($_GET['uid']) || !is_int($_GET['uid']) || !isset($_GET['hash']))
+        else if(!isset($_GET['uid']) || !is_numeric($_GET['uid']) || !isset($_GET['hash']))
             $pass = false;
         // If we already have an open session with the current uid and hash, 
         // we can simply continue that session.

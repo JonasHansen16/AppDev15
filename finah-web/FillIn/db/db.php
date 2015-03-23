@@ -1,6 +1,7 @@
 <?php
-$DBUSER = "root";
+$DBUSER = "TinkeringTurian";
 $DBPASS = "Drag0nMuffin";
-$DBHOST = "localhost";
+$DBHOST = "127.0.0.1";
 $DBNAME = "nah_remote";
+$DBPORT = 8888;
 ?>
