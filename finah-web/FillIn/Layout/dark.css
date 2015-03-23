@@ -40,3 +40,18 @@ main{
     background: rgb(9,65,103);
     border-color: white;
 }
+
+.questionbox{
+    background: rgb(9,65,103);
+    border-color: white;
+}
+
+label > input + div{ /* Div when not selected */
+    background: rgb(0,122,204);
+    border-color: rgb(9,65,103);
+}
+
+label > input:checked + div{ /* Div when selected */
+    background: rgb(104,33,122);
+    border-color: rgb(0,122,204);
+}

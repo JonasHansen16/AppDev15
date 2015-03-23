@@ -164,6 +164,65 @@ h2{
     margin-bottom: 10px;
 }
 
+.questionbox{
+    margin: auto;
+    margin-top: 20px;
+    min-width: 500px;
+    width: 75%;
+    border: 4px;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+.questiontitle{
+    padding: 20px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.questiontext{
+    padding: 20px;
+    padding-top: 0px;
+    margin: auto;
+    text-align: left;
+    margin-bottom: 20px;
+}
+
+.answercontainer{
+    overflow: hidden;
+    margin: 20px;
+}
+
+.answerbox{
+    width: 150px;
+    margin: 10px;
+    height: 120px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.answerboxlabel{
+    float: left;
+}
+
+label > input{ /* Disable radio buttons */
+  display:none;
+}
+
+label > input + div{ /* Answer box when not selected */
+    cursor: pointer;
+    border: 7px solid;
+    transition: background 5s, border-color 1s;
+}
+
+label > input:checked + div{ /* Div when selected */
+    transition: background 5s, border-color 1s;
+}
+
 @media screen and (max-width: 800px) {
     .titlecontainer{
         padding-right: 5px;
@@ -172,10 +231,4 @@ h2{
     h1{
         font-size: 40px;
     }
-    
-    /*
-    main{
-        margin-left: 26px;
-    }
-    */
 }

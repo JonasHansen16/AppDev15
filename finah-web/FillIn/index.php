@@ -24,7 +24,7 @@ and open the template in the editor.
                 </div>
                 <div class="navcontainer">
                     <a href="./about/">
-                        <img class="navimg" src="./res/aboutbutton.png" alt="home">
+                        <img class="navimg" src="./res/aboutbutton.png" alt="about">
                     </a>
                 </div>
             </nav>

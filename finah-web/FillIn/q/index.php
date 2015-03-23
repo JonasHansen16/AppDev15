@@ -261,13 +261,86 @@
                         ?>
         
         <!--Temporarily an errorbox; change to something prettier later-->
-        <div class="errorbox">
-            <h2 class="errortitle">
+        <div class="questionbox">
+            <h2 class="questiontitle">
                 <?php echo($question->title);?>
             </h2>
-            <p class="error">
+            <p class="questiontext">
                 <?php echo($question->text);?>
             </p>
+            <!-- TODO: IMPLEMENT
+                <img class="questionimage"></img>
+            -->
+            <!-- TODO: IMPLEMENT
+                <progress value="22" max="100"></progress>
+            -->
+            <form action="index.php" method="post">
+                <p>Hoe ervaart u dit onderdeel?</p>
+                <div class="answercontainer">
+                    <label class="answerboxlabel">
+                        <input type="radio" name="primary" value="1" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Verloopt naar wens
+                            </p>
+                        </div>
+                    </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="primary" value="2" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Probleem - niet hinderlijk
+                            </p>
+                        </div>
+                    </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="primary" value="3" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Probleem - hinderlijk voor cliënt
+                            </p>
+                        </div>
+                    </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="primary" value="4" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Probleem - hinderlijk voor mantelzorger
+                            </p>
+                        </div>
+                    </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="primary" value="5" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Probleem - hinderlijk voor beide
+                            </p>
+                        </div>
+                    </label>
+                </div>
+                
+                <p>Wilt u dat we hieraan werken?</p>
+                <div class="answercontainer">
+                    <label class="answerboxlabel">
+                        <input type="radio" name="secondary" value="0" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Wilt u dat we hie
+                            </p>
+                        </div>
+                    </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="secondary" value="1" />
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Probleem - niet hinderlijk
+                            </p>
+                        </div>
+                    </label>
+                </div>
+                
+                <input type="submit">
+            </form>
         </div>
                         <?php
                     }

@@ -18,7 +18,7 @@ echo '2) The full absolute path of the config file that was loaded: ';
 echo php_ini_loaded_file();
 echo ' - If this value is blank, no configuration file is being loaded. To resolve this, create php.ini at the configuration file path in the table below. If all else fails, place it in %ROOT%\windows .';
 echo '<br/>';
-echo '3) Remember that php configuration stuff usually requires a full restart of the PHP engine (read: reboot computer) in order to take effect.';
+echo '3) Remember that php configuration stuff usually requires a full restart of the PHP engine (read: restart server or reboot computer) in order to take effect.';
 echo '<br/>';
 echo '4) Further information, useful fields are configuration file path, loaded configuration file and everything under the header mysqli.';
 echo phpinfo();
