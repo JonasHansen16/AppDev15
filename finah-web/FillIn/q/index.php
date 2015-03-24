@@ -498,7 +498,7 @@
             
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
                 <input type="radio" name="started" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton" value="Vorige vraag">
+                <input type="submit" class="submitbutton" value="Volgende">
             </form>
         </div>
                         
@@ -637,8 +637,10 @@
                 while(toHide.length > 0)
                     toHide[0].className = toHide[0].className.replace(/(?:^|\s)visible(?!\S)/g , ' hidden');
                 
-                document.getElementById('touncheck').checked = false;
-                document.getElementById('tocheck').checked = true;
+                if(document.getElementById('touncheck') !== null)
+                    document.getElementById('touncheck').checked = false;
+                if(document.getElementById('tocheck') !== null)
+                    document.getElementById('tocheck').checked = true;
             }
             
             // Shows the help section
