@@ -29,11 +29,19 @@ a{
 
 .errorbox{
     background: rgb(9,65,103);
-    border-color: rgb(104,33,122);
-    border-color: rgb(255, 45, 45);
+    border-color: rgb(45, 255, 45);
 }
 
 .error{
+    color: white;
+}
+
+.successbox{
+    background: rgb(9,65,103);
+    border-color: rgb(255, 45, 45);
+}
+
+.success{
     color: white;
 }
 

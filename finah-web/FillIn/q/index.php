@@ -1,3 +1,8 @@
+<?php
+    /// BEGIN SESSION \\\
+    session_start();
+?>
+
 <html>
     <head>
         <meta charset="UTF-8">
@@ -25,9 +30,9 @@
         
         /**
          * Checks whether or not the client specified by the id and hash
-         * parameters exists or not. If the client exists, $_POST['hid']
-         * and $_POST['hhash'] will be set for the duration of the session. 
-         * The current value of $_POST['hid'] and $_POST['hhash'] will be lost 
+         * parameters exists or not. If the client exists, $_SESSION['hid']
+         * and $_SESSION['hhash'] will be set for the duration of the session. 
+         * The current value of $_SESSION['hid'] and $_SESSION['hhash'] will be lost 
          * upon calling this function.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
@@ -45,8 +50,8 @@
             if($result === FALSE || !is_object($result) || $result->num_rows <= 0)            
                 return false;
             
-            $_POST['hid'] = $id;
-            $_POST['hhash'] = $hash;
+            $_SESSION['hid'] = $id;
+            $_SESSION['hhash'] = $hash;
             return true;
         }
         
@@ -156,23 +161,19 @@
             require '../db/qinsertanswer.php';
             require '../db/qinvalidateanswers.php';
             
-            // Conversion stuff. $help is actually a string, so we convert it to
-            // a boolean
-            //$aid = ($help == '1'? true : false);
-            // Nevermind, MySQL stores booleans as tinyints anyway.
-            
             // CURRENTLY THIS WORKS WITH SIMPLE UPDATES AND INSERTS
             // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
             // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
             
-            // First we invalidate all other answers.
+            // First we invalidate all other answers by this client for this 
+            // question.
             $updstmt = $dbconn->prepare($INVALIDATEANSWERSQUERY);
             $updstmt->bind_param("ii", $id, $qid);
             $updstmt->execute();
             
             // Then we insert our new answer.
             $insstmt = $dbconn->prepare($INSERTANSWERQUERY);
-            $insstmt->bind_param("iii", $id, $qid, $score, $aid);
+            $insstmt->bind_param("iiii", $id, $qid, $score, $help);
             $insstmt->execute();
         } 
         
@@ -223,7 +224,7 @@
             $pass = false;
         // If we already have an open session with the current uid and hash, 
         // we can simply continue that session.
-        else if(isset($_POST['hid']) && $_POST['hid'] == $_GET['uid'] && isset($_POST['hhash']) && $_POST['hhash'] == $_GET['hash'])
+        else if(isset($_SESSION['hid']) && $_SESSION['hid'] == $_GET['uid'] && isset($_SESSION['hhash']) && $_SESSION['hhash'] == $_GET['hash'])
             $pass = true;
         // If we do not have an open session, yet we do have a uid and a hash, 
         // we need to check the validity of the hash. 
@@ -234,16 +235,15 @@
         else
             $pass = false;
         
-        
         // If we are authorized, and we have an answer to submit and that answer is valid
-        if($pass && isset($_POST['hqid']) && isset($_POST['primaryanswer']) && isset($_POST['secondaryanswer']) && validateAnswerInput($_POST['primaryanswer'], $_POST['secondaryanswer']))
+        if($pass && isset($_SESSION['hqid']) && isset($_POST['primaryanswer']) && isset($_POST['secondaryanswer']) && validateAnswerInput($_POST['primaryanswer'], $_POST['secondaryanswer']))
             // We submit the answer to the database
-            insertAnswer($_POST['hid'], $_POST['hhash'], $conn, $_POST['hqid'] && $_POST['primaryanswer'], $_POST['secondaryanswer']); 
+            insertAnswer($_SESSION['hid'], $_SESSION['hhash'], $conn, $_SESSION['hqid'], $_POST['primaryanswer'], $_POST['secondaryanswer']); 
         
         // Regardless of whether the answer was submitted or not, we unset the data.
         unset($_POST['primaryanswer']);
         unset($_POST['secondaryanswer']);
-        unset($_POST['hqid']);
+        unset($_SESSION['hqid']);
         ?>
         
         <header>
@@ -304,7 +304,7 @@
             // If we are allowed to pass,
             else{
                 // we check whether we are done or perhaps just beginning.
-                getStartOrDone($_POST['hid'], $_POST['hhash'], $conn);
+                getStartOrDone($_SESSION['hid'], $_SESSION['hhash'], $conn);
                 
                 // If we are done, we display an appropriate message.
                 if($GLOBALS['done']){
@@ -317,17 +317,17 @@
                 // If we are not done, and not starting, we fetch the next 
                 // question.
                 else {
-                    $question = getNextUnansweredQuestion($_POST['hid'], $_POST['hhash'], $conn);
+                    $question = getNextUnansweredQuestion($_SESSION['hid'], $_SESSION['hhash'], $conn);
                     // If we didn't get a new question, that means we're done.
                     // We update the database and display an appropriate message.
                     if(is_null($question)){
-                        setDone();
+                        setDone($_SESSION['hid'], $_SESSION['hhash'], $conn);
                         printDone();
                     }
                     // Else we set our hidden question id 
                     // and finally display the question
                     else{
-                        $_POST['hqid'] = $question->id;
+                        $_SESSION['hqid'] = $question->id;
                         ?>
         
         <!--Temporarily an errorbox; change to something prettier later-->
@@ -344,11 +344,11 @@
             <!-- TODO: IMPLEMENT
                 <progress value="22" max="100"></progress>
             -->
-            <form action="index.php?uid=<?php echo $_POST['hid']; ?>&hash=<?php echo $_POST['hhash']; ?>" method="post">
+            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
                 
                 <p>Hoe ervaart u dit onderdeel?</p>
                 <div class="answercontainer" id="primary">
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel" onclick="hide()">
                         <input type="radio" name="primaryanswer" value="1" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -356,7 +356,7 @@
                             </p>
                         </div>
                     </label>
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel" onclick="hide()">
                         <input type="radio" name="primaryanswer" value="2" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -364,7 +364,7 @@
                             </p>
                         </div>
                     </label>
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel" onclick="show()">
                         <input type="radio" name="primaryanswer" value="3" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -372,7 +372,7 @@
                             </p>
                         </div>
                     </label>
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel" onclick="show()">
                         <input type="radio" name="primaryanswer" value="4" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -380,7 +380,7 @@
                             </p>
                         </div>
                     </label>
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel" onclick="show()">
                         <input type="radio" name="primaryanswer" value="5" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -390,9 +390,9 @@
                     </label>
                 </div>
                 
-                <p>Wilt u dat we hieraan werken?</p>
+                <p class="visible">Wilt u dat we hieraan werken?</p>
                 <div class="answercontainer" id="secondary">
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel visible">
                         <input type="radio" name="secondaryanswer" value="1" />
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -400,7 +400,7 @@
                             </p>
                         </div>
                     </label>
-                    <label class="answerboxlabel">
+                    <label class="answerboxlabel visible">
                         <input type="radio" name="secondaryanswer" value="0"  checked="checked"/>
                         <div class="answerbox">
                             <p class="answerboxtext">
@@ -420,6 +420,27 @@
             }
         ?> 
          
-
+        <script>
+            // Hides the help section
+            function hide(){
+                var toHide = document.getElementsByClassName("visible");
+                for(element in toHide){
+                    element.classList.remove("visible");
+                    element.classList.add("hidden");
+                }
+            }
+            
+            // Shows the help section
+            function show(){
+                var toHide = document.getElementsByClassName("hidden");
+                for(element in toHide){
+                    element.classList.remove("hidden");
+                    element.classList.add("visible");
+                }
+            }
+            
+            //Hide the help section
+            hide();
+        </script>
     </body>
 </html>

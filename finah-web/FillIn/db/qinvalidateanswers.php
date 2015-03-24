@@ -5,7 +5,7 @@
 
 $INVALIDATEANSWERSQUERY = 
        "UPDATE answer
-        SET valid = FALSE
+        SET final = FALSE
         WHERE clientid = ? AND qid = ?
         ;";
 ?>
