@@ -1,4 +1,3 @@
 <?php
-$STARTDONEQUERY = "SELECT done FROM client WHERE id = ? AND hash = ?";
-//TOADD: START
+$STARTDONEQUERY = "SELECT start, done FROM client WHERE id = ? AND hash = ? ;";
 ?>

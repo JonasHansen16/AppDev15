@@ -29,7 +29,7 @@ a{
 
 .errorbox{
     background: rgb(9,65,103);
-    border-color: rgb(45, 255, 45);
+    border-color: rgb(255, 45, 45);
 }
 
 .error{
@@ -38,7 +38,7 @@ a{
 
 .successbox{
     background: rgb(9,65,103);
-    border-color: rgb(255, 45, 45);
+    border-color: rgb(45, 255, 45);
 }
 
 .success{

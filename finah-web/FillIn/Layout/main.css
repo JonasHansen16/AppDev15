@@ -171,8 +171,6 @@ main{
     margin-top: 20px;
     min-width: 500px;
     width: 50%;
-    border: 4px;
-    //border-style: solid;
     border-radius: 10px;
     padding: 20px;
 }
@@ -193,8 +191,6 @@ h2{
     margin-top: 20px;
     min-width: 500px;
     width: 75%;
-    border: 4px;
-    //border-style: solid;
     border-radius: 10px;
     padding: 20px;
 }
@@ -244,11 +240,27 @@ h2{
 }
 
 .visible{
+    opacity: 1;
     visibility: visible;
+    transition: opacity 1s;
 }
 
 .hidden{
+    opacity: 0;
     visibility: hidden;
+    transition: visibility 1s, opacity 1s;
+}
+
+.nodisplay{
+    display: none;
+}
+
+.preload *{
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
 }
 
 #secondary{
@@ -262,11 +274,11 @@ label > input{ /* Disable radio buttons */
 label > input + div{ /* Answer box when not selected */
     cursor: pointer;
     border: 7px solid;
-    transition: background 5s, border-color 1s;
+    transition: background 2s, border-color 1s;
 }
 
 label > input:checked + div{ /* Div when selected */
-    transition: background 5s, border-color 1s;
+    transition: background 2s, border-color 1s;
 }
 
 @media screen and (max-width: 800px) {
