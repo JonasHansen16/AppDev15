@@ -274,9 +274,10 @@
             <!-- TODO: IMPLEMENT
                 <progress value="22" max="100"></progress>
             -->
-            <form action="index.php" method="post">
+            <form action="index.php?uid=<?php echo $_POST['hid']; ?>&hash=<?php echo $_POST['hhash']; ?>" method="post">
+                
                 <p>Hoe ervaart u dit onderdeel?</p>
-                <div class="answercontainer">
+                <div class="answercontainer" id="primary">
                     <label class="answerboxlabel">
                         <input type="radio" name="primary" value="1" />
                         <div class="answerbox">
@@ -320,26 +321,27 @@
                 </div>
                 
                 <p>Wilt u dat we hieraan werken?</p>
-                <div class="answercontainer">
-                    <label class="answerboxlabel">
-                        <input type="radio" name="secondary" value="0" />
-                        <div class="answerbox">
-                            <p class="answerboxtext">
-                                Wilt u dat we hie
-                            </p>
-                        </div>
-                    </label>
+                <div class="answercontainer" id="secondary">
                     <label class="answerboxlabel">
                         <input type="radio" name="secondary" value="1" />
                         <div class="answerbox">
                             <p class="answerboxtext">
-                                Probleem - niet hinderlijk
+                                Ja
                             </p>
                         </div>
                     </label>
+                    <label class="answerboxlabel">
+                        <input type="radio" name="secondary" value="0"  checked="checked"/>
+                        <div class="answerbox">
+                            <p class="answerboxtext">
+                                Nee
+                            </p>
+                        </div>
+                    </label>
+                    
+                    <input type="submit" class="submitbutton" value="Volgende vraag">
                 </div>
                 
-                <input type="submit">
             </form>
         </div>
                         <?php

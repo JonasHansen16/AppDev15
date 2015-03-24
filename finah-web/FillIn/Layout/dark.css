@@ -1,5 +1,6 @@
 body{
     background: rgb(45, 45, 48);
+    //background: rgb(9,65,103);
     color: white;
 }
 
@@ -28,7 +29,7 @@ a{
 
 .errorbox{
     background: rgb(9,65,103);
-    //border-color: rgb(104,33,122);
+    border-color: rgb(104,33,122);
     border-color: rgb(255, 45, 45);
 }
 
@@ -54,4 +55,10 @@ label > input + div{ /* Div when not selected */
 label > input:checked + div{ /* Div when selected */
     background: rgb(104,33,122);
     border-color: rgb(0,122,204);
+}
+
+.submitbutton{
+    background: rgb(104,33,122);
+    border-color: rgb(9,65,103);
+    color: white;
 }
