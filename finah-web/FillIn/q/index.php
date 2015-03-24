@@ -10,7 +10,7 @@
         <link rel="stylesheet" href="../layout/main.css">
         <link rel="stylesheet" href="../layout/dark.css">
     </head>
-    <body>
+    <body onload="hide()">
         <?php
         /// START GLOBAL INCLUDES AND REQUIRES \\\
         
@@ -423,24 +423,21 @@
         <script>
             // Hides the help section
             function hide(){
-                var toHide = document.getElementsByClassName("visible");
-                for(element in toHide){
-                    element.classList.remove("visible");
-                    element.classList.add("hidden");
-                }
+                // Run through all elements with class 'visible' and give them
+                // class 'hidden' instead
+                var toHide = document.getElementsByClassName('visible');
+                while(toHide.length > 0)
+                    toHide[0].className = toHide[0].className.replace(/(?:^|\s)visible(?!\S)/g , ' hidden');
             }
             
             // Shows the help section
             function show(){
-                var toHide = document.getElementsByClassName("hidden");
-                for(element in toHide){
-                    element.classList.remove("hidden");
-                    element.classList.add("visible");
-                }
+                // Run through all elements with class 'hidden' and give them
+                // class 'visible' instead
+                var toShow = document.getElementsByClassName('hidden');
+                while(toShow.length > 0)
+                    toShow[0].className = toShow[0].className.replace(/(?:^|\s)hidden(?!\S)/g , ' visible');
             }
-            
-            //Hide the help section
-            hide();
         </script>
     </body>
 </html>
