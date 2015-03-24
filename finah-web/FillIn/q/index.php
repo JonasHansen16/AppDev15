@@ -141,6 +141,58 @@
             $stmt->execute();
         }
         
+        /**
+         * Inserts an answer into the database, invalidating all other answers
+         * for the same question by the same user by setting their 'final' value
+         * to false.
+         * @param type $id The id of the client.
+         * @param type $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @param type $qid The id of the question to insert.
+         * @param type $score The score of the question to insert.
+         * @param type $help Whether or not the client has requested aid.
+         */
+        function insertAnswer($id, $hash, mysqli $dbconn, $qid, $score, $help){
+            require '../db/qinsertanswer.php';
+            require '../db/qinvalidateanswers.php';
+            
+            // CURRENTLY THIS WORKS WITH SIMPLE UPDATES AND INSERTS
+            // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
+            // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
+            
+            // First we invalidate all other answers.
+            $updstmt = $dbconn->prepare($INVALIDATEANSWERSQUERY);
+            $updstmt->bind_param("ii", $id, $qid);
+            $updstmt->execute();
+            
+            // Then we insert our new answer.
+            $insstmt = $dbconn->prepare($INSERTANSWERQUERY);
+            $insstmt->bind_param("ii", $id, $qid);
+            $insstmt->execute();
+        } 
+        
+        /**
+         * Validates the input $score and $help following these rules:
+         * $score must be numeric and be within the range [1,5]
+         * $help must be numeric and be within the range [0,1]
+         * @param type $score The first variable to validate.
+         * @param type $help The second variable to validate.
+         * @return boolean True if all of the input validated according to the
+         * rules, false otherwise.
+         */
+        function validateAnswerInput($score, $help){
+            if(!is_numeric($score) || !is_numeric($help))
+                return false;
+            
+            if($score < 1 || $score > 5)
+                return false;
+            
+            if($help < 0 || $help > 1)
+                return false;
+            
+            return true;
+        }
+        
         /// START MAIN SCRIPT \\\
         
         // CONNECT TO DATABASE \\
@@ -176,6 +228,17 @@
         // If the hash lookup fails, we are not authorized to access the questions.
         else
             $pass = false;
+        
+        
+        // If we are authorized, and we have an answer to submit and that answer is valid
+        if($pass && isset($_POST['hqid']) && isset($_POST['primaryanswer']) && isset($_POST['secondaryanswer']) && validateAnswerInput($_POST['primaryanswer'], $_POST['secondaryanswer']))
+            // We submit the answer to the database
+            insertAnswer($_POST['hid'], $_POST['hhash'], $conn, $_POST['hqid'] && $_POST['primaryanswer'], $_POST['secondaryanswer']); 
+        
+        // Regardless of whether the answer was submitted or not, we unset the data.
+        unset($_POST['primaryanswer']);
+        unset($_POST['secondaryanswer']);
+        unset($_POST['hqid']);
         ?>
         
         <header>
@@ -256,8 +319,10 @@
                         setDone();
                         printDone();
                     }
-                    // Else we finally display the question.
+                    // Else we set our hidden question id 
+                    // and finally display the question
                     else{
+                        $_POST['hqid'] = $question->id;
                         ?>
         
         <!--Temporarily an errorbox; change to something prettier later-->
@@ -279,7 +344,7 @@
                 <p>Hoe ervaart u dit onderdeel?</p>
                 <div class="answercontainer" id="primary">
                     <label class="answerboxlabel">
-                        <input type="radio" name="primary" value="1" />
+                        <input type="radio" name="primaryanswer" value="1" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Verloopt naar wens
@@ -287,7 +352,7 @@
                         </div>
                     </label>
                     <label class="answerboxlabel">
-                        <input type="radio" name="primary" value="2" />
+                        <input type="radio" name="primaryanswer" value="2" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Probleem - niet hinderlijk
@@ -295,7 +360,7 @@
                         </div>
                     </label>
                     <label class="answerboxlabel">
-                        <input type="radio" name="primary" value="3" />
+                        <input type="radio" name="primaryanswer" value="3" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Probleem - hinderlijk voor cliënt
@@ -303,7 +368,7 @@
                         </div>
                     </label>
                     <label class="answerboxlabel">
-                        <input type="radio" name="primary" value="4" />
+                        <input type="radio" name="primaryanswer" value="4" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Probleem - hinderlijk voor mantelzorger
@@ -311,7 +376,7 @@
                         </div>
                     </label>
                     <label class="answerboxlabel">
-                        <input type="radio" name="primary" value="5" />
+                        <input type="radio" name="primaryanswer" value="5" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Probleem - hinderlijk voor beide
@@ -323,7 +388,7 @@
                 <p>Wilt u dat we hieraan werken?</p>
                 <div class="answercontainer" id="secondary">
                     <label class="answerboxlabel">
-                        <input type="radio" name="secondary" value="1" />
+                        <input type="radio" name="secondaryanswer" value="1" />
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Ja
@@ -331,7 +396,7 @@
                         </div>
                     </label>
                     <label class="answerboxlabel">
-                        <input type="radio" name="secondary" value="0"  checked="checked"/>
+                        <input type="radio" name="secondaryanswer" value="0"  checked="checked"/>
                         <div class="answerbox">
                             <p class="answerboxtext">
                                 Nee
@@ -346,13 +411,7 @@
         </div>
                         <?php
                     }
-                }
-                
-                
-                    
-                    
-                
-               
+                }  
             }
         ?> 
          
