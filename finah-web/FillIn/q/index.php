@@ -156,6 +156,11 @@
             require '../db/qinsertanswer.php';
             require '../db/qinvalidateanswers.php';
             
+            // Conversion stuff. $help is actually a string, so we convert it to
+            // a boolean
+            //$aid = ($help == '1'? true : false);
+            // Nevermind, MySQL stores booleans as tinyints anyway.
+            
             // CURRENTLY THIS WORKS WITH SIMPLE UPDATES AND INSERTS
             // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
             // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
@@ -167,7 +172,7 @@
             
             // Then we insert our new answer.
             $insstmt = $dbconn->prepare($INSERTANSWERQUERY);
-            $insstmt->bind_param("ii", $id, $qid);
+            $insstmt->bind_param("iii", $id, $qid, $score, $aid);
             $insstmt->execute();
         } 
         

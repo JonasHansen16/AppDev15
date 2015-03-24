@@ -4,7 +4,7 @@
     // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
 
     $INSERTANSWERQUERY = 
-           "INSERT INTO answer (qid, clientid, score, help, final) 
+           "INSERT INTO answer (clientid, qid, score, help, final) 
             VALUES (?, ?, ?, ?, TRUE) 
             ;";
 ?>
