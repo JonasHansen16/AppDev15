@@ -24,15 +24,9 @@ namespace gui_login
         {
             InitializeComponent();
         }
-        private void nummers_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!char.IsLetter(e.Text, e.Text.Length - 1))
-            {
-                e.Handled = true;
-            }
-        }
 
-        private void emailvalidation(object sender, TextCompositionEventArgs e)
+
+        private void emailvalidation(object sender, System.EventArgs e)
         {
             if (textBoxEmail.Text.Length == 0)
             {
@@ -48,6 +42,14 @@ namespace gui_login
         }
 
         private void nummers_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsLetter(e.Text, e.Text.Length - 1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void nummers_PreviewTextInputTweede(object sender, TextCompositionEventArgs e)
         {
             if (!char.IsLetter(e.Text, e.Text.Length - 1))
             {
@@ -74,6 +76,6 @@ namespace gui_login
             }
         }
 
-        
+
     }
 }
