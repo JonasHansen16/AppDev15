@@ -36,7 +36,7 @@ namespace gui_login
             else if (!Regex.IsMatch(textBoxEmail.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
                 textBoxEmail.ToolTip = "Enter a valid email.";
-                textBoxEmail.Select(0, textBoxEmail.Text.Length);
+                textBoxEmail.Select(0, textBoxEmail.Text.Length-1);
                 textBoxEmail.Focus();
             }
         }
