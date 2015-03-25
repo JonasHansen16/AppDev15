@@ -24,15 +24,9 @@ namespace gui_login
         {
             InitializeComponent();
         }
-        private void nummers_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!char.IsLetter(e.Text, e.Text.Length - 1))
-            {
-                e.Handled = true;
-            }
-        }
 
-        private void emailvalidation(object sender, TextCompositionEventArgs e)
+
+        private void emailvalidation(object sender, System.EventArgs e)
         {
             if (textBoxEmail.Text.Length == 0)
             {
@@ -42,12 +36,20 @@ namespace gui_login
             else if (!Regex.IsMatch(textBoxEmail.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
                 textBoxEmail.ToolTip = "Enter a valid email.";
-                textBoxEmail.Select(0, textBoxEmail.Text.Length);
+                textBoxEmail.Select(0, textBoxEmail.Text.Length-1);
                 textBoxEmail.Focus();
             }
         }
 
         private void nummers_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsLetter(e.Text, e.Text.Length - 1))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void nummers_PreviewTextInputTweede(object sender, TextCompositionEventArgs e)
         {
             if (!char.IsLetter(e.Text, e.Text.Length - 1))
             {
@@ -74,6 +76,6 @@ namespace gui_login
             }
         }
 
-        
+
     }
 }
