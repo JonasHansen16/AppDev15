@@ -631,12 +631,16 @@
             </p>
             <progress  class="progressbar" value="<?php echo $currQuestion; ?>" max="<?php echo $total; ?>" ></progress>
             
-            <h2 class="questiontitle">
-                <?php echo($question->title);?>
-            </h2>
-            <p class="questiontext">
-                <?php echo($question->text);?>
-            </p>
+            <div class="question">
+                <div class="questiontextwrapper">
+                    <h2 class="questiontitle">
+                        <?php echo($question->title);?>
+                    </h2>
+                    <p class="questiontext">
+                        <?php echo($question->text);?>
+                    </p>
+                </div>
+            </div>
             <?php
                     if($question !== NULL)
                     {
