@@ -1,0 +1,20 @@
+INSERT INTO questionnaire (title, description, intro, enabled) VALUES ('Functioneringsinstrument','Meetinstrument voor het functioneren van personen met NAH op vlak van activiteiten en participatie
+vanuit het standpunt van de persoon met NAH en zijn/haar mantelzorger','introduction', true);
+INSERT INTO question (theme, title, text) VALUES ('Leren en toepassen van kennis','title','Iets nieuws leren
+(zoals het leren
+omgaan m
+et bijv. een nieuwe
+GSM, vaatwasmachine of
+afstandsbediening; leren ikv een
+hobby
+)');
+INSERT INTO question (theme, title, text) VALUES ('Leren en toepassen van kennis','title','Zich kunnen concentreren zonder
+te worden afgeleid (zoals het
+volgen van een gesprek in een
+drukke omgeving, of het volgen
+van een Tv
+-
+programma)');
+INSERT INTO question (theme, title, text) VALUES ('Algemene taken en activiteiten','title','Uitvoeren van dagelijkse
+routinehandelingen (zoals zich
+wassen, ontbijten');
