@@ -503,6 +503,7 @@
                 }
                 // Same for if we are beginning.
                 else if($GLOBALS['start']){
+                    $intro = getIntro($_SESSION['hid'], $_SESSION['hhash'], $conn);
         ?>
         <div class="questionbox">
             <h2 class="questiontitle">
@@ -550,6 +551,20 @@
                         is om terug te keren naar dit scherm. Dat doet u door op de
                         'Instructies'-knop te klikken.
                     </p>
+                    <?php 
+                        if($intro != null) 
+                        {
+                    ?>
+                    <p class="questiontext">
+                        De titel van de vragenlijst die u moet invullen is 
+                        <?php echo $intro->title; ?>.
+                    </p>
+                    <p class="questiontext">
+                        <?php echo $intro->text; ?>
+                    </p>
+                    <?php
+                        }
+                    ?>
                 </div>
                 <div class="introright">
                     <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" class="introform">
