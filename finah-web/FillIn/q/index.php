@@ -344,6 +344,34 @@
         }
         
         /**
+         * Returns the image belonging to a question.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @param $qid The id of the question.
+         * @return int The image of the question, or null if no such question
+         * exists or if the user does not have access to that question. WARNING:
+         * this image still needs to be encoded in base64.
+         */
+        function getImage($id, $hash, mysqli $dbconn, $qid){
+            require '../db/qanswercount.php';
+            
+            $stmt = $dbconn->prepare($GETIMAGEQUERY);
+            $stmt->bind_param("isi", $id, $hash, $qid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
+                return NULL;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = $row['image'];
+            
+            return $output;
+        }
+        
+        /**
          * Validates the input $score and $help following these rules:
          * $score must be numeric and be within the range [1,5]
          * $help must be numeric and be within the range [0,1]
