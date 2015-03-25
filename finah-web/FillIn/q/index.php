@@ -354,7 +354,7 @@
          * this image still needs to be encoded in base64.
          */
         function getImage($id, $hash, mysqli $dbconn, $qid){
-            require '../db/qanswercount.php';
+            require '../db/qgetimage.php';
             
             $stmt = $dbconn->prepare($GETIMAGEQUERY);
             $stmt->bind_param("isi", $id, $hash, $qid);
@@ -622,6 +622,7 @@
                         $_SESSION['hqid'] = $question->id;
                         $currQuestion = answerCount($_SESSION['hid'], $_SESSION['hhash'], $conn) + 1;
                         $total = totalCount($_SESSION['hid'], $_SESSION['hhash'], $conn);
+                        $image = getImage($_SESSION['hid'], $_SESSION['hhash'], $conn, $_SESSION['hqid']);
                         ?>
  
         <div class="questionbox">
@@ -636,11 +637,16 @@
             <p class="questiontext">
                 <?php echo($question->text);?>
             </p>
+            <?php
+                    if($question !== NULL)
+                    {
+            ?>
             
-            <!-- TODO: IMPLEMENT
-                <img class="questionimage"></img>
-            -->
             
+            <img class="questionimage" src="data:image/jpeg;base64,<?php echo(base64_encode($image));?>"></img>
+            <?php
+                    }
+            ?>
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
                     <?php 
                     if($currQuestion == $total)
