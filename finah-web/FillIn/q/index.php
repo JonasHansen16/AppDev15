@@ -511,19 +511,19 @@
             </h2>
             <div class="intro">
                 <div class="introtext">
-                    <p class="questiontext">
+                    <p class="starttext">
                         Welkom bij uw online vragenlijst! Hieronder volgt eerst even wat
                         uitleg over hoe het invullen van een vragenlijst werkt. Daarna
                         volgt specifieke informatie over de vragenlijst die uw
                         hulpverlener voor u heeft uitgekozen.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         Het invullen van een online vragenlijst is vrij gemakkelijk. Na
                         hieronder op 'Volgende' te klikken, zal u de eerste vraag te 
                         zien krijgen. Neem de tijd om deze op uw eigen tempo te lezen.
                         Er is helemaal geen tijdsdruk.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         Na dat u de vraag hebt gelezen, is het de bedoeling dat u het 
                         meest gepaste van de vijf antwoorden kiest. Dit doet u door
                         simpelweg op het antwoord te klikken. Het huidig gekozen
@@ -532,19 +532,19 @@
                         dit nog altijd veranderen door simpelweg op een ander antwoord
                         te klikken.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         Indien u aangeeft dat iets hinderlijk is voor u of uw 
                         mantelzorger, dan krijgt u ook de mogelijkheid om te vragen dat
                         hier aan gewerkt moet worden. U kan dit aangeven net zoals u een
                         vraag beantwoordt. Standaard staat dit op 'Nee'.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         Om een vraag in te dienen klikt u simpelweg op de knop 'Volgende
                         vraag'. Indien u per ongeluk een vergissing heeft gemaakt, geen
                         probleem! U kan altijd op 'Vorige vraag' klikken om terug te
                         keren naar de vorige vraag, en deze opnieuw oplossen.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         Verder kan u ook nog volledig opnieuw beginnen met de
                         vragenlijst door op "Herstarten" te klikken. Merk op dat u dan
                         ook nog de bevestiging moet accepteren. Een laatste mogelijkheid
@@ -555,22 +555,22 @@
                         if($intro != null) 
                         {
                     ?>
-                    <p class="questiontext">
+                    <p class="starttext">
                         De titel van de vragenlijst die u moet invullen is 
                         <?php echo $intro->title; ?>.
                     </p>
-                    <p class="questiontext">
+                    <p class="starttext">
                         <?php echo $intro->text; ?>
                     </p>
                     <?php
                         }
                     ?>
                 </div>
-                <div class="introright">
+                <div class="introbutton">
                     <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" class="introform">
-                    <input type="radio" name="started" value="1" class="nodisplay" checked="checked"/>
-                    <input type="submit" class="submitbutton" value="Volgende">
-            </form>
+                        <input type="radio" name="started" value="1" class="nodisplay" checked="checked"/>
+                        <input type="submit" class="submitbutton" value="Volgende">
+                    </form>
                 </div>
             </div>
         </div>
@@ -691,21 +691,23 @@
                 </div>
                 
             </form>
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
-                  onsubmit="return confirm('Bent u zeker dat u opnieuw wilt beginnen? Uw voortgang wordt gewist.')">
-                <input type="radio" name="reset" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton auxcontrol darkred" value="Herstarten">
-            </form>
+            <div class="auxcontrolbox">
+                <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
+                      onsubmit="return confirm('Bent u zeker dat u opnieuw wilt beginnen? Uw voortgang wordt gewist.')">
+                    <input type="radio" name="reset" value="1" class="nodisplay" checked="checked"/>
+                    <input type="submit" class="submitbutton auxcontrol lightblue" value="Herstarten">
+                </form>
 
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
-                <input type="radio" name="previous" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton auxcontrol red" value="Vorige vraag">
-            </form>
+                <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
+                    <input type="radio" name="previous" value="1" class="nodisplay" checked="checked"/>
+                    <input type="submit" class="submitbutton auxcontrol purple" value="Vorige vraag">
+                </form>
 
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
-                <input type="radio" name="instructions" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton auxcontrol lightred" value="Instructies">
-            </form>
+                <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
+                    <input type="radio" name="instructions" value="1" class="nodisplay" checked="checked"/>
+                    <input type="submit" class="submitbutton auxcontrol lightblue" value="Instructies">
+                </form>
+            </div>
         </div>
                         <?php
                     }

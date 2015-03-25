@@ -71,20 +71,20 @@ label > input:checked + div{ /* Div when selected */
     color: white;
 }
 
-.darkred{
-    background: rgb(115,17,21);
+.lightblue{
+    background: rgb(0,122,204);
 }
 
-.red{
-    background: rgb(125,35,20);
-}
-
-.lightred{
-    background: rgb(155,47,16);
+.purple{
+   background: rgb(104,33,122);
 }
 
 .submitbutton:hover{
     background: rgb(0,122,204);
+}
+
+.lightblue:hover{
+    background: rgb(104,33,122) !important;
 }
 
 .progressbar{

@@ -213,6 +213,14 @@ h2{
     maximum-width: 500px;
 }
 
+.starttext{
+    display: block;
+    padding: 20px;
+    padding-top: 0px;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
 .progresstext{
     float: right;
     maximum-width: 100px;
@@ -259,13 +267,10 @@ h2{
 }
 
 .introtext{
-    max-width: 600px;
     min-width: 400px;
-    float: left;
 }
 
-.introright{
-    float: left;
+.introbutton{
     min-width: 300px;
 }
 
@@ -289,9 +294,15 @@ h2{
     display: none;
 }
 
+.auxcontrolbox{
+    margin: auto;
+    max-width: 600px;
+}
 .auxcontrol{
     float: left !important;
     margin-top: 20px;
+    height: 50px;
+    width: 200px;
 }
 
 .preload *{
