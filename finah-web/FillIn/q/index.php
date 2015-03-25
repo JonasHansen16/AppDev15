@@ -344,6 +344,34 @@
         }
         
         /**
+         * Returns the image belonging to a question.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @param $qid The id of the question.
+         * @return int The image of the question, or null if no such question
+         * exists or if the user does not have access to that question. WARNING:
+         * this image still needs to be encoded in base64.
+         */
+        function getImage($id, $hash, mysqli $dbconn, $qid){
+            require '../db/qgetimage.php';
+            
+            $stmt = $dbconn->prepare($GETIMAGEQUERY);
+            $stmt->bind_param("isi", $id, $hash, $qid);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
+                return NULL;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = $row['image'];
+            
+            return $output;
+        }
+        
+        /**
          * Validates the input $score and $help following these rules:
          * $score must be numeric and be within the range [1,5]
          * $help must be numeric and be within the range [0,1]
@@ -594,6 +622,7 @@
                         $_SESSION['hqid'] = $question->id;
                         $currQuestion = answerCount($_SESSION['hid'], $_SESSION['hhash'], $conn) + 1;
                         $total = totalCount($_SESSION['hid'], $_SESSION['hhash'], $conn);
+                        $image = getImage($_SESSION['hid'], $_SESSION['hhash'], $conn, $_SESSION['hqid']);
                         ?>
  
         <div class="questionbox">
@@ -602,16 +631,27 @@
             </p>
             <progress  class="progressbar" value="<?php echo $currQuestion; ?>" max="<?php echo $total; ?>" ></progress>
             
-            <h2 class="questiontitle">
-                <?php echo($question->title);?>
-            </h2>
-            <p class="questiontext">
-                <?php echo($question->text);?>
-            </p>
+            <div class="question">
+                <div class="questiontextwrapper">
+                    <h2 class="questiontitle">
+                        <?php echo($question->title);?>
+                    </h2>
+                    <p class="questiontext">
+                        <?php echo($question->text);?>
+                    </p>
+                </div>
+            <?php
+                    if($question !== NULL)
+                    {
+            ?>
             
-            <!-- TODO: IMPLEMENT
-                <img class="questionimage"></img>
-            -->
+            
+                <img class="questionimage" src="data:image/jpeg;base64,<?php echo(base64_encode($image));?>"></img>
+            <?php
+                    }
+            ?>
+            </div>
+            
             
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
                     <?php 
