@@ -189,11 +189,22 @@ h2{
 .questionbox{
     margin: auto;
     margin-top: 20px;
-    min-width: 680px;
+    min-width: 750px;
     width: 75%;
     border-radius: 10px;
     padding: 20px;
     overflow: hidden;
+}
+
+.question{
+    min-width: 750px;
+    overflow: hidden;
+}
+
+.questiontextwrapper{
+    margin-right: 20px;
+    width: 500px;
+    float: left;
 }
 
 .questiontitle{
@@ -210,7 +221,14 @@ h2{
     padding-top: 0px;
     text-align: justify;
     margin-bottom: 20px;
-    maximum-width: 500px;
+}
+
+.questionimage{
+    display: none;
+    max-width: 200px;
+    max-height: 200px;
+    float: left;
+    display: block;
 }
 
 .starttext{
