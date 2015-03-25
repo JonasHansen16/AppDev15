@@ -189,10 +189,11 @@ h2{
 .questionbox{
     margin: auto;
     margin-top: 20px;
-    min-width: 500px;
+    min-width: 680px;
     width: 75%;
     border-radius: 10px;
     padding: 20px;
+    overflow: hidden;
 }
 
 .questiontitle{
@@ -204,10 +205,10 @@ h2{
 }
 
 .questiontext{
+    display: block;
     padding: 20px;
     padding-top: 0px;
-    margin: auto;
-    text-align: left;
+    text-align: justify;
     margin-bottom: 20px;
 }
 
@@ -237,6 +238,22 @@ h2{
     border: none;
     float: right;
     cursor: pointer;
+    transition: background 2s;
+}
+
+.introtext{
+    max-width: 600px;
+    min-width: 400px;
+    float: left;
+}
+
+.introright{
+    float: left;
+    min-width: 300px;
+}
+
+.introform{
+    margin: auto;
 }
 
 .visible{
@@ -253,6 +270,11 @@ h2{
 
 .nodisplay{
     display: none;
+}
+
+.auxcontrol{
+    float: left !important;
+    margin-top: 20px;
 }
 
 .preload *{

@@ -70,3 +70,19 @@ label > input:checked + div{ /* Div when selected */
     border-color: rgb(9,65,103);
     color: white;
 }
+
+.darkred{
+    background: rgb(115,17,21);
+}
+
+.red{
+    background: rgb(125,35,20);
+}
+
+.lightred{
+    background: rgb(155,47,16);
+}
+
+.submitbutton:hover{
+    background: rgb(0,122,204);
+}

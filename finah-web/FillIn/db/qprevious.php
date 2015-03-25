@@ -14,7 +14,7 @@ $PREVIOUSQUERY =
 		( 
                     SELECT MAX(qid) as mqid 
                     FROM answer 
-                    WHERE clientid = ? 
+                    WHERE clientid = ? AND final = true 
                 ) as temp 
         ) 
         ;";

@@ -247,8 +247,7 @@
             
             // CURRENTLY THIS WORKS WITH SIMPLE UPDATES
             // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
-            // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
-            
+            // THIS WILL HAVE TO BE DONE WHILE WRITING THE APIZ
             $stmt = $dbconn->prepare($PREVIOUSQUERY);
             $stmt->bind_param("ii", $id, $id);
             $stmt->execute();
@@ -289,6 +288,60 @@
             $insstmt->bind_param("iiii", $id, $qid, $score, $help);
             $insstmt->execute();
         } 
+        
+        /**
+         * Returns the total amount of questions in the questionnaire of the 
+         * given client.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @return int The total amount of questions in the questionnaire of
+         * the given client. Will be 0 if the client does not exist.
+         */
+        function totalCount($id, $hash, mysqli $dbconn){
+            require '../db/qtotalcount.php';
+            
+            $stmt = $dbconn->prepare($TOTALCOUNTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
+                return 0;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = $row['amount'];
+            
+            return $output;
+        }
+        
+        /**
+         * Returns the total amount of different valid answers the client has 
+         * already given.
+         * @param $id The id of the client.
+         * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
+         * @return int The total amount of different valid answers the client has 
+         * already given. Will be 0 if the client does not exist.
+         */
+        function answerCount($id, $hash, mysqli $dbconn){
+            require '../db/qanswercount.php';
+            
+            $stmt = $dbconn->prepare($ANSWERCOUNTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
+                return 0;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = $row['amount'];
+            
+            return $output;
+        }
         
         /**
          * Validates the input $score and $help following these rules:
@@ -455,51 +508,56 @@
             <h2 class="questiontitle">
                 Instructies
             </h2>
-            <p class="questiontext">
-                Welkom bij uw online vragenlijst! Hieronder volgt eerst even wat
-                uitleg over hoe het invullen van een vragenlijst werkt. Daarna
-                volgt specifieke informatie over de vragenlijst die uw
-                hulpverlener voor u heeft uitgekozen.
-            </p>
-            <p class="questiontext">
-                Het invullen van een online vragenlijst is vrij gemakkelijk. Na
-                hieronder op 'Volgende' te klikken, zal u de eerste vraag te 
-                zien krijgen. Neem de tijd om deze op uw eigen tempo te lezen.
-                Er is helemaal geen tijdsdruk.
-            </p>
-            <p class="questiontext">
-                Na dat u de vraag hebt gelezen, is het de bedoeling dat u het 
-                meest gepaste van de vijf antwoorden kiest. Dit doet u door
-                simpelweg op het antwoord te klikken. Het huidig gekozen
-                antwoord zal in een andere kleur komen te staan. Wees gerust,
-                indien u per ongeluk op het verkeerde antwoord klikt, kan u
-                dit nog altijd veranderen door simpelweg op een ander antwoord
-                te klikken.
-            </p>
-            <p class="questiontext">
-                Indien u aangeeft dat iets hinderlijk is voor u of uw 
-                mantelzorger, dan krijgt u ook de mogelijkheid om te vragen dat
-                hier aan gewerkt moet worden. U kan dit aangeven net zoals u een
-                vraag beantwoordt. Standaard staat dit op 'Nee'.
-            </p>
-            <p class="questiontext">
-                Om een vraag in te dienen klikt u simpelweg op de knop 'Volgende
-                vraag'. Indien u per ongeluk een vergissing heeft gemaakt, geen
-                probleem! U kan altijd op 'Vorige vraag' klikken om terug te
-                keren naar de vorige vraag, en deze opnieuw oplossen.
-            </p>
-            <p class="questiontext">
-                Verder kan u ook nog volledig opnieuw beginnen met de
-                vragenlijst door op "Herstarten" te klikken. Merk op dat u dan
-                ook nog de bevestiging moet accepteren. Een laatste mogelijkheid
-                is om terug te keren naar dit scherm. Dat doet u door op de
-                'Instructies'-knop te klikken.
-            </p>
-            
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
-                <input type="radio" name="started" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton" value="Volgende">
+            <div class="intro">
+                <div class="introtext">
+                    <p class="questiontext">
+                        Welkom bij uw online vragenlijst! Hieronder volgt eerst even wat
+                        uitleg over hoe het invullen van een vragenlijst werkt. Daarna
+                        volgt specifieke informatie over de vragenlijst die uw
+                        hulpverlener voor u heeft uitgekozen.
+                    </p>
+                    <p class="questiontext">
+                        Het invullen van een online vragenlijst is vrij gemakkelijk. Na
+                        hieronder op 'Volgende' te klikken, zal u de eerste vraag te 
+                        zien krijgen. Neem de tijd om deze op uw eigen tempo te lezen.
+                        Er is helemaal geen tijdsdruk.
+                    </p>
+                    <p class="questiontext">
+                        Na dat u de vraag hebt gelezen, is het de bedoeling dat u het 
+                        meest gepaste van de vijf antwoorden kiest. Dit doet u door
+                        simpelweg op het antwoord te klikken. Het huidig gekozen
+                        antwoord zal in een andere kleur komen te staan. Wees gerust,
+                        indien u per ongeluk op het verkeerde antwoord klikt, kan u
+                        dit nog altijd veranderen door simpelweg op een ander antwoord
+                        te klikken.
+                    </p>
+                    <p class="questiontext">
+                        Indien u aangeeft dat iets hinderlijk is voor u of uw 
+                        mantelzorger, dan krijgt u ook de mogelijkheid om te vragen dat
+                        hier aan gewerkt moet worden. U kan dit aangeven net zoals u een
+                        vraag beantwoordt. Standaard staat dit op 'Nee'.
+                    </p>
+                    <p class="questiontext">
+                        Om een vraag in te dienen klikt u simpelweg op de knop 'Volgende
+                        vraag'. Indien u per ongeluk een vergissing heeft gemaakt, geen
+                        probleem! U kan altijd op 'Vorige vraag' klikken om terug te
+                        keren naar de vorige vraag, en deze opnieuw oplossen.
+                    </p>
+                    <p class="questiontext">
+                        Verder kan u ook nog volledig opnieuw beginnen met de
+                        vragenlijst door op "Herstarten" te klikken. Merk op dat u dan
+                        ook nog de bevestiging moet accepteren. Een laatste mogelijkheid
+                        is om terug te keren naar dit scherm. Dat doet u door op de
+                        'Instructies'-knop te klikken.
+                    </p>
+                </div>
+                <div class="introright">
+                    <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" class="introform">
+                    <input type="radio" name="started" value="1" class="nodisplay" checked="checked"/>
+                    <input type="submit" class="submitbutton" value="Volgende">
             </form>
+                </div>
+            </div>
         </div>
                         
                         
@@ -515,13 +573,14 @@
                         setDone($_SESSION['hid'], $_SESSION['hhash'], $conn);
                         printDone();
                     }
-                    // Else we set our hidden question id 
-                    // and finally display the question
+                    // Else we set our hidden question id, our current and total
+                    // question counts, and then finally display the question
                     else{
                         $_SESSION['hqid'] = $question->id;
+                        $currQuestion = answerCount($_SESSION['hid'], $_SESSION['hhash'], $conn) + 1;
+                        $total = totalCount($_SESSION['hid'], $_SESSION['hhash'], $conn);
                         ?>
-        
-        <!--Temporarily an errorbox; change to something prettier later-->
+ 
         <div class="questionbox">
             <h2 class="questiontitle">
                 <?php echo($question->title);?>
@@ -532,10 +591,23 @@
             <!-- TODO: IMPLEMENT
                 <img class="questionimage"></img>
             -->
-            <!-- TODO: IMPLEMENT
-                <progress value="22" max="100"></progress>
-            -->
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
+            <progress 
+                value="<?php echo $currQuestion; ?>" 
+                max="<?php echo $total; ?>"
+                >
+            </progress>
+            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
+                  
+                    <?php 
+                    if($currQuestion == $total)
+                    { 
+                    ?> 
+                        onsubmit="return confirm('Dit is de laatste vraag. U zal niets meer kunnen wijzigen na u deze hebt ingediend. Bent u zeker dat u door wil gaan?')" 
+                    <?php
+                    }
+                    ?>
+                  
+                  >
                 
                 <p>Hoe ervaart u dit onderdeel?</p>
                 <div class="answercontainer" id="primary">
@@ -604,20 +676,20 @@
                 </div>
                 
             </form>
-            
+            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
+                  onsubmit="return confirm('Bent u zeker dat u opnieuw wilt beginnen? Uw voortgang wordt gewist.')">
+                <input type="radio" name="reset" value="1" class="nodisplay" checked="checked"/>
+                <input type="submit" class="submitbutton auxcontrol darkred" value="Herstarten">
+            </form>
+
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
                 <input type="radio" name="previous" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton" value="Vorige vraag">
+                <input type="submit" class="submitbutton auxcontrol red" value="Vorige vraag">
             </form>
-            
-            <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
-                <input type="radio" name="reset" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton" value="Vragenlijst herstarten">
-            </form>
-            
+
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post">
                 <input type="radio" name="instructions" value="1" class="nodisplay" checked="checked"/>
-                <input type="submit" class="submitbutton" value="Vragenlijst herstarten">
+                <input type="submit" class="submitbutton auxcontrol lightred" value="Instructies">
             </form>
         </div>
                         <?php
