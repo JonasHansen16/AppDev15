@@ -9,7 +9,7 @@
             <Border BorderBrush="Black" BorderThickness="1">
                 <StackPanel HorizontalAlignment="Left" Height="86" VerticalAlignment="Top" Width="168" Margin="9,9,0,0">
                     <StackPanel.Background>
-                        <ImageBrush ImageSource="Images/logo.png"/>
+                        <ImageBrush ImageSource="Images/logo.PNG"/>
                     </StackPanel.Background>
                 </StackPanel>
             </Border>
