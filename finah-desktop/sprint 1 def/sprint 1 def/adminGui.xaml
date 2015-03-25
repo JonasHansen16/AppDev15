@@ -1,0 +1,44 @@
+﻿<Window x:Class="sprint_1_def.adminGui"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         Title="Admin" Height="656.97" Width="1008.741">
+    <Grid  Background="DarkGray">
+        <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="981" Background="White" Margin="10,19,0,0" Grid.ColumnSpan="1">
+            <Border BorderBrush="Black" BorderThickness="1">
+                <StackPanel HorizontalAlignment="Left" Height="86" VerticalAlignment="Top" Width="168" Margin="9,9,0,0">
+                    <StackPanel.Background>
+                        <ImageBrush ImageSource="Images/logo.png"/>
+                    </StackPanel.Background>
+                </StackPanel>
+            </Border>
+        </Grid>
+        <Grid x:Name="questionGrid" HorizontalAlignment="Left" Height="463" Margin="10,153,0,0" VerticalAlignment="Top" Width="981" Background="White">
+            <Border BorderBrush="Black" BorderThickness="1">
+                <Grid Margin="9">
+                    <TextBlock HorizontalAlignment="Left" Margin="112,38,0,0" TextWrapping="Wrap" Text="Nieuwe aanvragen" VerticalAlignment="Top" FontSize="24"/>
+                    <DataGrid ColumnWidth="350" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top" Loaded="DataGrid_Loaded" Height="274" Width="663" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16"/>
+                    <StackPanel x:Name="detailsStackPanel" HorizontalAlignment="Left" Height="107" Margin="591,28,0,0" VerticalAlignment="Top" Width="244" Background="LightBlue">
+                        <Border BorderBrush="Black" BorderThickness="2">
+                            <Grid Height="103">
+                                <TextBlock TextWrapping="Wrap" Text="Naam: Pieter Janssen" Margin="10,5,107,65" />
+                                <TextBlock TextWrapping="Wrap" Text="E-mail adres: pieter.janssen@gmail.com" Margin="10,24,10,46" />
+                                <TextBlock TextWrapping="Wrap" Text="Woonplaats: Hasselt" HorizontalAlignment="Right" Width="198" Margin="0,44,32,37"/>
+                                <Button Content="Bevestig" Margin="36,71,148,11" Foreground="Green"/>
+                                <Button Content="Weiger" Margin="139,71,42,11" Foreground="IndianRed"/>
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                    <Line x:Name="connectingLine"
+    X1="550" Y1="145"
+    X2="593" Y2="133"
+    Stroke="Black"
+    StrokeThickness="4" />
+                    <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="10,396,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
+                </Grid>
+
+            </Border>
+
+
+        </Grid>
+    </Grid>
+</Window>

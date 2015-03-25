@@ -1,0 +1,213 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{98E8A296-D625-4C7F-B597-C15602EDFFB7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>sprint_1_def</RootNamespace>
+    <AssemblyName>sprint 1 def</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="rapportenoverzicht.xaml.cs">
+      <DependentUpon>rapportenoverzicht.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="registeren.xaml.cs">
+      <DependentUpon>registeren.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="startpagina.xaml.cs">
+      <DependentUpon>startpagina.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="vraag.xaml.cs">
+      <DependentUpon>vraag.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="wachtwoordVergeten.xaml.cs">
+      <DependentUpon>wachtwoordVergeten.xaml</DependentUpon>
+    </Compile>
+    <Page Include="aanmakenPatient.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="adminGui.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="login.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="aanmakenPatient.xaml.cs">
+      <DependentUpon>aanmakenPatient.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="adminGui.xaml.cs">
+      <DependentUpon>adminGui.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="login.xaml.cs">
+      <DependentUpon>login.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="rapportenoverzicht.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="registeren.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="startpagina.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="vraag.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="wachtwoordVergeten.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="users\.DS_Store" />
+    <None Include="users\._.DS_Store" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="imagesQ\1.jpg" />
+    <Resource Include="imagesQ\10.jpg" />
+    <Resource Include="imagesQ\11.jpg" />
+    <Resource Include="imagesQ\12.jpg" />
+    <Resource Include="imagesQ\13.jpg" />
+    <Resource Include="imagesQ\14.jpg" />
+    <Resource Include="imagesQ\15.jpg" />
+    <Resource Include="imagesQ\16.jpg" />
+    <Resource Include="imagesQ\17.jpg" />
+    <Resource Include="imagesQ\18.jpg" />
+    <Resource Include="imagesQ\19.jpg" />
+    <Resource Include="imagesQ\2.jpg" />
+    <Resource Include="imagesQ\20.jpg" />
+    <Resource Include="imagesQ\21.jpg" />
+    <Resource Include="imagesQ\22.jpg" />
+    <Resource Include="imagesQ\23.jpg" />
+    <Resource Include="imagesQ\24.jpg" />
+    <Resource Include="imagesQ\25.jpg" />
+    <Resource Include="imagesQ\26.jpg" />
+    <Resource Include="imagesQ\27.jpg" />
+    <Resource Include="imagesQ\28.jpg" />
+    <Resource Include="imagesQ\29.jpg" />
+    <Resource Include="imagesQ\3.jpg" />
+    <Resource Include="imagesQ\30.jpg" />
+    <Resource Include="imagesQ\31.jpg" />
+    <Resource Include="imagesQ\32.jpg" />
+    <Resource Include="imagesQ\33.jpg" />
+    <Resource Include="imagesQ\34.jpg" />
+    <Resource Include="imagesQ\35.jpg" />
+    <Resource Include="imagesQ\36.jpg" />
+    <Resource Include="imagesQ\37.jpg" />
+    <Resource Include="imagesQ\38.jpg" />
+    <Resource Include="imagesQ\39.jpg" />
+    <Resource Include="imagesQ\4.jpg" />
+    <Resource Include="imagesQ\40.jpg" />
+    <Resource Include="imagesQ\41.jpg" />
+    <Resource Include="imagesQ\42.jpg" />
+    <Resource Include="imagesQ\43.jpg" />
+    <Resource Include="imagesQ\44.jpg" />
+    <Resource Include="imagesQ\45.jpg" />
+    <Resource Include="imagesQ\5.jpg" />
+    <Resource Include="imagesQ\6.jpg" />
+    <Resource Include="imagesQ\7.jpg" />
+    <Resource Include="imagesQ\8.jpg" />
+    <Resource Include="imagesQ\9.jpg" />
+    <Resource Include="imagesQ\logo.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="questions\questions.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="users\._users.txt" />
+    <Resource Include="users\users.txt" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
