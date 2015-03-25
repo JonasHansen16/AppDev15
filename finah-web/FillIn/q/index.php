@@ -640,17 +640,19 @@
                         <?php echo($question->text);?>
                     </p>
                 </div>
-            </div>
             <?php
                     if($question !== NULL)
                     {
             ?>
             
             
-            <img class="questionimage" src="data:image/jpeg;base64,<?php echo(base64_encode($image));?>"></img>
+                <img class="questionimage" src="data:image/jpeg;base64,<?php echo(base64_encode($image));?>"></img>
             <?php
                     }
             ?>
+            </div>
+            
+            
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
                     <?php 
                     if($currQuestion == $total)
