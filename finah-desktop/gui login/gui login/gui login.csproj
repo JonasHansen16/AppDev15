@@ -59,6 +59,9 @@
     <Compile Include="startpagina.xaml.cs">
       <DependentUpon>startpagina.xaml</DependentUpon>
     </Compile>
+    <Compile Include="wachtwoordVergeten.xaml.cs">
+      <DependentUpon>wachtwoordVergeten.xaml</DependentUpon>
+    </Compile>
     <Page Include="login.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -76,6 +79,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="startpagina.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="wachtwoordVergeten.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
