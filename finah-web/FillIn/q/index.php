@@ -582,22 +582,23 @@
                         ?>
  
         <div class="questionbox">
+            <p class="progresstext">
+                Vraag <?php echo $currQuestion; ?> / <?php echo $total; ?>
+            </p>
+            <progress  class="progressbar" value="<?php echo $currQuestion; ?>" max="<?php echo $total; ?>" ></progress>
+            
             <h2 class="questiontitle">
                 <?php echo($question->title);?>
             </h2>
             <p class="questiontext">
                 <?php echo($question->text);?>
             </p>
+            
             <!-- TODO: IMPLEMENT
                 <img class="questionimage"></img>
             -->
-            <progress 
-                value="<?php echo $currQuestion; ?>" 
-                max="<?php echo $total; ?>"
-                >
-            </progress>
+            
             <form action="index.php?uid=<?php echo $_SESSION['hid']; ?>&hash=<?php echo $_SESSION['hhash']; ?>" method="post" 
-                  
                     <?php 
                     if($currQuestion == $total)
                     { 
@@ -606,7 +607,6 @@
                     <?php
                     }
                     ?>
-                  
                   >
                 
                 <p>Hoe ervaart u dit onderdeel?</p>

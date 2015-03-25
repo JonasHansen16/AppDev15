@@ -210,6 +210,23 @@ h2{
     padding-top: 0px;
     text-align: justify;
     margin-bottom: 20px;
+    maximum-width: 500px;
+}
+
+.progresstext{
+    float: right;
+    maximum-width: 100px;
+    position: relative;
+    left: -250px;
+    top: 10px;
+}
+
+.progressbar{
+    float: right; 
+    -webkit-appearance: none;
+    border: none;
+    height: 40px; 
+    width: 400px;
 }
 
 .answercontainer{
