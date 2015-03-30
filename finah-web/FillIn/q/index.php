@@ -59,8 +59,7 @@
             $_SESSION['hhash'] = $hash;
             return true;
         }
-        
-        //TODO: ADD START
+
         /**
          * Sets the variables $GLOBALS['done'] and $GLOBALS['start'] if the 
          * client is done with his questionnaire or if he is at the start of it,
@@ -641,7 +640,7 @@
                     </p>
                 </div>
             <?php
-                    if($question !== NULL)
+                    if($image !== NULL)
                     {
             ?>
             
