@@ -18,3 +18,6 @@ programma)');
 INSERT INTO question (theme, title, text) VALUES ('Algemene taken en activiteiten','title','Uitvoeren van dagelijkse
 routinehandelingen (zoals zich
 wassen, ontbijten');
+INSERT INTO user (name, lastname, username,email,password,admin,enabled,profession,denied) VALUES ('Hans', 'Anderson','HansAnders','HansAnders@gmail.com', 'Hans',0 , 1,'HulpVerlener', 0);
+INSERT INTO form (airid, userid) VALUES (1,1);
+INSERT INTO client (start, formid, hash, done) VALUES (1,1,'XCD',0);
