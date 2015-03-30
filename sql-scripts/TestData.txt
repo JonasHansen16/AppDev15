@@ -1,5 +1,5 @@
 INSERT INTO questionnaire (title, description, intro, enabled) VALUES ('Functioneringsinstrument','Meetinstrument voor het functioneren van personen met NAH op vlak van activiteiten en participatie
-vanuit het standpunt van de persoon met NAH en zijn/haar mantelzorger','introduction', true);
+vanuit het standpunt van de persoon met NAH en zijn/haar mantelzorger','Dit is een introductie voor Ben omdat hij het zo lief vraagt', true);
 INSERT INTO question (theme, title, text) VALUES ('Leren en toepassen van kennis','title','Iets nieuws leren
 (zoals het leren
 omgaan m
@@ -21,3 +21,6 @@ wassen, ontbijten');
 INSERT INTO user (name, lastname, username,email,password,admin,enabled,profession,denied) VALUES ('Hans', 'Anderson','HansAnders','HansAnders@gmail.com', 'Hans',0 , 1,'HulpVerlener', 0);
 INSERT INTO form (airid, userid) VALUES (1,1);
 INSERT INTO client (start, formid, hash, done) VALUES (1,1,'XCD',0);
+INSERT INTO questionlist (airid, qid, enabled) VALUES (1,1,1);
+INSERT INTO questionlist (airid, qid, enabled) VALUES (1,2,1);
+INSERT INTO questionlist (airid, qid, enabled) VALUES (1,3,1);
