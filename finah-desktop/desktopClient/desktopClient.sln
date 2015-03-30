@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sprint 1 def", "sprint 1 def\sprint 1 def.csproj", "{98E8A296-D625-4C7F-B597-C15602EDFFB7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "desktopClient", "desktopClient\desktopClient.csproj", "{98E8A296-D625-4C7F-B597-C15602EDFFB7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
