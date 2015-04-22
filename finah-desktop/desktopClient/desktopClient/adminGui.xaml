@@ -3,8 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
          Title="Admin" Height="660" Width="1010">
     <Grid  Background="DarkGray">
-        <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="981" Background="#FF3F5CAC" Margin="10,19,0,0" Grid.ColumnSpan="1">
-            <Border BorderBrush="Black" BorderThickness="1">
+        <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="981" Background="LightBlue" Margin="10,19,0,0" Grid.ColumnSpan="1">
+            <Border>
                 <StackPanel HorizontalAlignment="Left" Height="86" VerticalAlignment="Top" Width="168" Margin="9,9,0,0">
                     <StackPanel.Background>
                         <ImageBrush ImageSource="Images/logo.png"/>
@@ -12,8 +12,8 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid x:Name="questionGrid" HorizontalAlignment="Left" Height="463" Margin="10,153,0,0" VerticalAlignment="Top" Width="981" Background="#FF3F5CAC">
-            <Border BorderBrush="Black" BorderThickness="1">
+        <Grid x:Name="questionGrid" HorizontalAlignment="Left" Height="463" Margin="10,153,0,0" VerticalAlignment="Top" Width="981" Background="LightBlue">
+            <Border>
                 <Grid Margin="9">
                     <TextBlock HorizontalAlignment="Left" Margin="112,38,0,0" TextWrapping="Wrap" Text="Nieuwe aanvragen" VerticalAlignment="Top" FontSize="24"/>
                     <DataGrid ColumnWidth="350" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top" Loaded="DataGrid_Loaded" Height="274" Width="663" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16"/>
