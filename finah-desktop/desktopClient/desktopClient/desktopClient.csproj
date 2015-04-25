@@ -53,6 +53,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Question.cs" />
+    <Compile Include="QuestionList.cs" />
     <Compile Include="rapportenoverzicht.xaml.cs">
       <DependentUpon>rapportenoverzicht.xaml</DependentUpon>
     </Compile>

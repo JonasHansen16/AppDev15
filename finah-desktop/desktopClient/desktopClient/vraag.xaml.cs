@@ -25,10 +25,13 @@ namespace sprint_1_def
         private int currentQuestion;
         private int clientId;  //clientId meegeven via parent
         private int[] currentSessionInfo;
+        private Button[] buttons;
+        
 
         public vraag()
         {
             InitializeComponent();
+            buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
             //array met answerwaarden, worden weggeschreven in vorm: clientId-currentQuestion-answer-helpanswer
             currentSessionInfo = new int[180];
@@ -42,7 +45,7 @@ namespace sprint_1_def
         //antwoorden paars maken, en antwoord in array zetten
         private void selectAnswer(object sender, RoutedEventArgs e)
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             Button b = ((Button)e.Source);
             int selectedAnswer = 0;
 
@@ -89,7 +92,7 @@ namespace sprint_1_def
         //het laden van een vraag
         private void loadQuestion()
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             int currentPlace = getPlaceArray(currentQuestion); //huidige plaats in de array
             int currentAnswer = currentSessionInfo[currentPlace];
             int currentHelpAnswer = currentSessionInfo[currentPlace + 1];
@@ -123,7 +126,7 @@ namespace sprint_1_def
         //bij een volgende, niet ingevulde vraag alle buttons terug normaal maken
         private void changeAnswersToBeginState(object sender)
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             SolidColorBrush brush = new SolidColorBrush(Color.FromRgb(56, 63, 228));
 
             if (sender != yesButton && sender != noButton)
