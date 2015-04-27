@@ -5,7 +5,7 @@ using System.Web;
 
 namespace nah_back.Models
 {
-    private class User
+    class User
     {
         public string Name { get; set; }
         public string LastName { get; set; }
@@ -16,6 +16,11 @@ namespace nah_back.Models
         public bool Admin { get; set; }
         public bool Active { get; set; }
         public bool Denied { get; set; }
+
+        public User()
+        {
+
+        }
 
         public User(string name, string lastname, string email, string password, string occupation, bool admin = false, bool active = false, bool denied = false)
         {
