@@ -5,8 +5,8 @@
 
     <Grid Margin="0,0,0,-7" Background="DarkGray">
 
-        <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="970" Background="#FF3F5CAC" Margin="10,19,0,0" Grid.ColumnSpan="2">
-            <Border BorderBrush="Black" BorderThickness="1">
+        <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="970" Background="LightBlue" Margin="10,19,0,0" Grid.ColumnSpan="2">
+            <Border>
                 <StackPanel HorizontalAlignment="Left" Height="86" VerticalAlignment="Top" Width="168" Margin="9,9,0,0">
                     <StackPanel.Background>
                         <ImageBrush ImageSource="Images\logo.PNG"/>
@@ -14,17 +14,17 @@
                 </StackPanel>
             </Border>
         </Grid>
-        <Grid HorizontalAlignment="Left" Height="426" Margin="10,158,0,0" VerticalAlignment="Top" Width="970" Background="#FF3F5CAD">
+        <Grid HorizontalAlignment="Left" Height="426" Margin="10,158,0,0" VerticalAlignment="Top" Width="970" Background="LightBlue">
 
-            <Button x:Name="CreatePatient" Content="Nieuwe Patient Toevoegen" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="152"/>
+            <Button x:Name="CreatePatient" Content="Nieuwe patient toevoegen" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="152"/>
             <Button x:Name="OverView" Content="Rapporten" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="152" RenderTransformOrigin="0.34,-0.023"/>
             <Grid HorizontalAlignment="Left" Height="442" Margin="162,13,0,0" VerticalAlignment="Top" Width="808">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="15*"/>
                     <ColumnDefinition Width="794*"/>
                 </Grid.ColumnDefinitions>
-                <Grid HorizontalAlignment="Left" Height="442" VerticalAlignment="Top" Width="808" Grid.ColumnSpan="2" Background="#FF3E5DAC">
-                    <Border BorderBrush="Black" BorderThickness="2" HorizontalAlignment="Left" Height="412" VerticalAlignment="Top" Width="808" RenderTransformOrigin="0.493,0.498" />
+                <Grid HorizontalAlignment="Left" Height="442" VerticalAlignment="Top" Width="808" Grid.ColumnSpan="2" Background="LightBlue">
+                    <Border BorderBrush="LightGray" BorderThickness="2" HorizontalAlignment="Left" Height="412" VerticalAlignment="Top" Width="808" RenderTransformOrigin="0.493,0.498" />
                 </Grid>
 
             </Grid>
@@ -36,8 +36,8 @@
             <Label x:Name="EmailLabel" Content="E-mailadres:" HorizontalAlignment="Left" Margin="461,180,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <Label x:Name="CategoryLabel" Content="NAH-Categorie:" HorizontalAlignment="Left" Margin="441,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <Label x:Name="RelationLabel" Content="Relatie cliënt/mantelzorger:" HorizontalAlignment="Left" Margin="382,250,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="AgeClientLabel" Content="Leeftijdscategorie Client:" HorizontalAlignment="Left" Margin="397,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="AgeCaretakerLabel" Content="Leeftijdscategorie Mantelverzorger:" HorizontalAlignment="Left" Margin="340,302,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25" Height="27"/>
+            <Label x:Name="AgeClientLabel" Content="Leeftijdscategorie client:" HorizontalAlignment="Left" Margin="397,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
+            <Label x:Name="AgeCaretakerLabel" Content="Leeftijdscategorie mantelverzorger:" HorizontalAlignment="Left" Margin="340,302,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25" Height="27"/>
             <Label x:Name="Emailclientlabel" Content="E-mailadressen betrokkenen:" HorizontalAlignment="Left" Margin="372,329,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <TextBox x:Name="ResidenceTextBox" HorizontalAlignment="Left" Height="23" Margin="542,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
             <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Height="23" Margin="542,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
