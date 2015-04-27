@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Text.RegularExpressions;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace sprint_1_def
 {
@@ -20,22 +22,29 @@ namespace sprint_1_def
     /// </summary>
     public partial class registeren : Window
     {
+        static string name;
+        static string lastName;
+        static string Email;
+        static string password;
+        static string occupation;
         public registeren()
         {
             InitializeComponent();
+
         }
+
         private void emailvalidation(object sender, System.EventArgs e)
         {
-            if (textBoxEmail.Text.Length == 0)
+            if (EmailTextBox1.Text.Length == 0)
             {
-                textBoxEmail.ToolTip = "Enter an email.";
-                textBoxEmail.Focus();
+                EmailTextBox1.ToolTip = "Enter an email.";
+                EmailTextBox1.Focus();
             }
-            else if (!Regex.IsMatch(textBoxEmail.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
+            else if (!Regex.IsMatch(EmailTextBox1.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
-                textBoxEmail.ToolTip = "Enter a valid email.";
-                textBoxEmail.Select(0, textBoxEmail.Text.Length - 1);
-                textBoxEmail.Focus();
+                EmailTextBox1.ToolTip = "Enter a valid email.";
+                EmailTextBox1.Select(0, EmailTextBox1.Text.Length - 1);
+                EmailTextBox1.Focus();
             }
         }
 
@@ -68,9 +77,9 @@ namespace sprint_1_def
 
         private void emailvalidation2(object sender, RoutedEventArgs e)
         {
-            if (!(textBoxEmail.Text == textBoxEmail2.Text))
+            if (!(EmailTextBox1.Text == EmailTextBox2.Text))
             {
-                textBoxEmail2.ToolTip = "niet hetzelfde email adres. geeft het juiste email adres in";
+                EmailTextBox2.ToolTip = "niet hetzelfde email adres. geeft het juiste email adres in";
             }
         }
 
@@ -79,6 +88,38 @@ namespace sprint_1_def
             var winLogin = new login();
             winLogin.Show();
             this.Close();
+        }
+
+        private void aanvraagButton_Click(object sender, RoutedEventArgs e)
+        {
+            name = VoornaamTextBox.Text;
+            lastName = AchternaamTextBox.Text;
+            Email = EmailTextBox1.Text;
+            password = PassWordTextBox1.Text;
+            occupation = beroepTextbox.Text;
+           
+        }
+        static async Task RunAsync()
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri("http://localhost:9000/");
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                var gizmo = new User()
+                {
+                    Name = name,
+                    LastName = lastName,
+                    Email = Email,
+                    Password = password,
+                    Occupation = occupation,
+                    Admin = false,
+                    Active = false,
+                    Denied = false
+                };
+                HttpResponseMessage response = await client.PostAsJsonAsync("api/User/Register", gizmo);
+            }
+
         }
 
 
