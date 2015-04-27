@@ -5,7 +5,7 @@ using System.Web;
 
 namespace nah_back.Models
 {
-    class User
+    public class User
     {
         public string Name { get; set; }
         public string LastName { get; set; }

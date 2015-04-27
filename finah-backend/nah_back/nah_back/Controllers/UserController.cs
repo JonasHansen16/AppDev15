@@ -8,6 +8,7 @@ using System.Web.Http;
 using nah_back.Models;
 using nah_back.Providers;
 using System.Data.SqlClient;
+using System.Text;
 
 namespace nah_back.Controllers
 {
@@ -28,17 +29,29 @@ namespace nah_back.Controllers
         /// <returns></returns>
         [AllowAnonymous]
         [Route("Register")]
-        public Task<IHttpActionResult> Register(nah_back.Models.User user)
+        public HttpResponseMessage Register(nah_back.Models.User user)
         {
+            HttpResponseMessage resp = new HttpResponseMessage();
+
             // First we make sure all the required data is present.
-            bool success = userDBCheck(user);
+            bool success = userDBCheck(user);            
 
-            // Then we make sure the data fits the database
-            userDBInsertMod(user);
+            // If this succeeded,
+            if (success)
+            {   // we make sure the data fits the database
+                userDBInsertMod(user);
+                // And finally we try to insert the data into the database
+                success = userDBInsert(user);
+            }
+                
+            if (success)
+            {
+                resp.Content = new StringContent("OK", Encoding.Unicode);
+                return resp;
+            }
 
-            // And finally we try to insert the data into the database
-            
-            return null;
+            resp.Content = new StringContent("NOK", Encoding.Unicode);
+            return resp;
         }
 
         /// <summary>
@@ -100,13 +113,50 @@ namespace nah_back.Controllers
         /// <returns>True if the user was successfully inserted, false otherwise.</returns>
         private bool userDBInsert(User toInsert)
         {
+            // Open connection and set parameters
             SqlConnection connection = DatabaseAccessProvider.GetConnection();
+            SqlCommand insertCommand = generateInsertCommand(toInsert, connection);
+            
+            // Send query
+            try
+            {
+                connection.Open();
+                insertCommand.ExecuteNonQuery();
+            }
+            // If an error occurs, we return false
+            catch (SqlException)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            // Else we return true
+            return true;
+        }
+
+        /// <summary>
+        /// This function will generate an SqlCommand capable of 
+        /// inserting the passed User into the database.
+        /// </summary>
+        /// <param name="toInsert">The User to insert.</param>
+        /// <param name="connection">The database connection.</param>
+        /// <returns>An SqlCommand capable of inserting the user.</returns>
+        private SqlCommand generateInsertCommand(User toInsert, SqlConnection connection)
+        {
             SqlCommand insertCommand = new SqlCommand(_qInsertUser, connection);
             insertCommand.Parameters.AddWithValue("@Name", toInsert.Name);
             insertCommand.Parameters.AddWithValue("@LastName", toInsert.LastName);
-            insertCommand.Parameters.AddWithValue("@LastName", toInsert.LastName);
-
-            return false;
+            insertCommand.Parameters.AddWithValue("@Email", toInsert.Email);
+            insertCommand.Parameters.AddWithValue("@UserName", toInsert.UserName);
+            insertCommand.Parameters.AddWithValue("@Password", toInsert.Password);
+            insertCommand.Parameters.AddWithValue("@Occupation", toInsert.Occupation);
+            insertCommand.Parameters.AddWithValue("@Admin", toInsert.Admin);
+            insertCommand.Parameters.AddWithValue("@Active", toInsert.Active);
+            insertCommand.Parameters.AddWithValue("@Denied", toInsert.Denied);
+            return insertCommand;
         }
 
         /// <summary>
