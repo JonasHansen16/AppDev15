@@ -24,6 +24,7 @@ namespace nah_back.Controllers
         /// data class. New users will not have admin privileges, they
         /// will start as inactive and they will not be denied. Certain
         /// text fields may be truncated to fit the database.
+        /// Be aware that the password is already assumed to be hashed.
         /// </summary>
         /// <param name="user">The user to register.</param>
         /// <returns></returns>
