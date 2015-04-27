@@ -23,9 +23,10 @@ namespace sprint_1_def
     public partial class vraag : Window
     {
         private int currentQuestion;
-        private int clientId;  //clientId meegeven via parent
+        private int clientId = 1;  //clientId meegeven via parent
         private int[] currentSessionInfo;
         private Button[] buttons;
+        private Answer answer;
         
 
         public vraag()
@@ -34,6 +35,8 @@ namespace sprint_1_def
             buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
             //array met answerwaarden, worden weggeschreven in vorm: clientId-currentQuestion-answer-helpanswer
+            answer = new Answer();
+            answer.ClientId = clientId;
             currentSessionInfo = new int[180];
 
             currentSessionInfo[0] = 23; //clientid
@@ -48,7 +51,7 @@ namespace sprint_1_def
             
             Button b = ((Button)e.Source);
             int selectedAnswer = 0;
-
+            
             //achterhalen welk antwoord geselecteerd is
             for (int i = 0; i < 7; i++)
             {
@@ -64,13 +67,16 @@ namespace sprint_1_def
             //antwoorden in array zetten, 6 en 7 staan voor de antwoorden op hulpvraag
             if (selectedAnswer == 6)
             {
+                answer.Help = 1;
                 currentSessionInfo[placeArray + 1] = 1; //hulpvraag antwoorden staan een plek verder
             }
             else if (selectedAnswer == 7)
             {
+                answer.Help = 2;
                 currentSessionInfo[placeArray + 1] = 2;
             }
             else
+                answer.AnswerButton = selectedAnswer;
                 currentSessionInfo[placeArray] = selectedAnswer;
 
             if (b.Background != Brushes.Purple)
@@ -85,6 +91,7 @@ namespace sprint_1_def
             }
             else
             {
+                
                 helpStackPanel.Visibility = Visibility.Hidden;
             }
         }
@@ -181,6 +188,8 @@ namespace sprint_1_def
         {
             if (currentQuestion != 45)
             {
+                answer.writeAnswerToTextFile();
+                answer = new Answer(clientId);
                 currentQuestion++;
                 loadQuestion();
             }
@@ -203,13 +212,15 @@ namespace sprint_1_def
             if (currentQuestion < 45)
             {
                 currentQuestion++;
+                writeUserToTextFile();
+                answer = new Answer(clientId);
                 loadQuestion();
 
                 if (currentQuestion == 45)
                 {
                     confirmButton.Content = "Bevestig vragenlijst";
 
-                    writeUserToTextFile();
+                    
                 }
 
             }
