@@ -106,7 +106,7 @@ namespace sprint_1_def
             using (var client = new HttpClient())
             {
                 MD5 md5hash = MD5.Create();
-                client.BaseAddress = new Uri("http://localhost:15060/");
+                client.BaseAddress = new Uri("http://localhost:18137/");
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
                 var gizmo = new User()
