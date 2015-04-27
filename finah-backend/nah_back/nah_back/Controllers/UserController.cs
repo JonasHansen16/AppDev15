@@ -28,7 +28,7 @@ namespace nah_back.Controllers
         /// <param name="user">The user to register.</param>
         /// <returns></returns>
         [AllowAnonymous]
-        [Route("Register")]
+        [Route("api/User/Register")]
         public HttpResponseMessage Register(nah_back.Models.User user)
         {
             HttpResponseMessage resp = new HttpResponseMessage();
