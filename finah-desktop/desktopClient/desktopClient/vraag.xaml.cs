@@ -23,14 +23,20 @@ namespace sprint_1_def
     public partial class vraag : Window
     {
         private int currentQuestion;
-        private int clientId;  //clientId meegeven via parent
+        private int clientId = 1;  //clientId meegeven via parent
         private int[] currentSessionInfo;
+        private Button[] buttons;
+        private Answer answer;
+        
 
         public vraag()
         {
             InitializeComponent();
+            buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
             //array met answerwaarden, worden weggeschreven in vorm: clientId-currentQuestion-answer-helpanswer
+            answer = new Answer();
+            answer.ClientId = clientId;
             currentSessionInfo = new int[180];
 
             currentSessionInfo[0] = 23; //clientid
@@ -42,10 +48,10 @@ namespace sprint_1_def
         //antwoorden paars maken, en antwoord in array zetten
         private void selectAnswer(object sender, RoutedEventArgs e)
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             Button b = ((Button)e.Source);
             int selectedAnswer = 0;
-
+            
             //achterhalen welk antwoord geselecteerd is
             for (int i = 0; i < 7; i++)
             {
@@ -61,13 +67,16 @@ namespace sprint_1_def
             //antwoorden in array zetten, 6 en 7 staan voor de antwoorden op hulpvraag
             if (selectedAnswer == 6)
             {
+                answer.Help = 1;
                 currentSessionInfo[placeArray + 1] = 1; //hulpvraag antwoorden staan een plek verder
             }
             else if (selectedAnswer == 7)
             {
+                answer.Help = 2;
                 currentSessionInfo[placeArray + 1] = 2;
             }
             else
+                answer.AnswerButton = selectedAnswer;
                 currentSessionInfo[placeArray] = selectedAnswer;
 
             if (b.Background != Brushes.Purple)
@@ -82,6 +91,7 @@ namespace sprint_1_def
             }
             else
             {
+                
                 helpStackPanel.Visibility = Visibility.Hidden;
             }
         }
@@ -89,7 +99,7 @@ namespace sprint_1_def
         //het laden van een vraag
         private void loadQuestion()
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             int currentPlace = getPlaceArray(currentQuestion); //huidige plaats in de array
             int currentAnswer = currentSessionInfo[currentPlace];
             int currentHelpAnswer = currentSessionInfo[currentPlace + 1];
@@ -123,7 +133,7 @@ namespace sprint_1_def
         //bij een volgende, niet ingevulde vraag alle buttons terug normaal maken
         private void changeAnswersToBeginState(object sender)
         {
-            Button[] buttons = { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
+            
             SolidColorBrush brush = new SolidColorBrush(Color.FromRgb(56, 63, 228));
 
             if (sender != yesButton && sender != noButton)
@@ -178,6 +188,8 @@ namespace sprint_1_def
         {
             if (currentQuestion != 45)
             {
+                answer.writeAnswerToTextFile();
+                answer = new Answer(clientId);
                 currentQuestion++;
                 loadQuestion();
             }
@@ -200,13 +212,15 @@ namespace sprint_1_def
             if (currentQuestion < 45)
             {
                 currentQuestion++;
+                writeUserToTextFile();
+                answer = new Answer(clientId);
                 loadQuestion();
 
                 if (currentQuestion == 45)
                 {
                     confirmButton.Content = "Bevestig vragenlijst";
 
-                    writeUserToTextFile();
+                    
                 }
 
             }
