@@ -24,6 +24,7 @@ namespace sprint_1_def
     public partial class registeren : Window
     {
         static string name;
+        static string username;
         static string lastName;
         static string Email;
         static string password;
@@ -33,6 +34,13 @@ namespace sprint_1_def
             InitializeComponent();
 
         }
+        private void terugButton_Click(object sender, RoutedEventArgs e)
+        {
+            var winLogin = new login();
+            winLogin.Show();
+            this.Close();
+        }
+
 
         private void emailvalidation(object sender, System.EventArgs e)
         {
@@ -76,27 +84,33 @@ namespace sprint_1_def
 
         }
 
-        private void emailvalidation2(object sender, RoutedEventArgs e)
+        private void passwordvalidation(object sender, RoutedEventArgs e)
         {
-            if (!(EmailTextBox1.Text == EmailTextBox2.Text))
+            if (textboxWachtwoord.Text != null && textBoxWachtwoord2.Text == null)
             {
-                EmailTextBox2.ToolTip = "niet hetzelfde email adres. geeft het juiste email adres in";
+                if (textboxWachtwoord.Text.Length < 8)
+                {
+                    textboxWachtwoord.ToolTip = "het wachtwoord moet minstens 8 tekens lang zijn";
+                    textboxWachtwoord.Background = Brushes.Red;
+                }
             }
-        }
-
-        private void terugButton_Click(object sender, RoutedEventArgs e)
-        {
-            var winLogin = new login();
-            winLogin.Show();
-            this.Close();
+            if (textboxWachtwoord.Text != null && textBoxWachtwoord2.Text != null)
+            {
+                if (!(textboxWachtwoord.Text == textBoxWachtwoord2.Text))
+                {
+                    textBoxWachtwoord2.ToolTip = "niet hetzelfde wachtwoord. geeft het juiste wachtwoord in";
+                    textBoxWachtwoord2.Background = Brushes.Red;
+                }
+            }
         }
 
         private void aanvraagButton_Click(object sender, RoutedEventArgs e)
         {
             name = VoornaamTextBox.Text;
+            username = usernameTextbox.Text;
             lastName = AchternaamTextBox.Text;
             Email = EmailTextBox1.Text;
-            password = PassWordTextBox1.Text;
+            password = textboxWachtwoord.Text;
             occupation = beroepTextbox.Text;
             RunAsync().Wait();
            
@@ -112,7 +126,7 @@ namespace sprint_1_def
                 var gizmo = new User()
                 {
                     
-                    UserName = "JJJJJJJ",
+                    UserName = username,
                     Name = name,
                     LastName = lastName,
                     Email = Email,
@@ -165,6 +179,8 @@ namespace sprint_1_def
             // Return the hexadecimal string. 
             return sBuilder.ToString();
         }
+
+        
 
 
 
