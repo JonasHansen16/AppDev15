@@ -144,10 +144,9 @@ namespace sprint_1_def
             bool result;
 
             //Create our client
-            using (var client = new HttpClient())
-            {
-                // Set the base address
-                client.BaseAddress = new Uri("http://localhost:18137");
+            using (var client = ApiConnection.getConnection())
+            {              
+              
                 // Make our request and request the results
                 HttpResponseMessage response = client.PostAsJsonAsync("api/user/register", toRegister).Result;
                 // Throw an exception if an error occurs
@@ -182,10 +181,9 @@ namespace sprint_1_def
             bool exists;
 
             // We check whether or not the user already existed.
-            using (var client = new HttpClient())
+            using (var client = ApiConnection.getConnection())
             {
-                // Set the base address
-                client.BaseAddress = new Uri("http://localhost:18137");
+                
                 // Make our request and request the results
                 HttpResponseMessage response = client.PostAsJsonAsync("api/user/exists", failure).Result;
                 // Throw an exception if an error occurs
@@ -217,14 +215,14 @@ namespace sprint_1_def
         /// <returns>A User created via the input fields.</returns>
         private User inputfieldsToUser()
         {
-            MD5 md5hash = MD5.Create();
+            
             User output = new User()
             {
                 UserName = username,
                 Name = name,
                 LastName = lastName,
                 Email = Email,
-                Password = GetMd5Hash(md5hash, password),
+                Password = HashMd5.Md5Hash(password),
                 Occupation = occupation,
                 Admin = false,
                 Active = false,
@@ -234,26 +232,7 @@ namespace sprint_1_def
             return output;
         }
 
-        string GetMd5Hash(MD5 md5Hash, string input)
-        {
 
-            // Convert the input string to a byte array and compute the hash. 
-            byte[] data = md5Hash.ComputeHash(Encoding.UTF8.GetBytes(input));
-
-            // Create a new Stringbuilder to collect the bytes 
-            // and create a string.
-            StringBuilder sBuilder = new StringBuilder();
-
-            // Loop through each byte of the hashed data  
-            // and format each one as a hexadecimal string. 
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            // Return the hexadecimal string. 
-            return sBuilder.ToString();
-        }
     }
 }
 
