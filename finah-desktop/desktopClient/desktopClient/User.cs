@@ -5,9 +5,8 @@ using System.Web;
 
 namespace sprint_1_def
 {
-    public class User
+     class User
     {
-        public int Id { get; set; }
         public string Name { get; set; }
         public string LastName { get; set; }
         public string Email { get; set; }
@@ -23,7 +22,7 @@ namespace sprint_1_def
 
         }
 
-        public User(string name, string lastname, string email, string password, string occupation, bool admin = false, bool active = false, bool denied = false, int id = 0)
+        public User(string name, string lastname, string email, string password, string occupation, bool admin = false, bool active = false, bool denied = false)
         {
             Name = name;
             LastName = lastname;
@@ -33,7 +32,8 @@ namespace sprint_1_def
             Admin = admin;
             Active = active;
             Denied = denied;
-            Id = id;
         }
+
+      
     }
 }
