@@ -145,9 +145,9 @@ namespace sprint_1_def
 
         private void passwordvalidation(object sender, RoutedEventArgs e)
         {
-            if (textboxWachtwoord.Text != null)
+            if (textboxWachtwoord.Password != null)
             {
-                if (textboxWachtwoord.Text.Length < 8)
+                if (textboxWachtwoord.Password.Length < 8)
                 {
                     textboxWachtwoord.ToolTip = "het wachtwoord moet minstens 8 tekens lang zijn";
                     textboxWachtwoord.Background = Brushes.Red;
@@ -157,9 +157,9 @@ namespace sprint_1_def
                     textboxWachtwoord.Background = Brushes.White;
                 }
             }else
-            if (textboxWachtwoord.Text != null && textBoxWachtwoord2.Text != null)
+            if (textboxWachtwoord.Password != null && textBoxWachtwoord2.Password != null)
             {
-                if (!(textboxWachtwoord.Text == textBoxWachtwoord2.Text))
+                if (!(textboxWachtwoord.Password == textBoxWachtwoord2.Password))
                 {
                     textBoxWachtwoord2.ToolTip = "niet hetzelfde wachtwoord. geeft het juiste wachtwoord in";
                     textBoxWachtwoord2.Background = Brushes.Red;
@@ -179,7 +179,7 @@ namespace sprint_1_def
             username = usernameTextbox.Text;
             lastName = AchternaamTextBox.Text;
             Email = EmailTextBox1.Text;
-            password = textboxWachtwoord.Text;
+            password = textboxWachtwoord.Password;
             occupation = beroepTextbox.Text;
             sendRequestWrapper(inputfieldsToUser());
         }

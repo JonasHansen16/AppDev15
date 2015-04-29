@@ -13,8 +13,8 @@
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Voornaam:" VerticalAlignment="Top" Canvas.Left="75" Canvas.Top="30" PreviewTextInput="nummers_PreviewTextInput"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Achternaam:" VerticalAlignment="Top" Canvas.Left="64" Canvas.Top="69"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="61" Canvas.Top="107"/>
-                <TextBox x:Name="textBoxWachtwoord2" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="140" LostFocus="passwordvalidation" TabIndex="3"/>
-                <TextBox x:Name="textboxWachtwoord" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="100" TabIndex="2" LostFocus="passwordvalidation"/>
+                <PasswordBox x:Name="textBoxWachtwoord2" HorizontalAlignment="Left" Height="23"  VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="140" LostFocus="passwordvalidation" TabIndex="3"/>
+                <PasswordBox x:Name="textboxWachtwoord" HorizontalAlignment="Left" Height="23"  VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="100" TabIndex="2" LostFocus="passwordvalidation"/>
                 <TextBox x:Name="AchternaamTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="59" TabIndex="1" LostFocus="lastnamevalidation"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord Herhalen:" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="147"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Emailadres:" VerticalAlignment="Top" Canvas.Left="73" Canvas.Top="187"/>
@@ -25,6 +25,7 @@
                 <TextBox x:Name="usernameTextbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="178" Canvas.Top="219" TabIndex="5" LostFocus="usernamevalidation"/>
                 <TextBox x:Name="beroepTextbox" PreviewTextInput="nummers_PreviewTextInput" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="179" Canvas.Top="267" TabIndex="6"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Beroep:" VerticalAlignment="Top" Canvas.Left="91" Canvas.Top="274" RenderTransformOrigin="1.142,0.588"/>
+                
             </Canvas>
         </GroupBox>
         <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="842,599,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
