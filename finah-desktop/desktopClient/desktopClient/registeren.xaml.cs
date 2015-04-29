@@ -47,13 +47,17 @@ namespace sprint_1_def
             if (EmailTextBox1.Text.Length == 0)
             {
                 EmailTextBox1.ToolTip = "Enter an email.";
-                EmailTextBox1.Focus();
+                EmailTextBox1.Background = Brushes.Red;
             }
             else if (!Regex.IsMatch(EmailTextBox1.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
                 EmailTextBox1.ToolTip = "Enter a valid email.";
                 EmailTextBox1.Select(0, EmailTextBox1.Text.Length - 1);
-                EmailTextBox1.Focus();
+                EmailTextBox1.Background = Brushes.Red;
+            }
+            else
+            {
+                EmailTextBox1.Background = Brushes.White;
             }
         }
 
@@ -84,25 +88,90 @@ namespace sprint_1_def
 
         }
 
+        private void usernamevalidation(object sender, RoutedEventArgs e)
+        {
+            if (usernameTextbox.Text.Length > 20)
+            {
+                usernameTextbox.ToolTip = "de username mag maximum 20 tekens lang zijn";
+                usernameTextbox.Background = Brushes.Red;
+            }else
+            if (usernameTextbox.Text.Length < 4)
+            {
+                usernameTextbox.ToolTip = "de username moet minstens 4 tekens lang zijn";
+                usernameTextbox.Background = Brushes.Red;
+            }
+            else
+            {
+                usernameTextbox.Background = Brushes.White;
+            }
+
+        }
+
+        private void lastnamevalidation(object sender, RoutedEventArgs e)
+        {
+            if (AchternaamTextBox.Text.Length > 50)
+            {
+                AchternaamTextBox.ToolTip = "de achternaam mag maximum 50 tekens lang zijn";
+                AchternaamTextBox.Background = Brushes.Red;
+            }else
+            if (AchternaamTextBox.Text.Length < 1)
+            {
+                AchternaamTextBox.ToolTip = "de achternaam moet minstens 1 teken lang zijn";
+                AchternaamTextBox.Background = Brushes.Red;
+            }
+            else
+            {
+                AchternaamTextBox.Background = Brushes.White;
+            }
+        }
+
+        private void firstnamevalidation(object sender, RoutedEventArgs e)
+        {
+            if (VoornaamTextBox.Text.Length > 50)
+            {
+                VoornaamTextBox.ToolTip = "de voornaam mag maximum 50 tekens lang zijn";
+                VoornaamTextBox.Background = Brushes.Red;
+            } else
+            if (VoornaamTextBox.Text.Length < 1)
+            {
+                VoornaamTextBox.ToolTip = "de voornaam moet minstens 1 teken lang zijn";
+                VoornaamTextBox.Background = Brushes.Red;
+            }
+            else
+            {
+                VoornaamTextBox.Background = Brushes.White;
+            }
+        }
+
         private void passwordvalidation(object sender, RoutedEventArgs e)
         {
-            if (textboxWachtwoord.Text != null && textBoxWachtwoord2.Text == null)
+            if (textboxWachtwoord.Password != null)
             {
-                if (textboxWachtwoord.Text.Length < 8)
+                if (textboxWachtwoord.Password.Length < 8)
                 {
                     textboxWachtwoord.ToolTip = "het wachtwoord moet minstens 8 tekens lang zijn";
                     textboxWachtwoord.Background = Brushes.Red;
                 }
-            }
-            if (textboxWachtwoord.Text != null && textBoxWachtwoord2.Text != null)
+                else
+                {
+                    textboxWachtwoord.Background = Brushes.White;
+                }
+            }else
+            if (textboxWachtwoord.Password != null && textBoxWachtwoord2.Password != null)
             {
-                if (!(textboxWachtwoord.Text == textBoxWachtwoord2.Text))
+                if (!(textboxWachtwoord.Password == textBoxWachtwoord2.Password))
                 {
                     textBoxWachtwoord2.ToolTip = "niet hetzelfde wachtwoord. geeft het juiste wachtwoord in";
                     textBoxWachtwoord2.Background = Brushes.Red;
                 }
             }
+            else
+            {
+                textBoxWachtwoord2.Background = Brushes.White;
+                textboxWachtwoord.Background = Brushes.White;
+            }
         }
+
 
         private void aanvraagButton_Click(object sender, RoutedEventArgs e)
         {
@@ -110,7 +179,7 @@ namespace sprint_1_def
             username = usernameTextbox.Text;
             lastName = AchternaamTextBox.Text;
             Email = EmailTextBox1.Text;
-            password = textboxWachtwoord.Text;
+            password = textboxWachtwoord.Password;
             occupation = beroepTextbox.Text;
             sendRequestWrapper(inputfieldsToUser());
         }
@@ -254,6 +323,9 @@ namespace sprint_1_def
             // Return the hexadecimal string. 
             return sBuilder.ToString();
         }
+
+
+        
     }
 }
 
