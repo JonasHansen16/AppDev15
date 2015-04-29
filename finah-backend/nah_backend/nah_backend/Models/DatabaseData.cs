@@ -32,7 +32,7 @@ namespace nah_back.Models
             }
             public static class Password
             {
-                public static int minlen = 255;
+                public static int minlen = 20;
             }
         }
 

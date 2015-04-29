@@ -29,9 +29,9 @@
 
             </Grid>
             <Label x:Name="NaamLabel" Content="Naam:" HorizontalAlignment="Left" Margin="493,92,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.829,0.577"/>
-            <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="23" Margin="542,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
+            <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="23" Margin="542,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="0"/>
             <Label x:Name="VoornaamLabel" Content="Voornaam:" HorizontalAlignment="Left" Margin="469,118,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <TextBox x:Name="VoornaamTextBox" HorizontalAlignment="Left" Height="23" Margin="542,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184"/>
+            <TextBox x:Name="VoornaamTextBox" HorizontalAlignment="Left" Height="23" Margin="542,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" TabIndex="1"/>
             <Label x:Name="WoonplaatsLabel" Content="Woonplaats:" HorizontalAlignment="Left" Margin="461,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <Label x:Name="EmailLabel" Content="E-mailadres:" HorizontalAlignment="Left" Margin="461,180,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <Label x:Name="CategoryLabel" Content="NAH-Categorie:" HorizontalAlignment="Left" Margin="441,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
@@ -39,13 +39,13 @@
             <Label x:Name="AgeClientLabel" Content="Leeftijdscategorie client:" HorizontalAlignment="Left" Margin="397,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
             <Label x:Name="AgeCaretakerLabel" Content="Leeftijdscategorie mantelverzorger:" HorizontalAlignment="Left" Margin="340,302,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25" Height="27"/>
             <Label x:Name="Emailclientlabel" Content="E-mailadressen betrokkenen:" HorizontalAlignment="Left" Margin="372,329,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <TextBox x:Name="ResidenceTextBox" HorizontalAlignment="Left" Height="23" Margin="542,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
-            <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Height="23" Margin="542,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
-            <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Height="41" Margin="542,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587"/>
-            <TextBox x:Name="RelationTextBox" HorizontalAlignment="Left" Height="23" Margin="542,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
-            <TextBox x:Name="NameTextBox_Copy" HorizontalAlignment="Left" Height="23" Margin="542,332,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587"/>
-            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="542,280,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True"/>
-            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="542,307,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True"/>
+            <TextBox x:Name="ResidenceTextBox" HorizontalAlignment="Left" Height="23" Margin="542,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="2"/>
+            <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Height="23" Margin="542,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="3"/>
+            <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Height="41" Margin="542,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="4"/>
+            <TextBox x:Name="RelationTextBox" HorizontalAlignment="Left" Height="23" Margin="542,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="5"/>
+            <TextBox x:Name="NameTextBox_Copy" HorizontalAlignment="Left" Height="23" Margin="542,332,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="8"/>
+            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="542,280,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="6"/>
+            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="542,307,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="7"/>
             <Button x:Name="AddButton" Content="Toevoegen" HorizontalAlignment="Left" Margin="828,368,0,0" VerticalAlignment="Top" Width="75"/>
             <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="10,396,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
 
