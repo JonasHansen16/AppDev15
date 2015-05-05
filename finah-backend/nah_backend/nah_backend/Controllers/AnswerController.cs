@@ -295,5 +295,37 @@ namespace nah_backend.Controllers
             // If we did not find a result, we return -1
             return -1;
         }
+
+        // POST api/answer/InsertList
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// insert a list of answers into the database.
+        /// </summary>
+        /// <param name="client">The Client containing an id-hash combination.</param>
+        /// <param name="answer">The Answer containing the question id, the score and whether or not help was requested.</param>
+        /// <returns>True if the database was updated successfully, false otherwise. 
+        /// False if the client does not exist or if one of the answers does not fit the required format.</returns>
+        [AllowAnonymous]
+        [Route("api/answer/InsertList")]
+        public bool InsertList(Client client, List<Answer> answers)
+        {
+            // If the client does not exist, we return false
+            if (!clientDBExists(client))
+                return false;
+            // If any of the answers does not fit the database, we return false
+            foreach(Answer answer in answers)
+                if (!answerDBCheck(answer))
+                    return false;
+            // If something fails while invalidating the previous answers for the same questions, we return false
+            foreach (Answer answer in answers)
+                if (!answerDBInvalidate(client, answer))
+                    return false;
+            // If everything else succeeds, insert all the answers. If something goes wrong, return false
+            foreach (Answer answer in answers)
+                if (!answerDBInsert(client, answer))
+                    return false;
+            // If everything succeeded, return true
+            return true;
+        }
     }
 }

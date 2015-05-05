@@ -71,6 +71,28 @@ namespace nah_backend.Controllers
             "AND question.id = @Qid " +
             ";";
 
+        private string _qUnanswered =
+            "SELECT question.id, question.txt, question.title " +
+            "FROM client, form, questionnaire, questionlist, question " +
+            "WHERE client.id = @Id AND client.hash = @Hash " +
+            "AND client.formid = form.id " +
+            "AND form.airid = questionnaire.id " +
+            "AND questionnaire.id = questionlist.airid " +
+            "AND questionlist.qid = question.id " +
+            "AND NOT EXISTS " +
+	        "    ( " +
+	        "     SELECT qid FROM " + 
+		    "        (SELECT qid " +
+		    "         FROM answer, client " +
+		    "         WHERE client.id = @Id " +
+		    "         AND client.hash = @Hash " +
+		    "         AND client.id = answer.clientid " +
+		    "         AND answer.final = 1 " +
+		    "         ) AS answers " +
+	        "      WHERE answers.qid = question.id " +
+	        "    ) " +
+            ";";
+
         private string _qExists = "SELECT id FROM client WHERE id = @Id AND hash = @Hash";
 
         // POST api/question/Next
@@ -312,6 +334,109 @@ namespace nah_backend.Controllers
 
             // If the client does not exist, we return false
             return null;
+        }
+
+        // POST api/question/Unanswered
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// receive all of a client's unanswered questions in a list.
+        /// </summary>
+        /// <param name="client">The Client containing an id-hash combination.</param>
+        /// <returns>A list of unanswered questions or null if the client does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/question/Unanswered")]
+        public List<Question> Unanswered(Client client)
+        {
+            return questionDBUnanswered(client);
+        }
+
+        /// <summary>
+        /// This function will connect to the database, 
+        /// execute a query asking the database for all the client's unanswered questions, 
+        /// and will return them
+        /// </summary>
+        /// <param name="client">The Client containing an id-hash combination.</param>
+        /// <returns>All unanswered questions of the client, or null if the client does not exist.</returns>
+        private List<Question> questionDBUnanswered(Client client)
+        {
+            if (!clientDBExists(client))
+                return null;
+
+            List<Question> output = new List<Question>();
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qUnanswered, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Id", client.Id);
+                selectCommand.Parameters.AddWithValue("@Hash", client.Hash);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader();
+                // Put all results in a list
+                while (reader.Read())
+                { // Get all relevant data and put it in a Question object
+                    Question current = new Question();
+                    current.Id = reader.GetInt32(0);
+                    current.Text = reader.GetString(1);
+                    current.Title = reader.GetString(2);
+                    output.Add(current);
+                }
+            }
+                
+            return output;
+        }
+
+        // POST api/question/AllAnswered
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// check if all questions of a client have been answered or not.
+        /// </summary>
+        /// <param name="client">The Client containing an id-hash combination.</param>
+        /// <returns>True if the client exists and has answered all questions, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/question/AllAnswered")]
+        public bool AllAnswered(Client client)
+        {
+            return questionDBAllAnswered(client);
+        }
+
+        /// <summary>
+        /// This function will connect to the database, 
+        /// execute a query asking the database for all the client's unanswered questions, 
+        /// and will return false if there is at least one.
+        /// </summary>
+        /// <param name="client">The Client containing an id-hash combination.</param>
+        /// <returns>False if there is at least one unanswered question or the user does not exist. True otherwise.</returns>
+        private bool questionDBAllAnswered(Client client)
+        {
+            if (!clientDBExists(client))
+                return false;
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qUnanswered, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Id", client.Id);
+                selectCommand.Parameters.AddWithValue("@Hash", client.Hash);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader();
+                // Put all results in a list
+                if (reader.Read())
+                { // If we have a result, return false
+                    return false;
+                }
+            }
+
+            // Else return true
+            return true;
         }
     }
 }
