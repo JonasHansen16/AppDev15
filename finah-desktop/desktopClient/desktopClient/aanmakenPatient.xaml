@@ -15,39 +15,55 @@
             </Border>
         </Grid>
         <Grid HorizontalAlignment="Left" Height="426" Margin="10,158,0,0" VerticalAlignment="Top" Width="970" Background="LightBlue">
-
-            <Button x:Name="CreatePatient" Content="Nieuwe patient toevoegen" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="152"/>
-            <Button x:Name="OverView" Content="Rapporten" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="152" RenderTransformOrigin="0.34,-0.023"/>
+            <Button x:Name="OverView" Content="Rapporten" HorizontalAlignment="Left" Margin="10,67,0,0" VerticalAlignment="Top" Width="152" RenderTransformOrigin="0.34,-0.023" Click="OverView_Click"/>
             <Grid HorizontalAlignment="Left" Height="442" Margin="162,13,0,0" VerticalAlignment="Top" Width="808">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="15*"/>
                     <ColumnDefinition Width="794*"/>
                 </Grid.ColumnDefinitions>
-                <Grid HorizontalAlignment="Left" Height="442" VerticalAlignment="Top" Width="808" Grid.ColumnSpan="2" Background="LightBlue">
-                    <Border BorderBrush="LightGray" BorderThickness="2" HorizontalAlignment="Left" Height="412" VerticalAlignment="Top" Width="808" RenderTransformOrigin="0.493,0.498" />
-                </Grid>
+                <Grid HorizontalAlignment="Left" Height="442" VerticalAlignment="Top" Width="808" Grid.ColumnSpan="2" Background="LightBlue"/>
 
             </Grid>
-            <Label x:Name="NaamLabel" Content="Naam:" HorizontalAlignment="Left" Margin="493,92,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.829,0.577"/>
-            <TextBox x:Name="NameTextBox" HorizontalAlignment="Left" Height="23" Margin="542,95,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="0"/>
-            <Label x:Name="VoornaamLabel" Content="Voornaam:" HorizontalAlignment="Left" Margin="469,118,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <TextBox x:Name="VoornaamTextBox" HorizontalAlignment="Left" Height="23" Margin="542,121,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" TabIndex="1"/>
-            <Label x:Name="WoonplaatsLabel" Content="Woonplaats:" HorizontalAlignment="Left" Margin="461,149,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="EmailLabel" Content="E-mailadres:" HorizontalAlignment="Left" Margin="461,180,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="CategoryLabel" Content="NAH-Categorie:" HorizontalAlignment="Left" Margin="441,207,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="RelationLabel" Content="Relatie cliënt/mantelzorger:" HorizontalAlignment="Left" Margin="382,250,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="AgeClientLabel" Content="Leeftijdscategorie client:" HorizontalAlignment="Left" Margin="397,276,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <Label x:Name="AgeCaretakerLabel" Content="Leeftijdscategorie mantelverzorger:" HorizontalAlignment="Left" Margin="340,302,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25" Height="27"/>
-            <Label x:Name="Emailclientlabel" Content="E-mailadressen betrokkenen:" HorizontalAlignment="Left" Margin="372,329,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
-            <TextBox x:Name="ResidenceTextBox" HorizontalAlignment="Left" Height="23" Margin="542,152,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="2"/>
-            <TextBox x:Name="EmailTextBox" HorizontalAlignment="Left" Height="23" Margin="542,180,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="3"/>
-            <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Height="41" Margin="542,207,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="4"/>
-            <TextBox x:Name="RelationTextBox" HorizontalAlignment="Left" Height="23" Margin="542,253,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="5"/>
-            <TextBox x:Name="NameTextBox_Copy" HorizontalAlignment="Left" Height="23" Margin="542,332,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="8"/>
-            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="542,280,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="6"/>
-            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="542,307,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="7"/>
+            <Label x:Name="CommentaarLabel" Content="commentaar:" HorizontalAlignment="Left" Margin="446,101,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
+            <Label x:Name="CategoryLabel" Content="NAH-Categorie:" HorizontalAlignment="Left" Margin="431,159,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
+            <Label x:Name="RelationLabel" Content="Relatie cliënt/mantelzorger:" HorizontalAlignment="Left" Margin="372,202,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
+            <Label x:Name="AgeClientLabel" Content="Leeftijdscategorie client:" HorizontalAlignment="Left" Margin="387,228,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25"/>
+            <Label x:Name="AgeCaretakerLabel" Content="Leeftijdscategorie mantelverzorger:" HorizontalAlignment="Left" Margin="330,254,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.289,2.25" Height="27"/>
+            <TextBox x:Name="ResidenceTextBox" HorizontalAlignment="Left" Height="50" Margin="532,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="1"/>
+            <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Height="41" Margin="532,159,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="2"/>
+            <TextBox x:Name="RelationTextBox" HorizontalAlignment="Left" Height="23" Margin="532,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="3"/>
+            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="532,232,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="4">
+                <ComboBoxItem Content="0 tot 10 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="10 tot 20 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="20 tot 30 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="30 tot 40 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="40 tot 50 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="50 tot 60 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="60 tot 70 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="70 tot 80 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="80 tot 90 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="90 tot 100 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="100 tot 110 jaar" HorizontalAlignment="Left" Width="144"/>
+            </ComboBox>
+            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="532,259,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="5">
+                <ComboBoxItem Content="10 tot 20 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="20 tot 30 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="30 tot 40 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="40 tot 50 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="50 tot 60 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="60 tot 70 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="70 tot 80 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="80 tot 90 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="90 tot 100 jaar" HorizontalAlignment="Left" Width="144"/>
+                <ComboBoxItem Content="100 tot 110 jaar" HorizontalAlignment="Left" Width="144"/>
+            </ComboBox>
             <Button x:Name="AddButton" Content="Toevoegen" HorizontalAlignment="Left" Margin="828,368,0,0" VerticalAlignment="Top" Width="75"/>
             <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="10,396,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
+            <ComboBox x:Name="Vragenlijsten" HorizontalAlignment="Left" Margin="532,286,0,0" VerticalAlignment="Top" Width="120">
+
+                <ComboBoxItem Content="NAH" HorizontalAlignment="Left" Width="144"/>
+            </ComboBox>
+            <Label Content="Vragenlijst:" HorizontalAlignment="Left" Margin="457,286,0,0" VerticalAlignment="Top"/>
 
 
 

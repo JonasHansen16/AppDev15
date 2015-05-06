@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -24,11 +25,24 @@ namespace sprint_1_def
             InitializeComponent();
         }
 
+        
+
         private void terugButton_Click(object sender, RoutedEventArgs e)
         {
             var winStart = new startpagina();
             winStart.Show();
             this.Close();
         }
+
+        private void OverView_Click(object sender, RoutedEventArgs e)
+        {
+            var winRapporten = new rapportenoverzicht();
+            winRapporten.Show();
+            this.Close();
+        }
+
+        
+
+        
     }
 }
