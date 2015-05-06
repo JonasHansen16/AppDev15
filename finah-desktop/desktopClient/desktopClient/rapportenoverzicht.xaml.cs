@@ -30,5 +30,12 @@ namespace sprint_1_def
             winStart.Show();
             this.Close();
         }
+
+        private void CreatePatient_Click(object sender, RoutedEventArgs e)
+        {
+            var winPatient = new aanmakenPatient();
+            winPatient.Show();
+            this.Close();
+        }
     }
 }

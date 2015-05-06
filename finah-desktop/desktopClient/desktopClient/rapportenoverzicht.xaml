@@ -15,8 +15,7 @@
         </Grid>
         <Grid HorizontalAlignment="Left" Height="426" Margin="10,166,0,0" VerticalAlignment="Top" Width="970" Background="LightBlue">
 
-            <Button x:Name="CreatePatient" Content="Nieuwe patient toevoegen" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="152"/>
-            <Button x:Name="OverView" Content="Rapporten" HorizontalAlignment="Left" Margin="10,91,0,0" VerticalAlignment="Top" Width="152" RenderTransformOrigin="0.34,-0.023"/>
+            <Button x:Name="CreatePatient" Content="Nieuwe patient toevoegen" HorizontalAlignment="Left" Margin="10,64,0,0" VerticalAlignment="Top" Width="152" Click="CreatePatient_Click"/>
             <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="12,396,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
 
             <Grid HorizontalAlignment="Left" Height="442" Margin="162,13,0,0" VerticalAlignment="Top" Width="808">
