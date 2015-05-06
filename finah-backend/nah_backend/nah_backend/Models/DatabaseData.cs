@@ -35,7 +35,18 @@ namespace nah_back.Models
                 public static int minlen = 20;
             }
         }
-
+        public static class Answer
+        {
+            public static class Score
+            {
+                public static int minval = 1;
+                public static int maxval = 5;
+            }
+            public static class Help
+            {
+                public static int minscore = 3;
+            }
+        }
 
     }
 }

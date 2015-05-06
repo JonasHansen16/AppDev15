@@ -18,3 +18,8 @@ Sprint 1
 ![Website](/screenshots/sprint1/web.png?raw=true "Website")
 ![Offline applicatie 1](/screenshots/sprint1/offline1.png?raw=true "Offline applicatie 1")
 ![Offline applicatie 2](/screenshots/sprint1/offline2.png?raw=true "Offline applicatie 2")
+
+Sprint 2
+![Website](/screenshots/sprint2/web.png?raw=true "Website")
+![Offline applicatie 1](/screenshots/sprint2/offline1.png?raw=true "Offline applicatie 1")
+![Offline applicatie 2](/screenshots/sprint2/offline2.png?raw=true "Offline applicatie 2")

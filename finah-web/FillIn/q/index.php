@@ -8,7 +8,7 @@
         <meta charset="UTF-8">
         <title>FillIn vragenlijst</title>
         <link rel="stylesheet" href="../layout/main.css">
-        <link rel="stylesheet" href="../layout/dark.css">
+        <link rel="stylesheet" href="../layout/light.css">
     </head>
     <body onload="start()" class="preload">
         <?php

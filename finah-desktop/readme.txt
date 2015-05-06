@@ -9,3 +9,6 @@ In order to run any of the projects:
 Open the solution (.sln) file in Microsoft Visual Studio.
 Click build and select 'Build Solution'.
 Once it has finished building, select Debug > Start Without Debugging
+
+In order to register and login, make sure the API is running. 
+You may have to edit the connectionstring in the configuration file.
