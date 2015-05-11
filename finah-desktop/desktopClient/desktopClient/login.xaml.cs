@@ -79,16 +79,8 @@ namespace sprint_1_def
             User result;
 
             //Create our client
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/Login", toLogin).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                result = response.Content.ReadAsAsync<User>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["Login"].ConnectionString, toLogin);
+            result = response.Content.ReadAsAsync<User>().Result;
 
             // We have our result, now do something with it
             if (result != null)
@@ -120,17 +112,8 @@ namespace sprint_1_def
             bool exists;
 
             // We check whether or not the user already existed.
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/exists", failure).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                exists = response.Content.ReadAsAsync<bool>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["UserExists"].ConnectionString, failure);
+            exists = response.Content.ReadAsAsync<bool>().Result;
 
             // If the user already existed, we display an appropriate message.
             if (exists)
@@ -151,19 +134,10 @@ namespace sprint_1_def
 
         private void UserStatus(User status)
         {
+            //Checks if the user is denied, returns a boolean
             bool denied;
-            using (var client = ApiConnection.getConnection())
-            {
-
-
-                // Make our request and request the results
-
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/Denied", status).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                denied = response.Content.ReadAsAsync<bool>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["UserDenied"].ConnectionString, status);
+            denied = response.Content.ReadAsAsync<bool>().Result;
 
             if (denied)
 
@@ -177,19 +151,11 @@ namespace sprint_1_def
 
         private void UserActive(User status)
         {
+            //checks if the user is active
+            //returns a boolean
             bool active;
-            using (var client = ApiConnection.getConnection())
-            {
-
-
-                // Make our request and request the results
-
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/Active", status).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                active = response.Content.ReadAsAsync<bool>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["UserActive"].ConnectionString, status);
+            active = response.Content.ReadAsAsync<bool>().Result;
 
             if (active)
                 MessageBox.Show("Gebruikersnaam en passwoord komen niet overeen.");

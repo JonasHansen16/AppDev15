@@ -6,23 +6,17 @@ using System.Threading.Tasks;
 
 namespace sprint_1_def
 {
-    class Question
+    public class Question
     {
-        public Question()
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string Text { get; set; }
+
+        public Question(int id = 0, string title = "", string text = "")
         {
-
+            Id = id;
+            Title = title;
+            Text = text;
         }
-
-        public int qId { get; set; }
-
-        public string questionText { get; set; }
-
-        public string theme { get; set; }
-
-        public string image { get; set; }
-
-        public string title { get; set; }
-
-
     }
 }

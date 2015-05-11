@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -213,16 +214,8 @@ namespace sprint_1_def
             bool result;
 
             //Create our client
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/register", toRegister).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                result = response.Content.ReadAsAsync<bool>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["Registration"].ConnectionString, toRegister);
+            result = response.Content.ReadAsAsync<bool>().Result;
 
             // We have our result, now do something with it
             if (result)
@@ -249,17 +242,11 @@ namespace sprint_1_def
         {
             bool exists;
 
-            // We check whether or not the user already existed.
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/exists", failure).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["UserExists"].ConnectionString, failure);
+            exists = response.Content.ReadAsAsync<bool>().Result;
                 // Fetch our actual results
-                exists = response.Content.ReadAsAsync<bool>().Result;
-            }
+            
+            
 
             // If the user already existed, we display an appropriate message.
             if (exists)
