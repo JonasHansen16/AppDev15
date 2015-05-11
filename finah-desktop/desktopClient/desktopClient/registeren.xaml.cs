@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,12 +47,12 @@ namespace sprint_1_def
         {
             if (EmailTextBox1.Text.Length == 0)
             {
-                EmailTextBox1.ToolTip = "Enter an email.";
+                EmailTextBox1.ToolTip = "Geef een email adres in.";
                 EmailTextBox1.Background = Brushes.Red;
             }
             else if (!Regex.IsMatch(EmailTextBox1.Text, @"^[a-zA-Z][\w\.-]*[a-zA-Z0-9]@[a-zA-Z0-9][\w\.-]*[a-zA-Z0-9]\.[a-zA-Z][a-zA-Z\.]*[a-zA-Z]$"))
             {
-                EmailTextBox1.ToolTip = "Enter a valid email.";
+                EmailTextBox1.ToolTip = "Geef een juist email-adres in.";
                 EmailTextBox1.Select(0, EmailTextBox1.Text.Length - 1);
                 EmailTextBox1.Background = Brushes.Red;
             }
@@ -92,12 +93,12 @@ namespace sprint_1_def
         {
             if (usernameTextbox.Text.Length > 20)
             {
-                usernameTextbox.ToolTip = "de username mag maximum 20 tekens lang zijn";
+                usernameTextbox.ToolTip = "De gebruikersnaam mag maximum 20 tekens lang zijn";
                 usernameTextbox.Background = Brushes.Red;
             }else
             if (usernameTextbox.Text.Length < 4)
             {
-                usernameTextbox.ToolTip = "de username moet minstens 4 tekens lang zijn";
+                usernameTextbox.ToolTip = "De gebruikersnaam moet minstens 4 tekens lang zijn";
                 usernameTextbox.Background = Brushes.Red;
             }
             else
@@ -111,12 +112,12 @@ namespace sprint_1_def
         {
             if (AchternaamTextBox.Text.Length > 50)
             {
-                AchternaamTextBox.ToolTip = "de achternaam mag maximum 50 tekens lang zijn";
+                AchternaamTextBox.ToolTip = "De achternaam mag maximum 50 tekens lang zijn";
                 AchternaamTextBox.Background = Brushes.Red;
             }else
             if (AchternaamTextBox.Text.Length < 1)
             {
-                AchternaamTextBox.ToolTip = "de achternaam moet minstens 1 teken lang zijn";
+                AchternaamTextBox.ToolTip = "De achternaam moet minstens 1 teken lang zijn";
                 AchternaamTextBox.Background = Brushes.Red;
             }
             else
@@ -129,12 +130,12 @@ namespace sprint_1_def
         {
             if (VoornaamTextBox.Text.Length > 50)
             {
-                VoornaamTextBox.ToolTip = "de voornaam mag maximum 50 tekens lang zijn";
+                VoornaamTextBox.ToolTip = "De voornaam mag maximum 50 tekens lang zijn";
                 VoornaamTextBox.Background = Brushes.Red;
             } else
             if (VoornaamTextBox.Text.Length < 1)
             {
-                VoornaamTextBox.ToolTip = "de voornaam moet minstens 1 teken lang zijn";
+                VoornaamTextBox.ToolTip = "De voornaam moet minstens 1 teken lang zijn";
                 VoornaamTextBox.Background = Brushes.Red;
             }
             else
@@ -149,7 +150,7 @@ namespace sprint_1_def
             {
                 if (textboxWachtwoord.Password.Length < 8)
                 {
-                    textboxWachtwoord.ToolTip = "het wachtwoord moet minstens 8 tekens lang zijn";
+                    textboxWachtwoord.ToolTip = "Het wachtwoord moet minstens 8 tekens lang zijn";
                     textboxWachtwoord.Background = Brushes.Red;
                 }
                 else
@@ -161,7 +162,7 @@ namespace sprint_1_def
             {
                 if (!(textboxWachtwoord.Password == textBoxWachtwoord2.Password))
                 {
-                    textBoxWachtwoord2.ToolTip = "niet hetzelfde wachtwoord. geeft het juiste wachtwoord in";
+                    textBoxWachtwoord2.ToolTip = "Dit is niet hetzelfde wachtwoord, geeft het juiste wachtwoord in";
                     textBoxWachtwoord2.Background = Brushes.Red;
                 }
             }
@@ -213,16 +214,8 @@ namespace sprint_1_def
             bool result;
 
             //Create our client
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/register", toRegister).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                // Fetch our actual results
-                result = response.Content.ReadAsAsync<bool>().Result;
-            }
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["Registration"].ConnectionString, toRegister);
+            result = response.Content.ReadAsAsync<bool>().Result;
 
             // We have our result, now do something with it
             if (result)
@@ -249,17 +242,11 @@ namespace sprint_1_def
         {
             bool exists;
 
-            // We check whether or not the user already existed.
-            using (var client = ApiConnection.getConnection())
-            {
-
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync("api/user/exists", failure).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["UserExists"].ConnectionString, failure);
+            exists = response.Content.ReadAsAsync<bool>().Result;
                 // Fetch our actual results
-                exists = response.Content.ReadAsAsync<bool>().Result;
-            }
+            
+            
 
             // If the user already existed, we display an appropriate message.
             if (exists)

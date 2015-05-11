@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -14,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Drawing;
 
 namespace sprint_1_def
 {
@@ -23,10 +25,13 @@ namespace sprint_1_def
     public partial class vraag : Window
     {
         private int currentQuestion;
-        private int clientId = 1;  //clientId meegeven via parent
-        private int[] currentSessionInfo;
+        
+       
         private Button[] buttons;
         private Answer answer;
+        private Client client;
+        private QuestionList allQuestions;
+        private List<Answer> _allAnswers;
         
 
         public vraag()
@@ -34,18 +39,21 @@ namespace sprint_1_def
             InitializeComponent();
             buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
-            //array met answerwaarden, worden weggeschreven in vorm: clientId-currentQuestion-answer-helpanswer
+            allQuestions = new QuestionList();           
             answer = new Answer();
-            answer.ClientId = clientId;
-            currentSessionInfo = new int[180];
+            client = new Client();
+            client.Id = 1;
+            client.Hash = "abcdefgh";
+            GetQuestionList();
+            _allAnswers = new List<Answer>();
+            
+           
 
-            currentSessionInfo[0] = 23; //clientid
-
-            currentQuestion = 1;
+            currentQuestion = 0;
 
             loadQuestion();
         }
-        //antwoorden paars maken, en antwoord in array zetten
+        //antwoorden paars maken, en antwoord in answer object zetten
         private void selectAnswer(object sender, RoutedEventArgs e)
         {
             
@@ -62,27 +70,27 @@ namespace sprint_1_def
                 }
             }
 
-            int placeArray = getPlaceArray(currentQuestion);
+            
 
-            //antwoorden in array zetten, 6 en 7 staan voor de antwoorden op hulpvraag
+            //antwoorden in answer zetten, 6 en 7 staan voor de antwoorden op hulpvraag
             if (selectedAnswer == 6)
             {
-                answer.Help = 1;
-                currentSessionInfo[placeArray + 1] = 1; //hulpvraag antwoorden staan een plek verder
+                answer.Help = false;
+                
             }
             else if (selectedAnswer == 7)
             {
-                answer.Help = 2;
-                currentSessionInfo[placeArray + 1] = 2;
+                answer.Help = true;
+                
             }
             else
-                answer.AnswerButton = selectedAnswer;
-                currentSessionInfo[placeArray] = selectedAnswer;
+                answer.Score = selectedAnswer;
 
-            if (b.Background != Brushes.Purple)
+
+            if (b.Background != System.Windows.Media.Brushes.Purple)
                 changeAnswersToBeginState(b);
 
-            b.Background = Brushes.Purple;
+            b.Background = System.Windows.Media.Brushes.Purple;
 
             //hulpvraag visible maken als als de laatste 3 antwoorden geselecteerd worden
             if (b == answer3Button || b == answer4Button || b == answer5Button || b == yesButton || b == noButton)
@@ -100,41 +108,51 @@ namespace sprint_1_def
         private void loadQuestion()
         {
             
-            int currentPlace = getPlaceArray(currentQuestion); //huidige plaats in de array
-            int currentAnswer = currentSessionInfo[currentPlace];
-            int currentHelpAnswer = currentSessionInfo[currentPlace + 1];
+             //huidige plaats in de array
+            int currentAnswer = _allAnswers[currentQuestion].Score;
+            bool currentHelpAnswer = _allAnswers[currentQuestion].Help;
+            
 
             changeAnswersToBeginState(null);
 
             if (currentAnswer != 0) //als er voor die vraag nog niks is ingevuld
             {
-                buttons[currentAnswer - 1].Background = Brushes.Purple;
+                buttons[currentAnswer - 1].Background = System.Windows.Media.Brushes.Purple;
             }
             else
                 helpStackPanel.Visibility = Visibility.Hidden;
 
-            if (currentHelpAnswer == 1)
+            if (currentHelpAnswer == false)
             {
-                yesButton.Background = Brushes.Purple;
+                yesButton.Background = System.Windows.Media.Brushes.Purple;
                 helpStackPanel.Visibility = Visibility.Visible;
             }
-            else if (currentHelpAnswer == 2)
+            else if (currentHelpAnswer == true)
             {
-                noButton.Background = Brushes.Purple;
+                noButton.Background = System.Windows.Media.Brushes.Purple;
                 helpStackPanel.Visibility = Visibility.Visible;
             }
 
             //ophalen van vraaginhoud
-            questionNumberTextBlock.Content = "Vraag " + currentQuestion + "/45";
-            questionTextBlock.Text = File.ReadLines("../../questions/questions.txt").Skip(currentQuestion - 1).Take(1).First();
-            questionImage.Source = new BitmapImage(new Uri("../../ImagesQ/" + currentQuestion + ".jpg", UriKind.Relative));
+            byte[] byteImage;
+            questionNumberTextBlock.Content = "Vraag " + allQuestions.Questions[currentQuestion].Id + allQuestions.Questions.Count;
+            questionTextBlock.Text = allQuestions.Questions[currentQuestion].Text;
+            CLID clid = new CLID();
+            clid.CL = client;
+            clid.ID = allQuestions.Questions[currentQuestion].Id;
+
+            HttpResponseMessage response =  ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetImage"].ConnectionString, clid );
+            byteImage = response.Content.ReadAsAsync<byte[]>().Result;
+            questionImage.Source = ByteToImage(byteImage);
+            
+
         }
 
         //bij een volgende, niet ingevulde vraag alle buttons terug normaal maken
         private void changeAnswersToBeginState(object sender)
         {
-            
-            SolidColorBrush brush = new SolidColorBrush(Color.FromRgb(56, 63, 228));
+
+            SolidColorBrush brush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(56, 63, 228));
 
             if (sender != yesButton && sender != noButton)
             {
@@ -150,34 +168,14 @@ namespace sprint_1_def
                 yesButton.Background = brush;
         }
 
-        //achterhalen waar in de array het antwoord op de huidige vraag staat
-        private int getPlaceArray(int currentQuestion)
-        {
-            int currentPlace = (currentQuestion - 1) * 4 + 2;
+    
 
-            return currentPlace;
-        }
-
-        /*bijhouden van de antwoorden wanneer de applicatie offline wordt gebruikt
-         * later worden die in de database opgeslagen
-         * ze staan in de vorm: clientId-currentQuestion-answer-helpAnswer
-         */
-        private void writeUserToTextFile()
-        {
-            StreamWriter userWriter = new StreamWriter("../../users/users.txt", true);
-
-            foreach (int value in currentSessionInfo)
-            {
-                userWriter.Write(value);
-            }
-            userWriter.WriteLine();
-
-            userWriter.Close();
-        }
+        
+        
 
         private void previousButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentQuestion != 1)
+            if (currentQuestion != 0)
             {
                 currentQuestion--;
                 loadQuestion();
@@ -186,10 +184,9 @@ namespace sprint_1_def
 
         private void nextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentQuestion != 45)
+            if (currentQuestion != allQuestions.Questions.Count)
             {
-                answer.writeAnswerToTextFile();
-                answer = new Answer(clientId);
+                
                 currentQuestion++;
                 loadQuestion();
             }
@@ -197,28 +194,72 @@ namespace sprint_1_def
 
         private void restartButton_Click(object sender, RoutedEventArgs e)
         {
-            currentQuestion = 1;
-
-            for (int i = 2; i < 180; i++)
-            {
-                currentSessionInfo[i] = 0;
-            }
-
+            currentQuestion = 0;
+            _allAnswers = new List<Answer>();
             loadQuestion();
         }
 
         private void confirmButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentQuestion < 45)
+            writeAnswerToTextFile();
+            if (currentQuestion < allQuestions.Questions.Count-1)
             {
-                currentQuestion++;
-                writeUserToTextFile();
-                answer = new Answer(clientId);
+                _allAnswers.Add(answer);
+                currentQuestion++;               
+                answer = new Answer();
                 loadQuestion();
 
-                if (currentQuestion == 45)
+                if (currentQuestion == allQuestions.Questions.Count-1)
                 {
+                    bool result;
+                    List<Answer> finalAllAnswers = new List<Answer>();
+                    Answer currentAnswer = new Answer();
+                    StreamReader reader = new StreamReader("../../users/"+client.Id+".txt", true);
+                    while (!reader.Peek().Equals(""))
+                    {
+
+                        currentAnswer.QuestionId = Convert.ToInt32(reader.ReadLine());
+                        currentAnswer.Score = Convert.ToInt32(reader.ReadLine());
+                        currentAnswer.Help = Convert.ToBoolean(reader.ReadLine());
+                        finalAllAnswers.Add(currentAnswer);
+                    }
+                    CLANL clanl = new CLANL();
+                    clanl.ANL = finalAllAnswers;
+                    clanl.CL = client;
+                    HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendAnswers"].ConnectionString, clanl);
+                    result = response.Content.ReadAsAsync<bool>().Result;
+
+                    if (result == false)
+                    {
+                        MessageBox.Show("Fout opgetreden tijdens het wegschrijven van de antwoorden naar de database");
+                        var window = new startpagina();
+                        window.Show();
+                        this.Close();
+                    }
+                    else
+                    {
+                        File.Delete("../../users/"+client.Id+".txt");
+                        HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, client);
+                        result = checkresponse.Content.ReadAsAsync<bool>().Result;
+                        if (result == true)
+                        {
+                            var window = new login();
+                            window.Show();
+                            this.Close();
+                        }
+                        else
+                        {
+                            HttpResponseMessage checkresponse2 = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAllUnanswered"].ConnectionString, client);
+                            allQuestions.Questions = checkresponse2.Content.ReadAsAsync<List<Question>>().Result;
+                            currentQuestion = 0;
+                            loadQuestion();
+                            _allAnswers = new List<Answer>();
+                            answer = new Answer();
+                        }
+
+                    }
                     confirmButton.Content = "Bevestig vragenlijst";
+
 
                     
                 }
@@ -230,6 +271,47 @@ namespace sprint_1_def
                 succesStackPanel.Visibility = Visibility.Visible;
             }
 
+        }
+
+        private void writeAnswerToTextFile()
+        {
+            
+            
+            StreamWriter userWriter = new StreamWriter("../../users/1.txt", true);
+
+            userWriter.WriteLine(answer.QuestionId);
+            userWriter.WriteLine(answer.Score);
+            userWriter.WriteLine(answer.Help);
+
+            userWriter.Close();
+        }
+
+        private void GetQuestionList()
+        {
+            Question question = new Question();
+            StreamReader reader = new StreamReader("../../questions/Questionnaire.txt", true);
+            while (!reader.Peek().Equals(""))
+            {
+                
+                question.Id = Convert.ToInt32(reader.ReadLine());
+                question.Text = reader.ReadLine();
+                question.Title = reader.ReadLine();
+                allQuestions.Questions.Add(question);
+            }
+        }
+
+        //converts byte array to image
+        private ImageSource ByteToImage(byte[] imageData)
+        {
+            BitmapImage biImg = new BitmapImage();
+            MemoryStream ms = new MemoryStream(imageData);
+            biImg.BeginInit();
+            biImg.StreamSource = ms;
+            biImg.EndInit();
+
+            ImageSource imgSrc = biImg as ImageSource;
+
+            return imgSrc;
         }
     }
 

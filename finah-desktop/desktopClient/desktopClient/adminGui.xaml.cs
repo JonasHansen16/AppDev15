@@ -37,7 +37,7 @@ namespace sprint_1_def
             items.Add(new Hulpverlener("Jeff Goyen"));
             items.Add(new Hulpverlener("Pieter Post"));
             items.Add(new Hulpverlener("Pieter Janssen"));
-        
+
             items.Add(new Hulpverlener("Pieter Post"));
 
             var grid = sender as DataGrid;
@@ -55,17 +55,5 @@ namespace sprint_1_def
 
     }
 
-    class Hulpverlener
-    {
-        public string Name { get; set; }
-
-        public string Details { get; set; }
-
-        public Hulpverlener(string name)
-        {
-            this.Name = name;
-            this.Details = "Bekijk details";
-        }
-    }
 }
 

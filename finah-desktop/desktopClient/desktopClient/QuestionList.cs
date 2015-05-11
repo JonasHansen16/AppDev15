@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections;
+using System.Net.Http;
+using System.Windows;
 
 
 namespace sprint_1_def
@@ -11,12 +13,13 @@ namespace sprint_1_def
     class QuestionList
     {
         
-        public QuestionList(int airId)
+        public QuestionList()
         {
-            
-
+          Questions = new List<Question>();
         }
 
-        public ArrayList Questions { get; set; }
+        
+
+        public List<Question> Questions { get; set; }
     }
 }
