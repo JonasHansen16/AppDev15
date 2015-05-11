@@ -41,6 +41,7 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -63,8 +64,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ADMST.cs" />
+    <Compile Include="ADMUS.cs" />
     <Compile Include="Answer.cs" />
     <Compile Include="ApiConnection.cs" />
+    <Compile Include="CLAN.cs" />
+    <Compile Include="CLANL.cs" />
+    <Compile Include="CLID.cs" />
     <Compile Include="Client.cs" />
     <Compile Include="HashMd5.cs" />
     <Compile Include="Question.cs" />

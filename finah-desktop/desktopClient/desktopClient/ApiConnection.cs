@@ -28,17 +28,7 @@ namespace sprint_1_def
              }
         }
 
-        static public HttpResponseMessage genericRequest(string connection, Object parameter = null, int parameter2 = 0)
-        {
-            using (var client = ApiConnection.getConnection())
-            {
-                // Make our request and request the results
-                HttpResponseMessage response = client.PostAsJsonAsync(connection,parameter).Result;
-                // Throw an exception if an error occurs
-                response.EnsureSuccessStatusCode();
-                return response;
-            }
-        }
+      
 
 
     }

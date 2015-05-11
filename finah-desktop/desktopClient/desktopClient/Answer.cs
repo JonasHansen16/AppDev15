@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace sprint_1_def
 {
-    class Answer
+    public class Answer
     {
         public Answer(int qId, int answerButton, bool help)
         {
