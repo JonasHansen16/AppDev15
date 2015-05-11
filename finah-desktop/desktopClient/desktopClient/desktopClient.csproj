@@ -66,6 +66,7 @@
     <Compile Include="Answer.cs" />
     <Compile Include="ApiConnection.cs" />
     <Compile Include="HashMd5.cs" />
+    <Compile Include="Hulpverlener.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
     <Compile Include="rapportenoverzicht.xaml.cs">
