@@ -1,5 +1,4 @@
-﻿using nah_back.Models;
-using nah_back.Providers;
+﻿using nah_back.Providers;
 using nah_backend.Models;
 using System;
 using System.Collections.Generic;
@@ -84,25 +83,25 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// insert an answer into the database.
         /// </summary>
-        /// <param name="client">The Client containing an id-hash combination.</param>
-        /// <param name="answer">The Answer containing the question id, the score and whether or not help was requested.</param>
+        /// <param name="clan">The CLAN object containing the Client with id-hash combination and the Answer with the question id, 
+        /// the score and whether or not help was requested.</param>
         /// <returns>True if the database was updated successfully, false otherwise. 
         /// False if the client does not exist or if the answer does not fit the required format.</returns>
         [AllowAnonymous]
         [Route("api/answer/Insert")]
-        public bool Insert(Client client, Answer answer)
+        public bool Insert(CLAN clan)
         {
             // If the client does not exist, we return false
-            if (!clientDBExists(client))
+            if (!clientDBExists(clan.CL))
                 return false;
             // If the answer does not fit the database, we return false
-            if (!answerDBCheck(answer))
+            if (!answerDBCheck(clan.AN))
                 return false;
             // If something fails while invalidating the previous answers for the same question, we return false
-            if (!answerDBInvalidate(client, answer))
+            if (!answerDBInvalidate(clan.CL, clan.AN))
                 return false;
             // If everything else succeeds, return whether or not we were able to insert the answer
-            return answerDBInsert(client, answer);
+            return answerDBInsert(clan.CL, clan.AN);
         }
 
         // POST api/answer/Check
@@ -301,28 +300,27 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// insert a list of answers into the database.
         /// </summary>
-        /// <param name="client">The Client containing an id-hash combination.</param>
-        /// <param name="answer">The Answer containing the question id, the score and whether or not help was requested.</param>
+        /// <param name="clanl">The CLANL object containing the Client with an id-hash combination and a list of Answers.</param>
         /// <returns>True if the database was updated successfully, false otherwise. 
         /// False if the client does not exist or if one of the answers does not fit the required format.</returns>
         [AllowAnonymous]
         [Route("api/answer/InsertList")]
-        public bool InsertList(Client client, List<Answer> answers)
+        public bool InsertList(CLANL clanl)
         {
             // If the client does not exist, we return false
-            if (!clientDBExists(client))
+            if (!clientDBExists(clanl.CL))
                 return false;
             // If any of the answers does not fit the database, we return false
-            foreach(Answer answer in answers)
+            foreach(Answer answer in clanl.ANL)
                 if (!answerDBCheck(answer))
                     return false;
             // If something fails while invalidating the previous answers for the same questions, we return false
-            foreach (Answer answer in answers)
-                if (!answerDBInvalidate(client, answer))
+            foreach (Answer answer in clanl.ANL)
+                if (!answerDBInvalidate(clanl.CL, answer))
                     return false;
             // If everything else succeeds, insert all the answers. If something goes wrong, return false
-            foreach (Answer answer in answers)
-                if (!answerDBInsert(client, answer))
+            foreach (Answer answer in clanl.ANL)
+                if (!answerDBInsert(clanl.CL, answer))
                     return false;
             // If everything succeeded, return true
             return true;

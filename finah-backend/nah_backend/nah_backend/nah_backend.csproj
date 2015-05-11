@@ -197,6 +197,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
     <Compile Include="Controllers\AnswerController.cs" />
     <Compile Include="Controllers\ClientController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -209,6 +210,11 @@
     <Compile Include="Models\AccountBindingModels.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Answer.cs" />
+    <Compile Include="Models\ADMUS.cs" />
+    <Compile Include="Models\CLANL.cs" />
+    <Compile Include="Models\CLAN.cs" />
+    <Compile Include="Models\ADMST.cs" />
+    <Compile Include="Models\CLID.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\DatabaseData.cs" />
     <Compile Include="Models\IdentityModels.cs" />

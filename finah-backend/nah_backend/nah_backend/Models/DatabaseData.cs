@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace nah_back.Models
+namespace nah_backend.Models
 {
     public static class DatabaseData
     {
@@ -46,6 +46,10 @@ namespace nah_back.Models
             {
                 public static int minscore = 3;
             }
+        }
+        public static class UserList
+        {
+            public static int maxlen = 10;
         }
 
     }
