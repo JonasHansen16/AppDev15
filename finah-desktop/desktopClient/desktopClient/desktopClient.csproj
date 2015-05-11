@@ -65,6 +65,7 @@
     </ApplicationDefinition>
     <Compile Include="Answer.cs" />
     <Compile Include="ApiConnection.cs" />
+    <Compile Include="Client.cs" />
     <Compile Include="HashMd5.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
@@ -155,11 +156,11 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
-    <None Include="users\.DS_Store" />
-    <None Include="users\._.DS_Store" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\logo.PNG" />
@@ -214,10 +215,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="questions\questions.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="users\._users.txt" />
-    <Resource Include="users\users.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
