@@ -84,7 +84,12 @@ namespace sprint_1_def
 
             // We have our result, now do something with it
             if (result != null)
-                LoginSuccess();
+            {
+                result.Password = toLogin.Password;
+                LoginSuccess(result);
+
+            }
+                
             else
                 LoginFailure(toLogin);
 
@@ -94,10 +99,10 @@ namespace sprint_1_def
         /// Will simply show a messagebox saying that 
         /// the registration was successful.
         /// </summary>
-        private void LoginSuccess()
+        private void LoginSuccess(User login)
         {
             MessageBox.Show("Successvol Ingelogd");
-            var winStart = new startpagina();
+            var winStart = new startpagina(login);
             winStart.Show();
             this.Close();
 

@@ -232,7 +232,7 @@ namespace sprint_1_def
                     if (result == false)
                     {
                         MessageBox.Show("Fout opgetreden tijdens het wegschrijven van de antwoorden naar de database");
-                        var window = new startpagina();
+                        var window = new login();
                         window.Show();
                         this.Close();
                     }

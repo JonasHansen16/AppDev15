@@ -19,21 +19,24 @@ namespace sprint_1_def
     /// </summary>
     public partial class rapportenoverzicht : Window
     {
-        public rapportenoverzicht()
+        private User user;
+
+        public rapportenoverzicht(User login)
         {
             InitializeComponent();
+            user = login;
         }
 
         private void terugButton_Click(object sender, RoutedEventArgs e)
         {
-            var winStart = new startpagina();
+            var winStart = new startpagina(user);
             winStart.Show();
             this.Close();
         }
 
         private void CreatePatient_Click(object sender, RoutedEventArgs e)
         {
-            var winPatient = new aanmakenPatient();
+            var winPatient = new aanmakenPatient(user);
             winPatient.Show();
             this.Close();
         }

@@ -16,11 +16,14 @@
             <Border>
                 <Grid Margin="9">
                     <TextBlock HorizontalAlignment="Left" Margin="112,38,0,0" TextWrapping="Wrap" Text="Nieuwe aanvragen" VerticalAlignment="Top" FontSize="24"/>
-                    <DataGrid ColumnWidth="150" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top" Loaded="DataGrid_Loaded" Height="274" Width="770" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16"/>
+                    <DataGrid x:Name="usergrid" ColumnWidth="150" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top"  Height="274" Width="770" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16" />
 
-                    <Button x:Name="activeerbutton" Content="Activeer" Foreground="Green" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="475,401,0,0"/>
-                    <Button x:Name="weigerbutton" Content="Weiger"  Foreground="IndianRed" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="639,401,0,0"/>
+                    <Button x:Name="activeerbutton" Content="Activeer" Foreground="Green" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="208,396,0,0" Click="activeerbutton_Click"/>
+                    <Button x:Name="weigerbutton" Content="Weiger"  Foreground="IndianRed" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="724,396,0,0" Click="weigerbutton_Click"/>
                     <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="10,396,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>
+                    <Label  x:Name="PageLabel" Content="Label" HorizontalAlignment="Left" Margin="778,52,0,0" VerticalAlignment="Top" Width="118" Height="45"/>
+                    <Button x:Name="PreviousButton" Content="&lt;&lt;" HorizontalAlignment="Left" Margin="455,396,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButton_Click"/>
+                    <Button x:Name="NextButton" Content=">>" HorizontalAlignment="Left" Margin="586,396,0,0" VerticalAlignment="Top" Width="75" Click="PreviousButton_Click"/>
                 </Grid>
 
             </Border>
