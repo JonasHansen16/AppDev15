@@ -24,7 +24,7 @@ namespace sprint_1_def
         private int amount;
         private int currentPage;
         private List<User> _allusers = new List<User>();
-        private int selected;
+       
 
 
         public adminGui(User login)
@@ -33,6 +33,7 @@ namespace sprint_1_def
             user = login;
             sendGetAmountUsersRequest();
             LoadUsers(0);
+            usergrid.IsReadOnly = true;
         }
 
         
@@ -162,7 +163,7 @@ namespace sprint_1_def
             try
             {
 
-                HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SetUserDeny"].ConnectionString, user);
+                HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SetUserDeny"].ConnectionString, admus);
                 result = response.Content.ReadAsAsync<bool>().Result;
 
                 if (result == true)

@@ -16,7 +16,7 @@
             <Border>
                 <Grid Margin="9">
                     <TextBlock HorizontalAlignment="Left" Margin="112,38,0,0" TextWrapping="Wrap" Text="Nieuwe aanvragen" VerticalAlignment="Top" FontSize="24"/>
-                    <DataGrid x:Name="usergrid" ColumnWidth="150" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top"  Height="274" Width="770" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16" />
+                    <DataGrid x:Name="usergrid" ColumnWidth="150" HorizontalAlignment="Left" Margin="126,102,0,0" VerticalAlignment="Top"  Height="274" Width="770" AlternatingRowBackground="LightGray" Background="White" BorderBrush="Black" FontSize="16" CanUserReorderColumns="False" />
 
                     <Button x:Name="activeerbutton" Content="Activeer" Foreground="Green" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="208,396,0,0" Click="activeerbutton_Click"/>
                     <Button x:Name="weigerbutton" Content="Weiger"  Foreground="IndianRed" Width="150" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="724,396,0,0" Click="weigerbutton_Click"/>
