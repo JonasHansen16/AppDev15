@@ -51,6 +51,9 @@ namespace nah_backend.Models
         {
             public static int maxlen = 10;
         }
-
+        public static class FormList
+        {
+            public static int maxlen = 10;
+        }
     }
 }

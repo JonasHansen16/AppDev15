@@ -72,8 +72,6 @@ namespace nah_backend.Controllers
             return inactiveUserDB(admst.ST, DatabaseData.UserList.maxlen);
         }
 
-        //private List<User> getInactiveUsers
-
         /// <summary>
         /// Checks whether the user identified by his name and
         /// his password is an admin or not.
@@ -218,7 +216,7 @@ namespace nah_backend.Controllers
         [Route("api/admin/Activate")]
         public bool Activate(ADMUS admus)
         {
-            if (admus.ADM == null || admus.US == null || !adminCheck(admus.ADM.Name, admus.ADM.Password))
+            if (admus.ADM == null || admus.US == null || !adminCheck(admus.ADM.UserName, admus.ADM.Password))
                 return false;
 
             return activateDB(admus.US.Id);
@@ -262,7 +260,7 @@ namespace nah_backend.Controllers
         [Route("api/admin/Deny")]
         public bool Deny(ADMUS admus)
         {
-            if (admus.ADM == null || admus.US == null || !adminCheck(admus.ADM.Name, admus.ADM.Password))
+            if (admus.ADM == null || admus.US == null || !adminCheck(admus.ADM.UserName, admus.ADM.Password))
                 return false;
 
             return denyDB(admus.US.Id);
