@@ -32,6 +32,57 @@ namespace nah_backend.Controllers
             "AND questionlist.active = 1 " +
             "; ";
         private string _qExists = "SELECT id FROM client WHERE id = @Id AND hash = @Hash ;";
+        private string _qUser = "SELECT id FROM usr WHERE username = @UserName AND pass = @Password AND denied = 0 AND active = 1;";
+        private string _qAll = "SELECT id, title, descr, intro FROM questionnaire WHERE active = 1;";
+
+        // POST api/questionnaire/All
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// get a list of all questionnaires.
+        /// </summary>
+        /// <param name="user">The User containing a username-password combination.</param>
+        /// <returns>A list of all questionnaires or null if the user does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/questionnaire/All")]
+        public List<Questionnaire> All(User user)
+        {
+            // First we make sure the user exists
+            if (userCheck(user.UserName, user.Password) == -1)
+                return null;
+            // If it does, we return the list of questionnares
+            return getList();
+        }
+
+        /// <summary>
+        /// Returns a list of all active questionnaires.
+        /// </summary>
+        /// <returns></returns>
+        private List<Questionnaire> getList()
+        {
+            List<Questionnaire> output = new List<Questionnaire>();
+
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qAll, connection);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader();
+                // Put all results in a list
+                while (reader.Read())
+                { // Get all relevant data and put it in a Question object
+                    Questionnaire current = new Questionnaire();
+                    current.Id = reader.GetInt32(0);
+                    current.Title = reader.GetString(1);
+                    current.Description = reader.GetString(2);
+                    current.Intro = reader.GetString(3);
+                    output.Add(current);
+                }
+            }
+
+            return output;
+        }
 
         // POST api/questionnaire/Intro
         /// <summary>
@@ -165,6 +216,39 @@ namespace nah_backend.Controllers
 
             // If the client does not exist, we return false
             return false;
+        }
+
+        /// <summary>
+        /// Checks whether the user identified by his name and
+        /// his password exists or not.
+        /// </summary>
+        /// <param name="name">The name of the user.</param>
+        /// <param name="pass">The hashed password of the user.</param>
+        /// <returns>The user's id if the users exists, -1 otherwise.</returns>
+        private int userCheck(string name, string pass)
+        {
+            if (name == null || name == "" || pass == null || pass == "")
+                return -1;
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qUser, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@UserName", name);
+                selectCommand.Parameters.AddWithValue("@Password", pass);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader(CommandBehavior.SingleRow);
+                // If we have a result
+                if (reader.Read())
+                    return reader.GetInt32(0); // We return the id of the user
+            }
+
+            // If the user does not exist, we return -1
+            return -1;
         }
     }
 }

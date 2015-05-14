@@ -70,27 +70,25 @@ namespace nah_back.Controllers
         /// <returns>True if the User object has all mandatory fields, false otherwise.</returns>
         private bool userDBCheck(User input)
         {
-            bool output = true;
-
             if (input.Name == null || input.Name.Length < DatabaseData.User.Name.minlen)
-                output = false;
+                return false;
 
             if (input.LastName == null || input.LastName.Length < DatabaseData.User.LastName.minlen)
-                output = false;
+                return false;
 
             if (input.Email == null || input.Email.Length < DatabaseData.User.Email.minlen)
-                output = false;
+                return false;
 
             if (input.UserName == null || input.UserName.Length < DatabaseData.User.UserName.minlen)
-                output = false;
+                return false;
 
             if (input.Password == null || input.Password.Length < DatabaseData.User.Password.minlen)
-                output = false;
+                return false;
 
             if (input.Occupation == null)
-                output = false;
+                return false;
 
-            return output;
+            return true;
         }
 
         /// <summary>

@@ -47,6 +47,36 @@ namespace nah_backend.Models
                 public static int minscore = 3;
             }
         }
+        public static class Form
+        {
+            public static class Memo
+            {
+                public static int maxlen = 100;
+            }
+            public static class Category
+            {
+                public static int maxlen = 100;
+            }
+            public static class Relation
+            {
+                public static int maxlen = 100;
+            }
+            public static class ClientList
+            {
+                public static int minlen = 1;
+            }
+        }
+        public static class Client
+        {
+            public static class Hash
+            {
+                public static int maxlen = 20;
+            }
+            public static class Function
+            {
+                public static int maxlen = 255;
+            }
+        }
         public static class UserList
         {
             public static int maxlen = 10;
