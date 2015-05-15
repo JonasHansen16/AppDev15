@@ -297,14 +297,13 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// return the image of a question.
         /// </summary>
-        /// <param name="client">The Client containing an id-hash combination.</param>
-        /// <param name="qid">The id of the question.</param>
+        /// <param name="clid">The CLID object containing a client and a question ID.</param>
         /// <returns>The image if the question exists and the client has access to it, null otherwise.</returns>
         [AllowAnonymous]
         [Route("api/question/Image")]
-        public byte[] Image(Client client, int qid)
+        public byte[] Image(CLID clid)
         {
-            return questionDBImage(client, qid);
+            return questionDBImage(clid.CL, clid.ID);
         }
 
         /// <summary>
@@ -315,6 +314,9 @@ namespace nah_backend.Controllers
         /// <returns>The image if the question exists and the client has access to it, null otherwise.</returns>
         private byte[] questionDBImage(Client client, int qid)
         {
+            if (client == null || client.Hash == null || client.Hash.Equals(""))
+                return null;
+
             using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
             {
                 // Create command
