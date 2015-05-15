@@ -5,11 +5,11 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
-using nah_back.Models;
-using nah_back.Providers;
+using nah_backend.Models;
 using System.Data.SqlClient;
 using System.Text;
 using System.Data;
+using nah_back.Providers;
 
 namespace nah_back.Controllers
 {
@@ -40,7 +40,7 @@ namespace nah_back.Controllers
         /// <returns>True if the registration was successful, false otherwise.</returns>
         [AllowAnonymous]
         [Route("api/user/Register")]
-        public bool Register(nah_back.Models.User user)
+        public bool Register(User user)
         {
             // First we make sure all the required data is present.
             bool success = userDBCheck(user);
@@ -68,29 +68,27 @@ namespace nah_back.Controllers
         /// </summary>
         /// <param name="input">The User object to check.</param>
         /// <returns>True if the User object has all mandatory fields, false otherwise.</returns>
-        private bool userDBCheck(nah_back.Models.User input)
+        private bool userDBCheck(User input)
         {
-            bool output = true;
-
             if (input.Name == null || input.Name.Length < DatabaseData.User.Name.minlen)
-                output = false;
+                return false;
 
             if (input.LastName == null || input.LastName.Length < DatabaseData.User.LastName.minlen)
-                output = false;
+                return false;
 
             if (input.Email == null || input.Email.Length < DatabaseData.User.Email.minlen)
-                output = false;
+                return false;
 
             if (input.UserName == null || input.UserName.Length < DatabaseData.User.UserName.minlen)
-                output = false;
+                return false;
 
             if (input.Password == null || input.Password.Length < DatabaseData.User.Password.minlen)
-                output = false;
+                return false;
 
             if (input.Occupation == null)
-                output = false;
+                return false;
 
-            return output;
+            return true;
         }
 
         /// <summary>
@@ -99,7 +97,7 @@ namespace nah_back.Controllers
         /// values to false.
         /// </summary>
         /// <param name="input">The user to modify.</param>
-        private void userDBInsertMod(nah_back.Models.User input)
+        private void userDBInsertMod(User input)
         {
             // Alter all strings to their respective lengths
             input.Name = stringDBMod(input.Name, DatabaseData.User.Name.maxlen);
@@ -198,7 +196,7 @@ namespace nah_back.Controllers
         /// The returned password field will never be filled in.</returns>
         [AllowAnonymous]
         [Route("api/user/Login")]
-        public User Login(nah_back.Models.User user)
+        public User Login(User user)
         {
             return userDBLogin(user.UserName, user.Password);
         }
@@ -264,7 +262,7 @@ namespace nah_back.Controllers
         /// <returns>True if the user exists, false otherwise.</returns>
         [AllowAnonymous]
         [Route("api/user/Exists")]
-        public bool Exists(nah_back.Models.User user)
+        public bool Exists(User user)
         {
             return genericSingleUserQuery(user.UserName, _qExists);
         }
@@ -280,7 +278,7 @@ namespace nah_back.Controllers
         /// <returns>True if the user exists and is denied, false otherwise.</returns>
         [AllowAnonymous]
         [Route("api/user/Denied")]
-        public bool Denied(nah_back.Models.User user)
+        public bool Denied(User user)
         {
             return genericSingleUserQuery(user.UserName, _qDenied);
         }
@@ -296,7 +294,7 @@ namespace nah_back.Controllers
         /// <returns>True if the user exists and is active, false otherwise.</returns>
         [AllowAnonymous]
         [Route("api/user/Active")]
-        public bool Active(nah_back.Models.User user)
+        public bool Active(User user)
         {
             return genericSingleUserQuery(user.UserName, _qActive);
         }
