@@ -24,7 +24,7 @@ namespace sprint_1_def
         private int amount;
         private int currentPage;
         private List<User> _allusers = new List<User>();
-       
+
 
 
         public adminGui(User login)
@@ -36,7 +36,7 @@ namespace sprint_1_def
             usergrid.IsReadOnly = true;
         }
 
-        
+
 
         private void terugButton_Click(object sender, RoutedEventArgs e)
         {
@@ -52,12 +52,12 @@ namespace sprint_1_def
 
                 HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAmountInactiveUsers"].ConnectionString, user);
                 amount = response.Content.ReadAsAsync<int>().Result;
-               
+
             }
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error opgetreden tijdens connectie met de database");
+                MessageBox.Show("Error opgetreden tijdens connectie met de database " + ex);
             }
 
             if (amount == -1)
@@ -79,14 +79,14 @@ namespace sprint_1_def
                     int pages = amount / 10 + 1;
                 }
 
-                PageLabel.Content = (currentPage+1) + " / " + amount;
-                
-                
+                PageLabel.Content = (currentPage + 1) + " / " + amount;
+
+
             }
 
         }
 
-     
+
 
         private void LoadUsers(int page)
         {
@@ -100,17 +100,23 @@ namespace sprint_1_def
                 NextButton.IsEnabled = false;
             else
                 NextButton.IsEnabled = true;
-            
+            List<GridUser> userGridList = new List<GridUser>();
             ADMST admst = new ADMST();
             admst.ADM = user;
             admst.ST = currentPage * 10;
             HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetInactiveUsers"].ConnectionString, admst);
             _allusers = response.Content.ReadAsAsync<List<User>>().Result;
+            for (int i = 0; i < _allusers.Count; i++)
+            {
+                GridUser gridUser = new GridUser(_allusers[i].Name, _allusers[i].LastName, _allusers[i].Email, _allusers[i].Occupation, _allusers[i].UserName, _allusers[i].Id);
+                userGridList.Add(gridUser);
+            }
 
-            usergrid.ItemsSource = _allusers;
+
+            usergrid.ItemsSource = userGridList;
 
 
-            
+
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
@@ -147,10 +153,10 @@ namespace sprint_1_def
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error opgetreden tijdens connectie met de database");
+                MessageBox.Show("Error opgetreden tijdens connectie met de database " + ex);
             }
 
-           
+
 
         }
 
@@ -175,16 +181,16 @@ namespace sprint_1_def
 
             catch (Exception ex)
             {
-                MessageBox.Show("Error opgetreden tijdens connectie met de database");
+                MessageBox.Show("Error opgetreden tijdens connectie met de database " + ex);
             }
 
         }
 
-      
+
         private void activeerbutton_Click(object sender, RoutedEventArgs e)
         {
             sendActivateRequest();
-            
+
         }
 
         private void weigerbutton_Click(object sender, RoutedEventArgs e)
@@ -193,9 +199,9 @@ namespace sprint_1_def
         }
 
 
-        
 
-     
+
+
 
     }
 }

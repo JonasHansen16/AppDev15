@@ -74,8 +74,11 @@
     <Compile Include="Client.cs" />
     <Compile Include="ClientExp.cs" />
     <Compile Include="Form.cs" />
+    <Compile Include="GridForm.cs" />
+    <Compile Include="GridUser.cs" />
     <Compile Include="HashMd5.cs" />
     <Compile Include="Hulpverlener.cs" />
+    <Compile Include="OverviewForms.xaml.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
     <Compile Include="rapportenoverzicht.xaml.cs">
@@ -92,6 +95,7 @@
       <DependentUpon>startpagina.xaml</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
+    <Compile Include="USST.cs" />
     <Compile Include="vraag.xaml.cs">
       <DependentUpon>vraag.xaml</DependentUpon>
     </Compile>

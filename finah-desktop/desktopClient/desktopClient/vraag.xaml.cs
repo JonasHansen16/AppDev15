@@ -34,7 +34,7 @@ namespace sprint_1_def
         private List<Answer> _allAnswers;
         
 
-        public vraag()
+        public vraag(Client client)
         {
             InitializeComponent();
             buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
