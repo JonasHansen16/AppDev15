@@ -213,6 +213,8 @@
     <Compile Include="Models\ClientExp.cs" />
     <Compile Include="Models\Form.cs" />
     <Compile Include="Models\Questionnaire.cs" />
+    <Compile Include="Models\Report.cs" />
+    <Compile Include="Models\USFO.cs" />
     <Compile Include="Models\USFOQU.cs" />
     <Compile Include="Models\USST.cs" />
     <Compile Include="Models\Answer.cs" />

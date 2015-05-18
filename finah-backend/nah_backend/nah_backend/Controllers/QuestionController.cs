@@ -55,6 +55,7 @@ namespace nah_backend.Controllers
             "AND client.formid = form.id " +
             "AND form.airid = questionnaire.id " +
             "AND questionnaire.id = questionlist.airid " +
+            "AND questionlist.active = 1" +
             "AND questionlist.qid = question.id " +
             ";";
 
