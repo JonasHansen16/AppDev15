@@ -81,6 +81,7 @@
     <Compile Include="OverviewForms.xaml.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
+    <Compile Include="Questionnaire.cs" />
     <Compile Include="rapportenoverzicht.xaml.cs">
       <DependentUpon>rapportenoverzicht.xaml</DependentUpon>
     </Compile>
@@ -95,6 +96,7 @@
       <DependentUpon>startpagina.xaml</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
+    <Compile Include="USFOQU.cs" />
     <Compile Include="USST.cs" />
     <Compile Include="vraag.xaml.cs">
       <DependentUpon>vraag.xaml</DependentUpon>
