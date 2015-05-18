@@ -78,7 +78,9 @@
     <Compile Include="GridUser.cs" />
     <Compile Include="HashMd5.cs" />
     <Compile Include="Hulpverlener.cs" />
-    <Compile Include="OverviewForms.xaml.cs" />
+    <Compile Include="OverviewForms.xaml.cs">
+      <DependentUpon>OverviewForms.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
     <Compile Include="Questionnaire.cs" />
@@ -130,6 +132,10 @@
       <DependentUpon>login.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="OverviewForms.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="rapportenoverzicht.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

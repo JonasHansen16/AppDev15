@@ -8,7 +8,6 @@
         </Image>
 
         <Button x:Name="RapportAanvraagButton" Content="Nieuw rapport aanvraag" HorizontalAlignment="Left" Margin="412,315,0,0" VerticalAlignment="Top" Width="150" Click="RapportAanvraagButton_Click"/>
-        <Button  x:Name="VragenlijstButton" Content="Start vragenlijst" HorizontalAlignment="Left" Margin="412,355,0,0" VerticalAlignment="Top" Width="150" Click="VragenlijstButton_Click"/>
         <Button x:Name="logOutButton" Content="Log uit" HorizontalAlignment="Left" Margin="412,533,0,0" VerticalAlignment="Top" Width="150" Click="logOutButton_Click"/>
         <Button x:Name="RapportenButton" Content="Rapporten" HorizontalAlignment="Left" Margin="412,276,0,0" VerticalAlignment="Top" Width="150" Click="RapportenButton_Click"/>
         <Button x:Name="AdminButton" Content="Administrator" HorizontalAlignment="Left" Margin="412,240,0,0" VerticalAlignment="Top" Width="150" Click="AdminButton_Click"/>

@@ -48,21 +48,7 @@ namespace sprint_1_def
             this.Close();
         }
 
-        private void VragenlijstButton_Click(object sender, RoutedEventArgs e)
-        {
-            Client client = new Client();
-            try
-            {
-                SendRequest(client);
-            }
-            catch (Exception ex)
-            {
-                ConnectionFailure();
-            }
-            var winVraag = new vraag();
-            winVraag.Show();
-            this.Close();
-        }
+       
 
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
