@@ -22,6 +22,22 @@ namespace nah_backend.Controllers
 
         private string _qQuestionnaireExists = "SELECT id FROM questionnaire WHERE active = 1 AND id = @Id ;";
 
+        private string _qFormExists = "SELECT id FROM form WHERE id = @Id AND userid = @Uid;";
+
+        private string _qFormCheck = "UPDATE form SET checkedreport = 1 WHERE id = @Id;";
+
+        private string _qGetAnswers = "SELECT qid, score, help FROM answer WHERE clientid = @Id AND final = 1;";
+
+        private string _qGetQuestions = 
+            "SELECT question.id, question.txt, question.title " +
+            "FROM form, questionnaire, questionlist, question " +
+            "WHERE form.id = @Id " +
+			"AND form.airid = questionnaire.id " +
+			"AND questionnaire.id = questionlist.airid " +
+			"AND questionlist.active = 1 " +
+            "AND questionlist.qid = question.id " +
+            ";";
+
         private string _qFormInsert = "INSERT INTO form (airid, userid, memo, category, relation, completed, checkedreport) VALUES (@Aid, @Uid, @Memo, @Category, @Relation, 0, 0);";
 
         private string _qLatestForm = "SELECT TOP(1) id FROM form WHERE userid = @Uid ORDER BY id DESC;";
@@ -46,6 +62,279 @@ namespace nah_backend.Controllers
             "FROM latest " +
             "ORDER BY id DESC " +
             ";";
+
+        // POST api/form/Report
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// get the report of a form.
+        /// </summary>
+        /// <param name="usfo">
+        /// An USFO object which contains, in order:
+        /// -The user attempting to access the report (used: UserName and Password fields)
+        /// -The form the user wants the report of (used: Id field)
+        /// </param>
+        /// <returns>A Report object containing the report. 
+        /// Null if the user does not exist or if the form does not exist 
+        /// or if the user does not have access to the form,
+        /// or if a database error occurs.</returns>
+        [AllowAnonymous]
+        [Route("api/form/Report")]
+        public Report Report(USFO usfo)
+        {
+            // First we make sure the user exists
+            if (usfo.US == null)
+                return null;
+            usfo.US.Id = userCheck(usfo.US.UserName, usfo.US.Password);
+            if (usfo.US.Id == -1)
+                return null;
+
+            // Then we make sure the form exists and the user has access to it
+            if (usfo.FO == null || !formExists(usfo.FO.Id, usfo.US.Id))
+                return null;
+
+            // If the user has access to the form, we set its checkedreport to true
+            if (!checkForm(usfo.FO.Id))
+                return null;
+
+            // And then we return our report.
+            return generateReport(usfo.FO.Id);
+        }
+
+        /// <summary>
+        /// This function will generate a report of a form
+        /// by getting its clients, and then for each client
+        /// getting their answers, and then filtering those
+        /// lists of answers.
+        /// </summary>
+        /// <param name="id">The id of the form for which to generate a report.</param>
+        /// <returns>The generated Report.</returns>
+        private Report generateReport(int id)
+        {
+            Report output = new Report();
+            // Get our clients
+            output.ClientList = clientsDB(id);
+            // Get our questions
+            output.QuestionList = getQuestions(id);
+            // For each client, get their list of answers and add it to the list of answer lists.
+            foreach (ClientExp cl in output.ClientList)
+            {
+                List<Answer> al = getAnswers(cl.Id);
+                output.AnswerList.Add(al);
+            }
+            // Now, we will filter the answerlists, keeping only a select few.
+            filterLists(output.QuestionList, output.AnswerList);
+            // And we return our filtered output.
+            return output;
+        }
+
+        /// <summary>
+        /// This function will filter the passed list of answerlists
+        /// by first removing all answers which are not in the questionlist,
+        /// and then by filtering all answers for which not every client
+        /// requested help.
+        /// </summary>
+        /// <param name="ql">The list of questions.</param>
+        /// <param name="lal">The list of answerlists.</param>
+        private void filterLists(List<Question> ql, List<List<Answer>> lal)
+        {
+            // Filter out all the answers which do not request help and all the answers which do not have a corresponding question
+            foreach (List<Answer> la in lal)
+                foreach (Answer a in la)                    
+                    if(!a.Help || !contains(ql, a))
+                        la.Remove(a);
+            // Filter out all the remaining answers which do not appear in all answer lists
+            foreach (List<Answer> la in lal)
+                foreach (Answer a in la) 
+                    if(!allContain(lal, a))
+                        la.Remove(a);
+        }
+
+        /// <summary>
+        /// Returns true if all of the lists of 
+        /// answer lists contain the answer,
+        /// and false otherwise.
+        /// </summary>
+        /// <param name="lal">The list of answer lists.</param>
+        /// <param name="a">The answer.</param>
+        /// <returns>True if all of the lists of answer lists contain the answer, false otherwise.</returns>
+        private bool allContain(List<List<Answer>> lal, Answer a)
+        {
+            foreach (List<Answer> la in lal)
+                if (!contains(la, a))
+                    return false;
+
+            return true;
+        }
+
+        /// <summary>
+        /// Checks whether the answerlist contains the answer.
+        /// </summary>
+        /// <param name="la">The answerlist.</param>
+        /// <param name="a">THe answer.</param>
+        /// <returns>True if the answerlist contains the answer, false otherwise.</returns>
+        private bool contains(List<Answer> la, Answer a)
+        {
+            foreach (Answer curr in la)
+                if (curr.QuestionID == a.QuestionID)
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Checks whether the questionlist contains the question answered in the answer.
+        /// </summary>
+        /// <param name="ql">The questionlist.</param>
+        /// <param name="a">The answer.</param>
+        /// <returns>True if the questionlist contains the answer, false otherwise.</returns>
+        private bool contains(List<Question> ql, Answer a)
+        {
+            foreach (Question q in ql)
+                if (q.Id == a.QuestionID)
+                    return true;
+
+            return false;
+        }
+
+        /// <summary>
+        /// Sets the checkedreport of a Form to true.
+        /// </summary>
+        /// <param name="id">The id of the form.</param>
+        /// <returns>True if successful, false otherwise.</returns>
+        private bool checkForm(int id)
+        {
+            // Open connection and set parameters
+            SqlConnection connection = DatabaseAccessProvider.GetConnection();
+            SqlCommand insertCommand = new SqlCommand(_qFormCheck, connection);
+            insertCommand.Parameters.AddWithValue("@Id", id);
+
+            // Execute our query
+            try
+            {
+                connection.Open();
+                insertCommand.ExecuteNonQuery();
+            }
+            // If an error occurs, we return false
+            catch (SqlException)
+            {
+                return false;
+            }
+            finally
+            {
+                connection.Close();
+            }
+
+            // Else we return true
+            return true;
+        }
+
+        /// <summary>
+        /// Returns all of a client's final answers.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <returns>A list of the client's final answers.</returns>
+        private List<Answer> getAnswers(int id)
+        {
+            List<Answer> output = new List<Answer>();
+
+            if (id < 0)
+                return output;
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qGetAnswers, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Id", id);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader();
+                // Put our results in a list of Answers
+                while (reader.Read())
+                {
+                    Answer a = new Answer();
+                    a.QuestionID = reader.GetInt32(0);
+                    a.Score = reader.GetInt32(1);
+                    a.Help = reader.GetBoolean(2);
+                    output.Add(a);
+                }
+            }
+
+            // Return our list of answers
+            return output;
+        }
+
+        /// <summary>
+        /// Returns all of a form's questions.
+        /// </summary>
+        /// <param name="id">The id of the form.</param>
+        /// <returns>A list of the form's questions.</returns>
+        private List<Question> getQuestions(int id)
+        {
+            List<Question> output = new List<Question>();
+
+            if (id < 0)
+                return output;
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qGetQuestions, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Id", id);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader();
+                // Put our results in a list of Questions
+                while (reader.Read())
+                {
+                    Question q = new Question();
+                    q.Id = reader.GetInt32(0);
+                    q.Text = reader.GetString(1);
+                    q.Title = reader.GetString(2);
+                    output.Add(q);
+                }
+            }
+
+            // Return our list of answers
+            return output;
+        }
+
+
+        /// <summary>
+        /// Returns true if the form indicated by its 
+        /// id exists and the user indicated by uid has 
+        /// acccess to it, and false otherwise.
+        /// </summary>
+        /// <param name="id">The id of the form.</param>
+        /// <param name="uid">The id of the user.</param>
+        /// <returns>True if the form indicated by its id exists and the user has access to it, false otherwise.</returns>
+        private bool formExists(int id, int uid)
+        {
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qFormExists, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Id", id);
+                selectCommand.Parameters.AddWithValue("@Uid", uid);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader(CommandBehavior.SingleRow);
+                // If we have a result
+                if (reader.Read())
+                    return true; // We return true
+            }
+
+            // If the questionnaire does not exist, we return false
+            return false;
+        }
 
         // POST api/form/New
         /// <summary>

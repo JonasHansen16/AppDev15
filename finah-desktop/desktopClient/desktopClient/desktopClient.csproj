@@ -72,6 +72,8 @@
     <Compile Include="CLANL.cs" />
     <Compile Include="CLID.cs" />
     <Compile Include="Client.cs" />
+    <Compile Include="ClientExp.cs" />
+    <Compile Include="Form.cs" />
     <Compile Include="HashMd5.cs" />
     <Compile Include="Hulpverlener.cs" />
     <Compile Include="Question.cs" />
@@ -81,6 +83,10 @@
     </Compile>
     <Compile Include="registeren.xaml.cs">
       <DependentUpon>registeren.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Report.cs" />
+    <Compile Include="ReportGUI.xaml.cs">
+      <DependentUpon>ReportGUI.xaml</DependentUpon>
     </Compile>
     <Compile Include="startpagina.xaml.cs">
       <DependentUpon>startpagina.xaml</DependentUpon>
@@ -123,6 +129,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="registeren.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="ReportGUI.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
