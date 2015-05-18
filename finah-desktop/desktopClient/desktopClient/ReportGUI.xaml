@@ -12,7 +12,12 @@
         <Label Content="id" HorizontalAlignment="Left" Margin="593,105,0,0" VerticalAlignment="Top" Name="Client2IDLabel" FontWeight="Bold" FontSize="14pt"/>
         <Label Content="Memo:" HorizontalAlignment="Left" Margin="593,10,0,0" VerticalAlignment="Top"/>
         <Label Content="Categorie:" HorizontalAlignment="Left" Margin="593,36,0,0" VerticalAlignment="Top"/>
-        <Label Content="Relatie tussen clienten:" HorizontalAlignment="Left" Margin="593,62,0,0" VerticalAlignment="Top"/>
+        <Label Content="Relatie tussen cliënten:" HorizontalAlignment="Left" Margin="593,62,0,0" VerticalAlignment="Top"/>
+        <Label Content="memo" HorizontalAlignment="Left" Margin="640,10,0,0" VerticalAlignment="Top" Name="memoLabel"/>
+        <Label Content="category" HorizontalAlignment="Left" Margin="657,36,0,0" VerticalAlignment="Top" Name="catLabel"/>
+        <Label Content="relation" HorizontalAlignment="Left" Margin="724,62,0,0" VerticalAlignment="Top" Name="relLabel"/>
+        <Label Content="Functie:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="193,114,0,0"/>
+        <Label Content="Leeftijd: &lt;" HorizontalAlignment="Left" Margin="193,145,0,0" VerticalAlignment="Top"/>
 
     </Grid>
 </Window>
