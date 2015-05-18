@@ -59,7 +59,7 @@ namespace sprint_1_def
 
         private void RapportenButton_Click(object sender, RoutedEventArgs e)
         {
-            var winRapporten = new rapportenoverzicht(user);
+            var winRapporten = new OverviewForms(user);
             winRapporten.Show();
             this.Close();
         }

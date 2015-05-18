@@ -170,7 +170,7 @@ namespace sprint_1_def
 
         private void ReviewButton_Click(object sender, RoutedEventArgs e)
         {
-            var window = new ReportGUI();
+            var window = new ReportGUI(user, _forms[formsGrid.SelectedIndex]);
             window.Show();
             this.Close();
 

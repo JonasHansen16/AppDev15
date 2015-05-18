@@ -91,6 +91,7 @@
       <DependentUpon>registeren.xaml</DependentUpon>
     </Compile>
     <Compile Include="Report.cs" />
+    <Compile Include="ReportGrid.cs" />
     <Compile Include="ReportGUI.xaml.cs">
       <DependentUpon>ReportGUI.xaml</DependentUpon>
     </Compile>
@@ -98,6 +99,7 @@
       <DependentUpon>startpagina.xaml</DependentUpon>
     </Compile>
     <Compile Include="User.cs" />
+    <Compile Include="USFO.cs" />
     <Compile Include="USFOQU.cs" />
     <Compile Include="USST.cs" />
     <Compile Include="vraag.xaml.cs">
