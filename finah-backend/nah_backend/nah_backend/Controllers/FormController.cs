@@ -2,11 +2,13 @@
 using nah_backend.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mail;
 using System.Security.Cryptography;
 using System.Web.Http;
 
@@ -15,6 +17,8 @@ namespace nah_backend.Controllers
     public class FormController : ApiController
     {
         private string _qUser = "SELECT id FROM usr WHERE username = @UserName AND pass = @Password AND denied = 0 AND active = 1;";
+
+        private string _qMail = "SELECT email FROM usr WHERE username = @UserName AND pass = @Password AND denied = 0 AND active = 1;";
 
         private string _qClient = "SELECT id, hash, age, start, done, func FROM client WHERE formid = @FormId ;";
 
@@ -28,13 +32,13 @@ namespace nah_backend.Controllers
 
         private string _qGetAnswers = "SELECT qid, score, help FROM answer WHERE clientid = @Id AND final = 1;";
 
-        private string _qGetQuestions = 
+        private string _qGetQuestions =
             "SELECT question.id, question.txt, question.title " +
             "FROM form, questionnaire, questionlist, question " +
             "WHERE form.id = @Id " +
-			"AND form.airid = questionnaire.id " +
-			"AND questionnaire.id = questionlist.airid " +
-			"AND questionlist.active = 1 " +
+            "AND form.airid = questionnaire.id " +
+            "AND questionnaire.id = questionlist.airid " +
+            "AND questionlist.active = 1 " +
             "AND questionlist.qid = question.id " +
             ";";
 
@@ -44,7 +48,7 @@ namespace nah_backend.Controllers
 
         private string _qClientInsert = "INSERT INTO client (formid, hash, age, start, done, func) VALUES (@Fid, @Hash, @Age, 1, 0, @Function);";
 
-        private string _qForm = 
+        private string _qForm =
             "WITH largelatest AS " +
             "( " +
             "    SELECT TOP(@Start + @Max) id, memo, category, relation, completed, checkedreport " +
@@ -137,46 +141,27 @@ namespace nah_backend.Controllers
         /// <param name="lal">The list of answerlists.</param>
         private void filterLists(List<Question> ql, List<List<Answer>> lal)
         {
-            // Filter out all the answers which do not request help and all the answers which do not have a corresponding question
+            // Filter out all the answers which do not have a corresponding question and all the answers which do not have a corresponding help request
             foreach (List<Answer> la in lal)
-                foreach (Answer a in la)                    
-                    if(!a.Help || !contains(ql, a))
-                        la.Remove(a);
-            // Filter out all the remaining answers which do not appear in all answer lists
-            foreach (List<Answer> la in lal)
-                foreach (Answer a in la) 
-                    if(!allContain(lal, a))
+                foreach (Answer a in la)
+                    if (!contains(ql, a) || !anyHelp(lal, a))
                         la.Remove(a);
         }
 
         /// <summary>
-        /// Returns true if all of the lists of 
-        /// answer lists contain the answer,
-        /// and false otherwise.
+        /// Returns true if any of the answers for the 
+        /// same question as the passed answer request help
         /// </summary>
         /// <param name="lal">The list of answer lists.</param>
         /// <param name="a">The answer.</param>
-        /// <returns>True if all of the lists of answer lists contain the answer, false otherwise.</returns>
-        private bool allContain(List<List<Answer>> lal, Answer a)
+        /// <returns>True if any of the answers for the same question 
+        /// as the passed answer request help, false otherwise.</returns>
+        private bool anyHelp(List<List<Answer>> lal, Answer a)
         {
             foreach (List<Answer> la in lal)
-                if (!contains(la, a))
-                    return false;
-
-            return true;
-        }
-
-        /// <summary>
-        /// Checks whether the answerlist contains the answer.
-        /// </summary>
-        /// <param name="la">The answerlist.</param>
-        /// <param name="a">THe answer.</param>
-        /// <returns>True if the answerlist contains the answer, false otherwise.</returns>
-        private bool contains(List<Answer> la, Answer a)
-        {
-            foreach (Answer curr in la)
-                if (curr.QuestionID == a.QuestionID)
-                    return true;
+                foreach (Answer curr in la)
+                    if (curr.QuestionID == a.QuestionID && curr.Help)
+                        return true;
 
             return false;
         }
@@ -362,6 +347,9 @@ namespace nah_backend.Controllers
             if (usfoqu.US.Id == -1)
                 return false;
 
+            // We fetch the user's email
+            usfoqu.US.Email = userMail(usfoqu.US.UserName, usfoqu.US.Password);
+
             // Then we make sure the questionnaire exists
             if (usfoqu.QU == null || !questionnaireExists(usfoqu.QU.Id))
                 return false;
@@ -377,8 +365,95 @@ namespace nah_backend.Controllers
                 success = formDBInsert(usfoqu.FO, usfoqu.US.Id, usfoqu.QU.Id);
             }
 
+            // If the form was successfully inserted, we send a mail to the user informing him of this.
+            sendMail(usfoqu.FO, usfoqu.US);
+
             // Return whether we were succesful or not.
             return success;
+        }
+
+        /// <summary>
+        /// Returns the user's email.
+        /// </summary>
+        /// <param name="name">The name of the user.</param>
+        /// <param name="pass">The hashed password of the user.</param>
+        /// <returns>The user's email if the users exists, an empty string otherwise.</returns>
+        private string userMail(string name, string pass)
+        {
+            if (name == null || name == "" || pass == null || pass == "")
+                return "";
+
+            // Get connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qMail, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@UserName", name);
+                selectCommand.Parameters.AddWithValue("@Password", pass);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader(CommandBehavior.SingleRow);
+                // If we have a result
+                if (reader.Read())
+                    return reader.GetString(0); // We return the email of the user
+            }
+
+            // If the user does not exist, we return the empty string
+            return "";
+        }
+
+        /// <summary>
+        /// Sends a mail containing the clients' data,
+        /// and a link on how to get to their questionnaires.
+        /// </summary>
+        /// <param name="fo">The form the mail is about.</param>
+        /// <param name="us">The user to send the mail to.</param>
+        private void sendMail(Form fo, User us)
+        {
+            // Set from and to
+            string from = ConfigurationManager.AppSettings["email"];
+            string to = us.Email;
+
+            System.Net.Mail.MailMessage mail = new System.Net.Mail.MailMessage();
+            mail.To.Add(to);
+            mail.From = new MailAddress(from, ConfigurationManager.AppSettings["emailfrom"], System.Text.Encoding.UTF8);
+            mail.Subject = ConfigurationManager.AppSettings["emailsubject"];
+            mail.SubjectEncoding = System.Text.Encoding.UTF8;
+            mail.Body = "";
+
+            for (int i = 0; i < fo.ClientList.Count; i++)
+            {
+                mail.Body += "Client " + i + 1 + 
+                    "<br/>Functie: " + fo.ClientList[i].Function +
+                    "<br/>ID: " + fo.ClientList[i].Id + 
+                    "<br/>Hash: " + fo.ClientList[i].Hash + 
+                    "<br/>Link: " + ConfigurationManager.AppSettings["websitebase"] +
+                    ConfigurationManager.AppSettings["websitenav"] +
+                    "?uid=" + fo.ClientList[i].Id + "&hash=" + fo.ClientList[i].Hash;
+            }
+                    
+
+            mail.BodyEncoding = System.Text.Encoding.UTF8;
+            mail.IsBodyHtml = true;
+            mail.Priority = MailPriority.Normal;
+
+            SmtpClient client = new SmtpClient();
+            //Add the Creddentials- use your own email id and password
+
+            client.Credentials = new System.Net.NetworkCredential(from, ConfigurationManager.AppSettings["emailpass"]);
+
+            client.Port = 587; // Gmail works on this port
+            client.Host = ConfigurationManager.AppSettings["emailhost"];
+            client.EnableSsl = true; //Gmail works on Server Secured Layer
+            try
+            {
+                client.Send(mail);
+            }
+            catch (Exception)
+            {
+            }
         }
 
         /// <summary>
@@ -434,7 +509,7 @@ namespace nah_backend.Controllers
 
             foreach (ClientExp cl in input.ClientList)
                 if (!clientDBCheck(cl))
-                    return false;                
+                    return false;
 
             return true;
         }
@@ -477,7 +552,7 @@ namespace nah_backend.Controllers
                 // Make sure it fits the database
                 clientDBInsertMod(cl);
             }
-            
+
         }
 
         /// <summary>
@@ -491,6 +566,10 @@ namespace nah_backend.Controllers
             input.Function = stringDBMod(input.Hash, DatabaseData.Client.Function.maxlen);
         }
 
+        /// <summary>
+        /// Generates a random hash string.
+        /// </summary>
+        /// <returns>A randomly generated string.</returns>
         private string generateHash()
         {
             // Generate random bytes
@@ -547,7 +626,7 @@ namespace nah_backend.Controllers
 
             // Else, insert all our clients
             foreach (ClientExp cl in toInsert.ClientList)
-                if(!clientDBInsert(cl, fid))
+                if (!clientDBInsert(cl, fid))
                     return false;
 
             // Else we return true
