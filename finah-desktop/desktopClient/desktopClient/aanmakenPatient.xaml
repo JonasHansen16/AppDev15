@@ -32,8 +32,8 @@
             <TextBox x:Name="CommentTextBox" HorizontalAlignment="Left" Height="50" Margin="532,104,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="1" LostFocus="CommentTextBox_LostFocus"/>
             <TextBox x:Name="CategoryTextBox" HorizontalAlignment="Left" Height="41" Margin="532,159,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="303" RenderTransformOrigin="0.663,0.587" TabIndex="2" LostFocus="CategoryTextBox_LostFocus"/>
             <TextBox x:Name="RelationTextBox" HorizontalAlignment="Left" Height="23" Margin="532,205,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="184" RenderTransformOrigin="0.663,0.587" TabIndex="3" LostFocus="RelationTextBox_LostFocus"/>
-            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="532,232,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="4">
-                <ComboBoxItem Content="0 tot 10 jaar" HorizontalAlignment="Left" Width="144"/>
+            <ComboBox x:Name="AgeClientComboBox" HorizontalAlignment="Left" Margin="532,232,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="4" SelectedIndex="0">
+                <ComboBoxItem Content="0 tot 10 jaar"  HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="10 tot 20 jaar" HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="20 tot 30 jaar" HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="30 tot 40 jaar" HorizontalAlignment="Left" Width="144"/>
@@ -45,7 +45,7 @@
                 <ComboBoxItem Content="90 tot 100 jaar" HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="100 tot 110 jaar" HorizontalAlignment="Left" Width="144"/>
             </ComboBox>
-            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="532,259,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="5">
+            <ComboBox x:Name="AgeCareComboBox" HorizontalAlignment="Left" Margin="532,259,0,0" VerticalAlignment="Top" Width="146" IsReadOnly="True" TabIndex="5" SelectedIndex="0">
                 <ComboBoxItem Content="10 tot 20 jaar" HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="20 tot 30 jaar" HorizontalAlignment="Left" Width="144"/>
                 <ComboBoxItem Content="30 tot 40 jaar" HorizontalAlignment="Left" Width="144"/>

@@ -24,6 +24,7 @@ namespace sprint_1_def
     {
 
         private User user;
+        private List<Questionnaire> _allquestionnaire = new List<Questionnaire>();
 
         public aanmakenPatient(User login)
         {
@@ -44,7 +45,7 @@ namespace sprint_1_def
 
         private void Rapporten()
         {
-            var winRapporten = new rapportenoverzicht(user);
+            var winRapporten = new OverviewForms(user);
             winRapporten.Show();
             this.Close();
         }
@@ -62,10 +63,11 @@ namespace sprint_1_def
             {
                 foreach (Questionnaire item in Vragenlijsten)
                 {
-                    MessageBox.Show("ok ontvangen");
+                   
+                    _allquestionnaire.Add(item);
                     VragenlijstenNaam = item.Title;
                     VragenlijstDropDown.Items.Add(VragenlijstenNaam);
-                    MessageBox.Show("afgerond");
+                    
                 }
             }
             else
@@ -93,8 +95,13 @@ namespace sprint_1_def
             string comment = CommentTextBox.Text;
             string relation = RelationTextBox.Text;
             string category = CategoryTextBox.Text;
-            string questionnaire = VragenlijstDropDown.SelectedValue.ToString();
-
+            if (VragenlijstDropDown.SelectedIndex == -1)
+            {
+                MessageBox.Show("Geen vragenlijst geselecteerd");
+                return;
+            }
+            
+            int questionnaire = _allquestionnaire[VragenlijstDropDown.SelectedIndex].Id;
             ClientExp CareTaker = new ClientExp(0, "", 20, false, false, "CareTaker");
             ClientExp Client = new ClientExp(0, "", 30, false, false, "Client");
             List<ClientExp> personen = new List<ClientExp>();
@@ -102,7 +109,7 @@ namespace sprint_1_def
             personen.Add(Client);
             Form sentForm = new Form(0, comment, category, relation, false, false, personen);
             User sentUser = this.user;
-            Questionnaire sentQuestionnaire = new Questionnaire(0, questionnaire, "", "");
+            Questionnaire sentQuestionnaire = new Questionnaire(questionnaire);
             USFOQU sent = new USFOQU(sentUser, sentForm, sentQuestionnaire);
             sendRequestWrapper(sent);
         }

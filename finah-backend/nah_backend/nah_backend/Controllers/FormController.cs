@@ -42,7 +42,7 @@ namespace nah_backend.Controllers
             "AND questionlist.qid = question.id " +
             ";";
 
-        private string _qFormInsert = "INSERT INTO form (airid, userid, memo, category, relation, completed, checkedreport) VALUES (@Aid, @Uid, @Memo, @Category, @Relation, 0, 0);";
+        private string _qFormInsert = "INSERT INTO form (airid, userid, memo, category, relation, completed, checkedreport) VALUES (@Aid, @Userid, @Memo, @Category, @Relation, 0, 0);";
 
         private string _qLatestForm = "SELECT TOP(1) id FROM form WHERE userid = @Uid ORDER BY id DESC;";
 
@@ -594,9 +594,15 @@ namespace nah_backend.Controllers
         {
             // Open connection and set parameters
             SqlConnection connection = DatabaseAccessProvider.GetConnection();
-            SqlCommand insertCommand = generateInsertCommand(toInsert, uid, qid, connection);
+            SqlCommand insertCommand = new SqlCommand(_qFormInsert, connection);
+            insertCommand.Parameters.AddWithValue("@Aid", qid);
+            insertCommand.Parameters.AddWithValue("@Userid", uid);
+            insertCommand.Parameters.AddWithValue("@Memo", toInsert.Memo);
+            insertCommand.Parameters.AddWithValue("@Category", toInsert.Category);
+            insertCommand.Parameters.AddWithValue("@Relation", toInsert.Relation);
+            
             SqlCommand selectCommand = new SqlCommand(_qLatestForm, connection);
-
+            selectCommand.Parameters.AddWithValue("@Uid", uid);
             int fid = -1;
 
             try
@@ -668,25 +674,7 @@ namespace nah_backend.Controllers
             return true;
         }
 
-        /// <summary>
-        /// This function will generate an SqlCommand capable of 
-        /// inserting the passed Form into the database.
-        /// </summary>
-        /// <param name="toInsert">The Form to insert.</param>
-        /// <param name="uid">The id of the user.</param>
-        /// <param name="qid">The id of the questionnaire.</param>
-        /// <param name="connection">The database connection.</param>
-        /// <returns>An SqlCommand capable of inserting the Form.</returns>
-        private SqlCommand generateInsertCommand(Form toInsert, int uid, int qid, SqlConnection connection)
-        {
-            SqlCommand insertCommand = new SqlCommand(_qFormInsert, connection);
-            insertCommand.Parameters.AddWithValue("@Aid", qid);
-            insertCommand.Parameters.AddWithValue("@Uid", uid);
-            insertCommand.Parameters.AddWithValue("@Memo", toInsert.Memo);
-            insertCommand.Parameters.AddWithValue("@Category", toInsert.Category);
-            insertCommand.Parameters.AddWithValue("@Relation", toInsert.Relation);
-            return insertCommand;
-        }
+
 
         /// <summary>
         /// Trims the input string and limits it to the specified
