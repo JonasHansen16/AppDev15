@@ -48,24 +48,147 @@ namespace nah_backend.Controllers
 
         private string _qClientInsert = "INSERT INTO client (formid, hash, age, start, done, func) VALUES (@Fid, @Hash, @Age, 1, 0, @Function);";
 
+        private string _qGetForm = "SELECT id, memo, category, relation, completed, checkedreport, repeats FROM form WHERE id = @Fid ;";
+
+        private string _qGetQid = "SELECT airid FROM form WHERE id = @Fid ;";
+
         private string _qForm =
             "WITH largelatest AS " +
             "( " +
-            "    SELECT TOP(@Start + @Max) id, memo, category, relation, completed, checkedreport " +
+            "    SELECT TOP(@Start + @Max) id, memo, category, relation, completed, checkedreport, repeats " +
             "    FROM form " +
             "    WHERE userid = @Uid " +
             "    ORDER BY id DESC " +
             "), " +
             "latest AS " +
             "( " +
-            "    SELECT TOP(@Max) id, memo, category, relation, completed, checkedreport " +
+            "    SELECT TOP(@Max) id, memo, category, relation, completed, checkedreport, repeats " +
             "    FROM largelatest " +
             "    ORDER BY id ASC " +
             ") " +
-            "SELECT id, memo, category, relation, completed, checkedreport " +
+            "SELECT id, memo, category, relation, completed, checkedreport, repeats " +
             "FROM latest " +
             "ORDER BY id DESC " +
             ";";
+
+        // POST api/form/Repeat
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// repeat a form.
+        /// </summary>
+        /// <param name="usfo">
+        /// An USFO object which contains, in order:
+        /// -The user attempting to repeat the form (used: UserName and Password fields)
+        /// -The form the user wants to repeat (used: Id field)
+        /// </param>
+        /// <returns>True if the operation was successful, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/form/Repeat")]
+        public bool Repeat(USFO usfo)
+        {
+            // First we make sure the user exists
+            if (usfo.US == null)
+                return false;
+            usfo.US.Id = userCheck(usfo.US.UserName, usfo.US.Password);
+            if (usfo.US.Id == -1)
+                return false;
+
+            // Then we make sure the form exists and the user has access to it
+            if (usfo.FO == null || !formExists(usfo.FO.Id, usfo.US.Id))
+                return false;
+
+            // If the user has access to the form, we get its data
+            Form fo = getForm(usfo.FO.Id);
+            // If for some reason the form was not found, we return false            
+            if (fo == null)
+                return false;
+
+            // In order to re-insert it, we need to set its repeat variable to the id of the old form
+            fo.Repeats = fo.Id;
+
+            // We must also look up its questionnaire id
+            int qid = getQid(usfo.FO.Id);
+            // If for some reason the questionnaire was not found, we return false            
+            if (qid == -1)
+                return false;
+
+            // And then we insert the new copy into the database
+            return formDBInsert(fo, usfo.US.Id, qid);
+        }
+
+        /// <summary>
+        /// Returns the questionnaire id of the form with the passed id.
+        /// </summary>
+        /// <param name="formid">The id of the form to look up.</param>
+        /// <returns>The questionnaire of the form, or -1 if it was not found.</returns>
+        private int getQid(int formid)
+        {
+            int output = -1;
+
+            if (formid < 0)
+                return output;
+
+            // Open connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qGetQid, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Fid", formid);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader(CommandBehavior.SingleRow);
+                // Read resulting integer
+                if (reader.Read())
+                    output = reader.GetInt32(0);
+            }
+
+            // Return our questionnaire id
+            return output;
+        }
+
+        /// <summary>
+        /// Returns all data of the form with the passed id.
+        /// </summary>
+        /// <param name="formid">The id of the form to look up.</param>
+        /// <returns>All data of the form, or NULL if it was not found.</returns>
+        private Form getForm(int formid)
+        {
+            Form output = null;
+
+            if (formid < 0)
+                return output;
+
+            // Open connection
+            using (SqlConnection connection = DatabaseAccessProvider.GetConnection())
+            {
+                // Create command
+                SqlCommand selectCommand = new SqlCommand(_qGetForm, connection);
+                // Set parameters
+                selectCommand.Parameters.AddWithValue("@Fid", formid);
+                // Open connection
+                connection.Open();
+                // Execute query
+                SqlDataReader reader = selectCommand.ExecuteReader(CommandBehavior.SingleRow);
+                // Read results
+                if (reader.Read())
+                {
+                    // Turn it into a Form
+                    output = new Form();
+                    output.Id = reader.GetInt32(0);
+                    output.Memo = reader.GetString(1);
+                    output.Category = reader.GetString(2);
+                    output.Relation = reader.GetString(3);
+                    output.Completed = reader.GetBoolean(4);
+                    output.CheckedReport = reader.GetBoolean(5);
+                    output.Repeats = reader.GetInt32(6);
+                }
+            }
+
+            // Return our form
+            return output;
+        }
 
         // POST api/form/Report
         /// <summary>
@@ -798,6 +921,7 @@ namespace nah_backend.Controllers
                     toAdd.Relation = reader.GetString(3);
                     toAdd.Completed = reader.GetBoolean(4);
                     toAdd.CheckedReport = reader.GetBoolean(5);
+                    toAdd.Repeats = reader.GetInt32(6);
                     output.Add(toAdd);
                 }
             }
