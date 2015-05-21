@@ -1,13 +1,13 @@
 ﻿<Window x:Class="sprint_1_def.registeren"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         Title="registreren" Height="660" Width="1010">
+         Title="registreren" Height="660" Width="1010" WindowStartupLocation="CenterScreen">
     <Grid Background="LightBlue" >
         <Image x:Name="image"  HorizontalAlignment="Left" Height="100" Margin="240,20,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.105,0.209" ToolTip="userimage" >
 
 
         </Image>
-        <GroupBox Header="Registeren" Margin="217,106,227,105">
+        <GroupBox Header="Registeren" Margin="217,106,227,46">
             <Canvas Margin="103,28,97,23">
                 <TextBox x:Name="VoornaamTextBox" PreviewTextInput="nummers_PreviewTextInput" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="20" TabIndex="0" LostFocus="firstnamevalidation"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Voornaam:" VerticalAlignment="Top" Canvas.Left="75" Canvas.Top="30" PreviewTextInput="nummers_PreviewTextInput"/>
@@ -20,12 +20,16 @@
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Emailadres:" VerticalAlignment="Top" Canvas.Left="73" Canvas.Top="187"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="45" Canvas.Top="229"/>
 
-                <Button x:Name="aanvraagButton" Content="Aanvraag indienen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="121" Canvas.Left="126" Canvas.Top="309" Click="aanvraagButton_Click"/>
+                <Button x:Name="aanvraagButton" Content="Aanvraag indienen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="121" Canvas.Left="177" Canvas.Top="373" Click="aanvraagButton_Click" TabIndex="8"/>
                 <TextBox x:Name="EmailTextBox1" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="178" Canvas.Top="177" TabIndex="4" LostFocus="emailvalidation"/>
                 <TextBox x:Name="usernameTextbox" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="178" Canvas.Top="219" TabIndex="5" LostFocus="usernamevalidation"/>
                 <TextBox x:Name="beroepTextbox" PreviewTextInput="nummers_PreviewTextInput" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="179" Canvas.Top="267" TabIndex="6"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Beroep:" VerticalAlignment="Top" Canvas.Left="91" Canvas.Top="274" RenderTransformOrigin="1.142,0.588"/>
-                
+                <TextBox x:Name="CaptchaTextBox" Height="51" Canvas.Left="10" TextWrapping="NoWrap" Text="" Canvas.Top="309" Width="155" IsReadOnly="True" FontSize="28" Foreground="Red" FontStyle="Italic" FontWeight="Heavy" Background="{x:Null}" FontStretch="UltraCondensed" Focusable="False" HorizontalContentAlignment="Center" />
+                <TextBox x:Name="ControlTextBox" Height="23" Canvas.Left="179" TextWrapping="Wrap" Text="" Canvas.Top="337" Width="120" TabIndex="7" />
+                <TextBlock Canvas.Left="177" TextWrapping="Wrap" Text="Geef de code in" Canvas.Top="309"/>
+                <Button x:Name="RegenerateButton" Content="Nieuwe Captcha" Canvas.Left="10" Canvas.Top="373" Width="106" Click="RegenerateButton_Click"/>
+
             </Canvas>
         </GroupBox>
         <Button x:Name="terugButton" Content="Terug" HorizontalAlignment="Left" Margin="842,599,0,0" VerticalAlignment="Top" Width="150" Click="terugButton_Click"/>

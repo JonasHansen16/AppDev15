@@ -1,7 +1,7 @@
 ﻿<Window x:Class="sprint_1_def.OverviewForms"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         Title="Admin" Height="660" Width="1010">
+         Title="Admin" Height="660" Width="1010" WindowStartupLocation="CenterScreen">
     <Grid  Background="DarkGray">
         <Grid x:Name="logoGrid" HorizontalAlignment="Left" Height="115" VerticalAlignment="Top" Width="981" Background="LightBlue" Margin="10,19,0,0" Grid.ColumnSpan="1">
             <Border>

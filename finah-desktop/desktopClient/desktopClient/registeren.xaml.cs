@@ -30,9 +30,12 @@ namespace sprint_1_def
         static string Email;
         static string password;
         static string occupation;
+        private string captcha;
         public registeren()
         {
             InitializeComponent();
+            LoadCaptcha();
+
 
         }
         private void terugButton_Click(object sender, RoutedEventArgs e)
@@ -182,7 +185,26 @@ namespace sprint_1_def
             Email = EmailTextBox1.Text;
             password = textboxWachtwoord.Password;
             occupation = beroepTextbox.Text;
-            sendRequestWrapper(inputfieldsToUser());
+           
+            captcha = captcha.Trim();
+            
+           
+            
+           
+           
+
+                if (ControlTextBox.Text.Equals(captcha))
+                {
+                    sendRequestWrapper(inputfieldsToUser());
+                }
+                else
+                {
+                    ControlTextBox.Clear();
+                    CaptchaTextBox.Clear();
+                    LoadCaptcha();
+                    MessageBox.Show("Captcha validatie niet juist, probeer het opnieuw");
+                    
+                }
         }
 
         /// <summary>
@@ -232,6 +254,9 @@ namespace sprint_1_def
         private void regSuccess()
         {
             MessageBox.Show("Successvol geregistreerd!");
+            var login = new login();
+            this.Close();
+            login.Show();
         }
 
         /// <summary>
@@ -287,6 +312,63 @@ namespace sprint_1_def
 
             return output;
         }
+
+        private string LoadCaptcha()
+        {
+            String allowchar = " ";
+
+            allowchar = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
+
+            allowchar += "a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,y,z";
+
+            allowchar += "1,2,3,4,5,6,7,8,9,0";
+
+            char [] a = {','};
+
+            String [] ar = allowchar.Split(a);
+
+            String pwd = " ";
+
+            string temp = " ";
+
+            Random r = new Random();
+
+       
+
+            for (int i = 0; i < 6; i++)
+
+            {
+
+                temp = ar [(r.Next(0,ar.Length))];
+
+           
+
+                pwd += temp;
+
+            }
+
+
+            captcha = pwd;
+            CaptchaTextBox.Text =pwd ;
+            return pwd;
+
+        }
+
+        static byte[] GetBytes(string str)
+        {
+            byte[] bytes = new byte[str.Length * sizeof(char)];
+            System.Buffer.BlockCopy(str.ToCharArray(), 0, bytes, 0, bytes.Length);
+            return bytes;
+        }
+
+        private void RegenerateButton_Click(object sender, RoutedEventArgs e)
+        {
+            ControlTextBox.Clear();
+            CaptchaTextBox.Clear();
+            LoadCaptcha();
+        }
+        
+
 
 
     }

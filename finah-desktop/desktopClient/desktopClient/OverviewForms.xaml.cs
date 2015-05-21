@@ -30,7 +30,7 @@ namespace sprint_1_def
         {
             InitializeComponent();
             user = currentUser;
-            currentPage = 1;
+            
             GetAmount();
             LoadForms(0);
 
@@ -38,12 +38,12 @@ namespace sprint_1_def
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadForms(currentPage++);
+            LoadForms(--currentPage);
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadForms(currentPage++);
+            LoadForms(++currentPage);
         }
 
         private void terugButton_Click(object sender, RoutedEventArgs e)
@@ -69,7 +69,7 @@ namespace sprint_1_def
             List<GridForm> gridForm = new List<GridForm>();
             USST usst = new USST();
             usst.US = user;
-            usst.ST = currentPage;
+            usst.ST = currentPage * 10;
             HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetForms"].ConnectionString, usst);
             _forms = response.Content.ReadAsAsync<List<Form>>().Result;
 
@@ -103,6 +103,7 @@ namespace sprint_1_def
         }
         private void GetAmount()
         {
+            int pages;
             try
             {
 
@@ -124,14 +125,14 @@ namespace sprint_1_def
             {
                 if (amount % 10 == 0)
                 {
-                    int pages = amount / 10;
+                     pages = amount / 10;
                 }
                 else
                 {
-                    int pages = amount / 10 + 1;
+                     pages = amount / 10 + 1;
                 }
 
-                PageLabel.Content = (currentPage + 1) + " / " + amount;
+                PageLabel.Content = (currentPage + 1) + " / " + pages ;
             }
 
 
@@ -152,18 +153,25 @@ namespace sprint_1_def
 
         private void formsGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (((_forms[formsGrid.SelectedIndex].ClientList[0].Function == "Mantelzorger") && (_forms[formsGrid.SelectedIndex].ClientList[0].Done)) || ((_forms[formsGrid.SelectedIndex].ClientList[1].Function == "Mantelzorger") && (_forms[formsGrid.SelectedIndex].ClientList[1].Done)))
-                CareStartButton.IsEnabled = false;
-            else
-                CareStartButton.IsEnabled = true;
-            if (((_forms[formsGrid.SelectedIndex].ClientList[0].Function == "Client") && (_forms[formsGrid.SelectedIndex].ClientList[0].Done)) || ((_forms[formsGrid.SelectedIndex].ClientList[1].Function == "Client") && (_forms[formsGrid.SelectedIndex].ClientList[1].Done)))
-                ClientStartButton.IsEnabled = false;
-            else
-                ClientStartButton.IsEnabled = true;
-            if (_forms[formsGrid.SelectedIndex].Completed == true)
-                ReviewButton.IsEnabled = true;
-            else
-                ReviewButton.IsEnabled = false;
+            try
+            {
+                if (((_forms[formsGrid.SelectedIndex].ClientList[0].Function == "Mantelzorger") && (_forms[formsGrid.SelectedIndex].ClientList[0].Done)) || ((_forms[formsGrid.SelectedIndex].ClientList[1].Function == "Mantelzorger") && (_forms[formsGrid.SelectedIndex].ClientList[1].Done)))
+                    CareStartButton.IsEnabled = false;
+                else
+                    CareStartButton.IsEnabled = true;
+                if (((_forms[formsGrid.SelectedIndex].ClientList[0].Function == "Client") && (_forms[formsGrid.SelectedIndex].ClientList[0].Done)) || ((_forms[formsGrid.SelectedIndex].ClientList[1].Function == "Client") && (_forms[formsGrid.SelectedIndex].ClientList[1].Done)))
+                    ClientStartButton.IsEnabled = false;
+                else
+                    ClientStartButton.IsEnabled = true;
+                if (_forms[formsGrid.SelectedIndex].Completed == true)
+                    ReviewButton.IsEnabled = true;
+                else
+                    ReviewButton.IsEnabled = false;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Fout Opgetreden" + ex);
+            }
             
                 
         }
