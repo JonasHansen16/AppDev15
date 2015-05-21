@@ -548,13 +548,14 @@ namespace nah_backend.Controllers
 
             for (int i = 0; i < fo.ClientList.Count; i++)
             {
-                mail.Body += "Client " + i + 1 + 
+                mail.Body += "Client " + (i + 1) + 
                     "<br/>Functie: " + fo.ClientList[i].Function +
                     "<br/>ID: " + fo.ClientList[i].Id + 
                     "<br/>Hash: " + fo.ClientList[i].Hash + 
                     "<br/>Link: " + ConfigurationManager.AppSettings["websitebase"] +
                     ConfigurationManager.AppSettings["websitenav"] +
-                    "?uid=" + fo.ClientList[i].Id + "&hash=" + fo.ClientList[i].Hash;
+                    "?uid=" + fo.ClientList[i].Id + "&hash=" + fo.ClientList[i].Hash +
+                    "<br/> <br/>";
             }
                     
 
