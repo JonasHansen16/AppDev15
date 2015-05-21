@@ -23,7 +23,23 @@ namespace nah_backend.Controllers
         private string _qGetForm = "SELECT formid FROM client WHERE id = @Id AND hash = @Hash ";
         private string _qAllDone = "SELECT client.id FROM client WHERE client.formid = @Id AND client.done = 0 ;";
         private string _qSetFormDone = "UPDATE form SET completed = 1 WHERE id = @Id ;";
-        
+
+        // POST api/client/Exists
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// check if a certain client exists or not.
+        /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the Client id-hash combination exists, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/Exists")]
+        public bool ExistsWeb(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Exists(client);
+        }
+
         // POST api/client/Exists
         /// <summary>
         /// This POST api function will allow the user of the API to
@@ -76,6 +92,23 @@ namespace nah_backend.Controllers
         /// check if a certain client has already started with his 
         /// questionnaire or not.
         /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the Client has not yet started with his questionnaire, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/Start")]
+        public bool Start(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Start(client);
+        }
+
+        // POST api/client/Start
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// check if a certain client has already started with his 
+        /// questionnaire or not.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>True if the Client has not yet started with his questionnaire, false otherwise.</returns>
         [AllowAnonymous]
@@ -117,7 +150,24 @@ namespace nah_backend.Controllers
             return false;
         }
 
-        // POST api/client/Started
+        // POST api/client/Done
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// check if a certain client has already finished with his 
+        /// questionnaire or not.
+        /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the Client has already finished with his questionnaire, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/Done")]
+        public bool Done(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Done(client);
+        }
+
+        // POST api/client/Done
         /// <summary>
         /// This POST api function will allow the user of the API to
         /// check if a certain client has already finished with his 
@@ -162,6 +212,22 @@ namespace nah_backend.Controllers
 
             // If the client does not exist, we return false
             return false;
+        }
+
+        // POST api/client/SetStart
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// set a client's start bit.
+        /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the client was successfully updated, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/SetStart")]
+        public bool SetStart(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return SetStart(client);
         }
 
         // POST api/client/SetStart
@@ -216,6 +282,22 @@ namespace nah_backend.Controllers
         /// This function will allow the user of the API to
         /// unset a client's start bit.
         /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the client was successfully updated, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/UnSetStart")]
+        public bool UnSetStart(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return UnSetStart(client);
+        }
+
+        // POST api/client/UnSetStart
+        /// <summary>
+        /// This function will allow the user of the API to
+        /// unset a client's start bit.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>True if the client was successfully updated, false otherwise.</returns>
         [AllowAnonymous]
@@ -256,6 +338,23 @@ namespace nah_backend.Controllers
 
             // Else we return true
             return true;
+        }
+
+        // POST api/client/SetDone
+        /// <summary>
+        /// This api function will allow the user of the API to
+        /// set a client's done bit. It will also set the form's
+        /// done bit if all the clients are done.
+        /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the client was successfully updated, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/SetDone")]
+        public bool SetDone(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return SetDone(client);
         }
 
         // POST api/client/SetDone
@@ -405,6 +504,22 @@ namespace nah_backend.Controllers
 
             // Else we return true
             return true;
+        }
+
+        // POST api/client/UnSetDone
+        /// <summary>
+        /// This api function will allow the user of the API to
+        /// unset a client's done bit.
+        /// </summary>
+        /// <param name="id">The Client's id.</param>
+        /// <param name="hash">The Client's hash.</param>
+        /// <returns>True if the client was successfully updated, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/client/UnSetDone")]
+        public bool UnSetDone(int id, string hash)
+        {
+            Client client = new Client();
+            return UnSetDone(client);
         }
 
         // POST api/client/UnSetDone

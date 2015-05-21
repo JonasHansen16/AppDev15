@@ -89,6 +89,22 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// get the intro of a questionnaire.
         /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>The intro of the client's questionnaire or null if the client does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/questionnaire/Intro")]
+        public Intro Intro(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Intro(client);
+        }
+
+        // POST api/questionnaire/Intro
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// get the intro of a questionnaire.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>The intro of the client's questionnaire or null if the client does not exist.</returns>
         [AllowAnonymous]
@@ -134,6 +150,22 @@ namespace nah_backend.Controllers
             // If the client does not exist,
             // we return null
             return null;
+        }
+
+        // POST api/questionnaire/Count
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// count the total amount of questions in a questionnaire.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>The total amount of questions of the client's questionnaire or -1 if the client does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/questionnaire/Count")]
+        public int Count(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Count(client);
         }
 
         // POST api/questionnaire/Count

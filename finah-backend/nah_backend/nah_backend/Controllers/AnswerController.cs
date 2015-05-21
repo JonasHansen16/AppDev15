@@ -32,6 +32,22 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// invalidate all of a client's answers.
         /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>True if the database was updated successfully, false otherwise. False if the client does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/answer/Reset")]
+        public bool Reset(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Reset(client);
+        }
+
+        // POST api/answer/Reset
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// invalidate all of a client's answers.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>True if the database was updated successfully, false otherwise. False if the client does not exist.</returns>
         [AllowAnonymous]
@@ -76,6 +92,25 @@ namespace nah_backend.Controllers
 
             // Else we return true
             return true;
+        }
+
+        // POST api/answer/Insert
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// insert an answer into the database.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <param name="qid">The id of the question.</param>
+        /// <param name="score">The score.</param>
+        /// <param name="help">Whether or not help was requested.</param>
+        /// False if the client does not exist or if the answer does not fit the required format.</returns>
+        [AllowAnonymous]
+        [Route("api/answer/Insert")]
+        public bool Insert(int id, string hash, int qid, int score, bool help)
+        {
+            CLAN clan = new CLAN(new Client(id, hash), new Answer(qid, score, help));
+            return Insert(clan);
         }
 
         // POST api/answer/Insert
@@ -243,6 +278,22 @@ namespace nah_backend.Controllers
 
             // If the client does not exist, we return false
             return false;
+        }
+
+        // POST api/answer/Count
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// count the amount of valid answers a client has given so far.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>The amount of answers the client has given so far or -1 if the client does not exist.</returns>
+        [AllowAnonymous]
+        [Route("api/answer/Count")]
+        public int Count(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return Count(client);
         }
 
         // POST api/answer/Count
