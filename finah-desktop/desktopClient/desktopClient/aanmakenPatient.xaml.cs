@@ -102,7 +102,7 @@ namespace sprint_1_def
             }
             
             int questionnaire = _allquestionnaire[VragenlijstDropDown.SelectedIndex].Id;
-            ClientExp CareTaker = new ClientExp(0, "", 20, false, false, "CareTaker");
+            ClientExp CareTaker = new ClientExp(0, "", 20, false, false, "Mantelverzorger");
             ClientExp Client = new ClientExp(0, "", 30, false, false, "Client");
             List<ClientExp> personen = new List<ClientExp>();
             personen.Add(CareTaker);

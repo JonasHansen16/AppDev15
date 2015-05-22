@@ -38,16 +38,18 @@ namespace sprint_1_def
         private void RapportAanvraagButton_Click(object sender, RoutedEventArgs e)
         {
             var winPatient = new aanmakenPatient(user);
-            winPatient.Show();
+            
             this.Close();
+            winPatient.Show();
         }
 
         private void logOutButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("tot ziens ");
             var winLogin = new login();
-            winLogin.Show();
+            
             this.Close();
+            winLogin.Show();
         }
 
        
@@ -55,15 +57,17 @@ namespace sprint_1_def
         private void AdminButton_Click(object sender, RoutedEventArgs e)
         {
             var winAdmin = new adminGui(user);
-            winAdmin.Show();
+            
             this.Close();
+            winAdmin.Show();
         }
 
         private void RapportenButton_Click(object sender, RoutedEventArgs e)
         {
             var winRapporten = new OverviewForms(user);
-            winRapporten.Show();
+            
             this.Close();
+            winRapporten.Show();
         }
 
         
