@@ -1,0 +1,360 @@
+/* STYLE RESET */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* END STYLE RESET */
+
+body{
+    font-family: sans-serif, "verdana", "times new roman", serif;
+}
+
+p{
+    font-size: 20px;
+}
+
+header{
+    width: 100%;
+    display: block;
+    min-width: 580px;
+    height: 64px;
+    //border-top: 4px;
+    border-bottom:4px;
+    border-style: solid;
+}
+
+.titlecontainer{
+    display: block;
+    //width: 600px;
+    float: right;
+    padding-right: 20px;
+}
+
+h1{
+    text-align: center;
+    font-size: 48px;
+    font-weight: bold;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+
+.navcontainer{
+    padding-left: 4px;
+    padding-right: 4px;
+    float: left;
+    height: 64px;
+    transition: background 1s;
+}
+
+.navcontainer:hover{
+    transition: background 1s;
+}
+
+.currentnavcontainer{
+    border-top: 4px;
+    border-left: 4px;
+    border-right: 4px;
+    border-style: solid;
+    float: left;
+    height: 64px;
+    transition: background 1s;
+}
+
+.currentnavcontainer:hover{
+    transition: background 1s;
+}
+
+.navimg{
+    height: 64px;
+}
+
+a{
+    text-decoration: none;
+}
+
+.errorbox{
+    display: block;
+    border-style: solid;
+    border-width: 4px;
+    margin: auto;
+    margin-top: 40px;
+    width: 600px;
+}
+
+.errortitle{
+    padding: 20px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.error{
+    padding: 20px;
+    padding-top: 0px;
+    margin: auto;
+    text-align: center;
+}
+
+.successbox{
+    display: block;
+    border-style: solid;
+    border-width: 4px;
+    margin: auto;
+    margin-top: 40px;
+    width: 600px;
+}
+
+.successtitle{
+    padding: 20px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.success{
+    padding: 20px;
+    padding-top: 0px;
+    margin: auto;
+    text-align: center;
+}
+
+main{
+    margin: auto;
+    margin-top: 20px;
+    min-width: 500px;
+    width: 50%;
+    border-radius: 10px;
+    padding: 20px;
+}
+
+h2{
+    font-weight: bold;
+    font-size: 36px;
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+.maintext{
+    margin-bottom: 10px;
+}
+
+.questionbox{
+    margin: auto;
+    margin-top: 20px;
+    min-width: 750px;
+    width: 75%;
+    border-radius: 10px;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.question{
+    min-width: 750px;
+    overflow: hidden;
+}
+
+.questiontextwrapper{
+    margin-right: 20px;
+    width: 500px;
+    float: left;
+}
+
+.questiontitle{
+    padding: 20px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+
+.questiontext{
+    display: block;
+    padding: 20px;
+    padding-top: 0px;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.questionimage{
+    display: none;
+    max-width: 200px;
+    max-height: 200px;
+    float: left;
+    display: block;
+}
+
+.starttext{
+    display: block;
+    padding: 20px;
+    padding-top: 0px;
+    text-align: justify;
+    margin-bottom: 20px;
+}
+
+.progresstext{
+    float: right;
+    maximum-width: 100px;
+    position: relative;
+    left: -250px;
+    top: 10px;
+}
+
+.progressbar{
+    float: right; 
+    -webkit-appearance: none;
+    border: none;
+    height: 40px; 
+    width: 400px;
+}
+
+.answercontainer{
+    overflow: hidden;
+    margin: 20px;
+}
+
+.answerbox{
+    width: 150px;
+    margin: 10px;
+    height: 120px;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+}
+
+.answerboxlabel{
+    float: left;
+}
+
+.submitbutton{
+    width: 200px;
+    height: 120px;
+    font-size: 20px;
+    outline: none;
+    border: none;
+    float: right;
+    cursor: pointer;
+    transition: background 2s;
+}
+
+.introtext{
+    min-width: 400px;
+}
+
+.introbutton{
+    min-width: 300px;
+}
+
+.introform{
+    margin: auto;
+}
+
+.visible{
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 1s;
+}
+
+.hidden{
+    opacity: 0;
+    visibility: hidden;
+    transition: visibility 1s, opacity 1s;
+}
+
+.nodisplay{
+    display: none;
+}
+
+.auxcontrolbox{
+    margin: auto;
+    max-width: 600px;
+}
+.auxcontrol{
+    float: left !important;
+    margin-top: 20px;
+    height: 50px;
+    width: 200px;
+}
+
+.preload *{
+    transition: none !important;
+    -webkit-transition: none !important;
+    -moz-transition: none !important;
+    -ms-transition: none !important;
+    -o-transition: none !important;
+}
+
+#secondary{
+    max-width: 815px;
+}
+
+label > input{ /* Disable radio buttons */
+  display:none;
+}
+
+label > input + div{ /* Answer box when not selected */
+    cursor: pointer;
+    border: 7px solid;
+    transition: background 2s, border-color 1s;
+}
+
+label > input:checked + div{ /* Div when selected */
+    transition: background 2s, border-color 1s;
+}
+
+@media screen and (max-width: 800px) {
+    .titlecontainer{
+        padding-right: 5px;
+    }
+    
+    h1{
+        font-size: 40px;
+    }
+}

@@ -13,9 +13,9 @@ namespace nah_backend.Controllers
 {
     public class AnswerController : ApiController
     {
-        private string _qReset = "UPDATE answer SET final = FALSE WHERE clientid = @Id ;";
+        private string _qReset = "UPDATE answer SET final = 0 WHERE clientid = @Id ;";
         private string _qExists = "SELECT id FROM client WHERE id = @Id AND hash = @Hash ;";
-        private string _qInval = "UPDATE answer SET final = FALSE WHERE clientid = @Id AND qid = @Qid ;";
+        private string _qInval = "UPDATE answer SET final = 0 WHERE clientid = @Id AND qid = @Qid ;";
         private string _qInsert = "INSERT INTO answer (clientid, qid, score, help, final) VALUES (@Id, @Qid, @Score, @Help, 1) ;";
         private string _qCount =
             "SELECT COUNT(answer.id) AS amount " +
@@ -107,9 +107,14 @@ namespace nah_backend.Controllers
         /// False if the client does not exist or if the answer does not fit the required format.</returns>
         [AllowAnonymous]
         [Route("api/answer/Insert")]
-        public bool Insert(int id, string hash, int qid, int score, bool help)
+        public bool Insert(int id, string hash, int qid, int score, int help)
         {
-            CLAN clan = new CLAN(new Client(id, hash), new Answer(qid, score, help));
+            bool hb = true;
+
+            if (help == 0)
+                hb = false;
+
+            CLAN clan = new CLAN(new Client(id, hash), new Answer(qid, score, hb));
             return Insert(clan);
         }
 

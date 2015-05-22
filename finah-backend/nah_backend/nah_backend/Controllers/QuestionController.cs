@@ -267,10 +267,9 @@ namespace nah_backend.Controllers
         /// <returns>True if the client was successfully updated, false otherwise.</returns>
         private bool questionDBPreviousQuestion(Client client)
         {
-            if(clientDBExists(client))
+            if(!clientDBExists(client))
                 return false;
             
-
             // Open connection and set parameters
             SqlConnection connection = DatabaseAccessProvider.GetConnection();
             SqlCommand insertCommand = new SqlCommand(_qPrevious, connection);

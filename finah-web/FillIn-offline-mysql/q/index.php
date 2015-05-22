@@ -34,59 +34,6 @@
         /// START FUNCTION DECLARATION \\\
         
         /**
-         * Sends a request to a REST API and returns the result.
-         * @param string $url The url to consume.
-         * @param $params The parameters to pass.
-         * @param $verb POST or GET.
-         * @param $format json or xml.
-         * @return The API's response.
-         * @throws Exception When an error occurs.
-         */
-        function rest_helper($url, $params = null, $verb = 'POST', $format = 'json')
-        {
-            $cparams = array(
-                'http' => array(
-                'method' => $verb,
-                'ignore_errors' => false
-                )
-            );
-            if ($params !== null) {
-                $params = http_build_query($params);
-                $cparams['http']['content'] = $params;
-                $url .= '?' . $params;
-            }
-
-            $context = stream_context_create($cparams);
-            $fp = fopen($url, 'rb', false, $context);
-            if (!$fp) {
-                $res = false;
-            } else {
-                $res = stream_get_contents($fp);
-            }
-
-            if ($res === false) {
-                throw new Exception("$verb $url failed: $php_errormsg");
-            }
-
-            switch ($format) {
-                case 'json':
-                    $r = json_decode($res);
-                    if ($r === null) {
-                        throw new Exception("failed to decode $res as json");
-                    }
-                    return $r;
-
-                case 'xml':
-                    $r = simplexml_load_string($res);
-                if ($r === null) {
-                    throw new Exception("failed to decode $res as xml");
-                }
-                return $r;
-            }
-            return $res;
-        }
-        
-        /**
          * Checks whether or not the client specified by the id and hash
          * parameters exists or not. If the client exists, $_SESSION['hid']
          * and $_SESSION['hhash'] will be set for the duration of the session. 
@@ -94,18 +41,18 @@
          * upon calling this function.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @return True if the client exists; false otherwise.
          */
-        function checkHash($id, $hash){
-            require '../db/db.php';
+        function checkHash($id, $hash, mysqli $dbconn){
+            require '../db/qexists.php';
             
-            $url = $APIHOST . 'api/client/Exists/';
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            } catch (Exception $ex){
-                return false;
-            }
-            if($result === FALSE)            
+            $stmt = $dbconn->prepare($EXISTSQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)            
                 return false;
             
             $_SESSION['hid'] = $id;
@@ -116,53 +63,60 @@
         /**
          * Sets the variables $GLOBALS['done'] and $GLOBALS['start'] if the 
          * client is done with his questionnaire or if he is at the start of it,
-         * respectively. Will set both of these to TRUE if an error occurs.
+         * respectively. Will set both of these to TRUE if the requested client
+         * does not exist.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function getStartOrDone($id, $hash){
-            require '../db/db.php';
+        function getStartOrDone($id, $hash, mysqli $dbconn){
+            require '../db/qstartdone.php';
             
-            $starturl = $APIHOST . 'api/client/Start/';
-            $doneurl = $APIHOST . 'api/client/Done/';
+            $stmt = $dbconn->prepare($STARTDONEQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $start = rest_helper($starturl, array('id' => $id, 'hash' => $hash));
-                $done = rest_helper($doneurl, array('id' => $id, 'hash' => $hash));
-            } catch(Exception $ex){
-                $GLOBALS['start'] = true;
+            // ERROR STATE: CLIENT DOES NOT EXIST
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)            
+            {
                 $GLOBALS['done'] = true;
+                $GLOBALS['start'] = true;
                 return;
-            }
+            }            
             
-            $GLOBALS['start'] = $start;
-            $GLOBALS['done'] = $done;
+            $row = $result->fetch_assoc();
+            
+            $GLOBALS['start'] = $row['start'];
+            $GLOBALS['done'] = $row['done'];
         }
         
         /**
          * Returns the next unanswered question of the given client.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @return question An object containing the title, the text and the id 
          * of the first unanswered question. Will be NULL if there are no more
          * questions.
          */
-        function getNextUnansweredQuestion($id, $hash){
-            require '../db/db.php';
+        function getNextUnansweredQuestion($id, $hash, mysqli $dbconn){
+            require '../db/qnext.php';
             
-            $url = $APIHOST . 'api/question/Next/';
+            $stmt = $dbconn->prepare($NEXTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
                 return null;
-            }
+            
+            $row = $result->fetch_assoc();
             
             $output = new question();
-            $output->id = $result->Id;
-            $output->title = $result->Title;
-            $output->text = $result->Text;
+            $output->id = $row['id'];
+            $output->title = $row['title'];
+            $output->text = $row['text'];
             
             return $output;
         }
@@ -171,25 +125,27 @@
          * Returns the intro of the questionnaire of the given client.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @return introduction An object containing the title and the 
          * introduction text of the questionnaire. Will be NULL if the client
          * does not exist.
          */
-        function getIntro($id, $hash){
-            require '../db/db.php';
+        function getIntro($id, $hash, mysqli $dbconn){
+            require '../db/qintro.php';
             
-            $url = $APIHOST . 'api/questionnaire/Intro/';
+            $stmt = $dbconn->prepare($INTROQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
                 return null;
-            }
+            
+            $row = $result->fetch_assoc();
             
             $output = new introduction();
-            $output->title = $result->Title;
-            $output->text = $result->Text;
+            $output->title = $row['title'];
+            $output->text = $row['intro'];
             
             return $output;
         }
@@ -212,18 +168,14 @@
          * true.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function setStart($id, $hash){
-            require '../db/db.php';
+        function setStart($id, $hash, mysqli $dbconn){
+            require '../db/qsetstart.php';
             
-            $url = $APIHOST . 'api/client/SetStart/';
-            
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            $stmt = $dbconn->prepare($SETSTARTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
         }
         
         /**
@@ -231,18 +183,14 @@
          * false.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function unsetStart($id, $hash){
-            require '../db/db.php';
+        function unsetStart($id, $hash, mysqli $dbconn){
+            require '../db/qunsetstart.php';
             
-            $url = $APIHOST . 'api/client/UnSetStart/';
-            
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            $stmt = $dbconn->prepare($UNSETSTARTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
         }
         
         /**
@@ -250,18 +198,14 @@
          * true.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function setDone($id, $hash){
-            require '../db/db.php';
+        function setDone($id, $hash, mysqli $dbconn){
+            require '../db/qsetdone.php';
             
-            $url = $APIHOST . 'api/client/Done/';
-            
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            $stmt = $dbconn->prepare($SETDONEQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
         }
         
         /**
@@ -269,55 +213,43 @@
          * false.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function unsetDone($id, $hash){
-            require '../db/db.php';
+        function unsetDone($id, $hash, mysqli $dbconn){
+            require '../db/qunsetdone.php';
             
-            $url = $APIHOST . 'api/client/UnSetDone/';
-            
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            $stmt = $dbconn->prepare($UNSETDONEQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
         }
         
         /**
          * Restarts the client's questionnaire by invalidating all his answers.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          */
-        function resetQuestionnaire($id, $hash){
-            require '../db/db.php';
+        function resetQuestionnaire($id, $hash, mysqli $dbconn){
+            require '../db/qrestart.php';
             
-            $url = $APIHOST . 'api/answer/Reset/';
+            // CURRENTLY THIS WORKS WITH SIMPLE UPDATES
+            // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
+            // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            $stmt = $dbconn->prepare($RESTARTQUERY);
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
         }
         
-        /**
-         * Returns the client to his previous question by invalidating his
-         * latest answer.
-         * @param type $id The id of the client.
-         * @param type $hash The hash of the client.
-         */
-        function previousQuestion($id, $hash){
-            require '../db/db.php';
+        function previousQuestion($id, $hash, mysqli $dbconn){
+            require '../db/qprevious.php';
             
-            $url = $APIHOST . 'api/question/PreviousQuestion/';
-            
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            // CURRENTLY THIS WORKS WITH SIMPLE UPDATES
+            // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
+            // THIS WILL HAVE TO BE DONE WHILE WRITING THE APIZ
+            $stmt = $dbconn->prepare($PREVIOUSQUERY);
+            $stmt->bind_param("ii", $id, $id);
+            $stmt->execute();
         }
         
         /**
@@ -327,25 +259,33 @@
          * than three, regardless of its actual value.
          * @param type $id The id of the client.
          * @param type $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @param type $qid The id of the question to insert.
          * @param type $score The score of the question to insert.
          * @param type $help Whether or not the client has requested aid.
          */
-        function insertAnswer($id, $hash, $qid, $score, $help){
-            require '../db/db.php';
-            
-            $url = $APIHOST . 'api/answer/Insert/';
+        function insertAnswer($id, $hash, mysqli $dbconn, $qid, $score, $help){
+            require '../db/qinsertanswer.php';
+            require '../db/qinvalidateanswers.php';
             
             // If score is lower than three, set help to false.
             if($score < 3)
                 $help = 0;
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash, 'qid' => $qid, 'score' => $score, 'help' => $help));
-            }
-            catch(Exception $ex){
-                return;
-            }
+            // CURRENTLY THIS WORKS WITH SIMPLE UPDATES AND INSERTS
+            // TODO: ADD SECURITY AND SAFETY CHECKS TO QUERIES
+            // THIS WILL HAVE TO BE DONE WHILE WRITING THE API
+            
+            // First we invalidate all other answers by this client for this 
+            // question.
+            $updstmt = $dbconn->prepare($INVALIDATEANSWERSQUERY);
+            $updstmt->bind_param("ii", $id, $qid);
+            $updstmt->execute();
+            
+            // Then we insert our new answer.
+            $insstmt = $dbconn->prepare($INSERTANSWERQUERY);
+            $insstmt->bind_param("iiii", $id, $qid, $score, $help);
+            $insstmt->execute();
         } 
         
         /**
@@ -353,24 +293,26 @@
          * given client.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @return int The total amount of questions in the questionnaire of
          * the given client. Will be 0 if the client does not exist.
          */
-        function totalCount($id, $hash){
-            require '../db/db.php';
+        function totalCount($id, $hash, mysqli $dbconn){
+            require '../db/qtotalcount.php';
             
-            $url = $APIHOST . 'api/questionnaire/Count/';
+            $stmt = $dbconn->prepare($TOTALCOUNTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            } catch (Exception $ex){
-                return 0;
-            }
-            
-            if($result < 0)
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
                 return 0;
             
-            return $result;
+            $row = $result->fetch_assoc();
+            
+            $output = $row['amount'];
+            
+            return $output;
         }
         
         /**
@@ -378,46 +320,54 @@
          * already given.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @return int The total amount of different valid answers the client has 
          * already given. Will be 0 if the client does not exist.
          */
-        function answerCount($id, $hash){
-            require '../db/db.php';
+        function answerCount($id, $hash, mysqli $dbconn){
+            require '../db/qanswercount.php';
             
-            $url = $APIHOST . 'api/answer/Count/';
+            $stmt = $dbconn->prepare($ANSWERCOUNTQUERY);
+            $stmt->bind_param("is", $id, $hash);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
-            } catch (Exception $ex){
-                return 0;
-            }
-            
-            if($result < 0)
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
                 return 0;
             
-            return $result;
+            $row = $result->fetch_assoc();
+            
+            $output = $row['amount'];
+            
+            return $output;
         }
         
         /**
          * Returns the image belonging to a question.
          * @param $id The id of the client.
          * @param $hash The hash of the client.
+         * @param mysqli $dbconn The database connection.
          * @param $qid The id of the question.
          * @return int The image of the question, or null if no such question
-         * exists or if the user does not have access to that question.
+         * exists or if the user does not have access to that question. WARNING:
+         * this image still needs to be encoded in base64.
          */
-        function getImage($id, $hash, $qid){
-            require '../db/db.php';
+        function getImage($id, $hash, mysqli $dbconn, $qid){
+            require '../db/qgetimage.php';
             
-            $url = $APIHOST . 'api/question/Image/';
+            $stmt = $dbconn->prepare($GETIMAGEQUERY);
+            $stmt->bind_param("isi", $id, $hash, $qid);
+            $stmt->execute();
+            $result = $stmt->get_result();
             
-            try{
-                $result = rest_helper($url, array('id' => $id, 'hash' => $hash, 'qid' => $qid));
-            } catch (Exception $ex){
-                return null;
-            }
-          
-            return $result;
+            if($result === FALSE || !is_object($result) || $result->num_rows <= 0)                    
+                return NULL;
+            
+            $row = $result->fetch_assoc();
+            
+            $output = $row['image'];
+            
+            return $output;
         }
         
         /**
@@ -445,15 +395,14 @@
         /// START MAIN SCRIPT \\\
         
         // CONNECT TO DATABASE \\
-        // Suppress notices
-        error_reporting(E_ALL ^ E_NOTICE);
-        // We perform a random query to assertain database connectivity
-        $testurl = $APIHOST . 'api/client/Exists/';
-        $db = true;
-        try{
-            $result = rest_helper($testurl, array('id' => 1, 'hash' => 'XCD'));
-        } catch (Exception $ex) {
+        
+        $conn = new mysqli($DBHOST, $DBUSER, $DBPASS, $DBNAME, $DBPORT);
+        
+        if($conn->connect_error)
             $db = false;
+        else{
+            $conn->select_db($DBNAME);
+            $db = true;
         }
         
         // AUTH USER \\
@@ -473,7 +422,7 @@
         // If we do not have an open session, yet we do have a uid and a hash, 
         // we need to check the validity of the hash. 
         // This will also create a user session.
-        else if(checkHash($_GET['uid'], $_GET['hash']))
+        else if(checkHash($_GET['uid'], $_GET['hash'], $conn))
             $pass = true;
         // If the hash lookup fails, we are not authorized to access the questions.
         else
@@ -482,27 +431,27 @@
         // If we are authorized, and we have an answer to submit and that answer is valid
         if($pass && isset($_SESSION['hqid']) && isset($_POST['primaryanswer']) && isset($_POST['secondaryanswer']) && validateAnswerInput($_POST['primaryanswer'], $_POST['secondaryanswer']))
             // We submit the answer to the database
-            insertAnswer($_SESSION['hid'], $_SESSION['hhash'], $_SESSION['hqid'], $_POST['primaryanswer'], $_POST['secondaryanswer']); 
+            insertAnswer($_SESSION['hid'], $_SESSION['hhash'], $conn, $_SESSION['hqid'], $_POST['primaryanswer'], $_POST['secondaryanswer']); 
         
         // If we are authorized, and we need to start the questionnaire
         if($pass && isset($_POST['started']))
             // We do so by unsetting start
-            unsetStart($_SESSION['hid'], $_SESSION['hhash']);
+            unsetStart($_SESSION['hid'], $_SESSION['hhash'], $conn);
         
         // If we are authorized, and we need to go back to the instructions
         if($pass && isset($_POST['instructions']))
             // We do so by setting start
-            setStart($_SESSION['hid'], $_SESSION['hhash']);
+            setStart($_SESSION['hid'], $_SESSION['hhash'], $conn);
         
         // If we are authorized, and we need to restart the questionnaire
         if($pass && isset($_POST['reset']))
             // We do so
-            resetQuestionnaire($_SESSION['hid'], $_SESSION['hhash']);
+            resetQuestionnaire($_SESSION['hid'], $_SESSION['hhash'], $conn);
         
         // If we are authoriwed, and we need to return to the previous question
         if($pass && isset($_POST['previous']))
             // We do so
-            previousQuestion($_SESSION['hid'], $_SESSION['hhash']);
+            previousQuestion($_SESSION['hid'], $_SESSION['hhash'], $conn);
             
         // Unset all the data
         unset($_POST['primaryanswer']);
@@ -573,7 +522,7 @@
             // If we are allowed to pass,
             else{
                 // we check whether we are done or perhaps just beginning.
-                getStartOrDone($_SESSION['hid'], $_SESSION['hhash']);
+                getStartOrDone($_SESSION['hid'], $_SESSION['hhash'], $conn);
                 
                 // If we are done, we display an appropriate message.
                 if($GLOBALS['done']){
@@ -581,7 +530,7 @@
                 }
                 // Same for if we are beginning.
                 else if($GLOBALS['start']){
-                    $intro = getIntro($_SESSION['hid'], $_SESSION['hhash']);
+                    $intro = getIntro($_SESSION['hid'], $_SESSION['hhash'], $conn);
         ?>
         <div class="questionbox">
             <h2 class="questiontitle">
@@ -659,20 +608,20 @@
                 // If we are not done, and not starting, we fetch the next 
                 // question.
                 else {
-                    $question = getNextUnansweredQuestion($_SESSION['hid'], $_SESSION['hhash']);
+                    $question = getNextUnansweredQuestion($_SESSION['hid'], $_SESSION['hhash'], $conn);
                     // If we didn't get a new question, that means we're done.
                     // We update the database and display an appropriate message.
                     if(is_null($question)){
-                        setDone($_SESSION['hid'], $_SESSION['hhash']);
+                        setDone($_SESSION['hid'], $_SESSION['hhash'], $conn);
                         printDone();
                     }
                     // Else we set our hidden question id, our current and total
                     // question counts, and then finally display the question
                     else{
                         $_SESSION['hqid'] = $question->id;
-                        $currQuestion = answerCount($_SESSION['hid'], $_SESSION['hhash']) + 1;
-                        $total = totalCount($_SESSION['hid'], $_SESSION['hhash']);
-                        $image = getImage($_SESSION['hid'], $_SESSION['hhash'], $_SESSION['hqid']);
+                        $currQuestion = answerCount($_SESSION['hid'], $_SESSION['hhash'], $conn) + 1;
+                        $total = totalCount($_SESSION['hid'], $_SESSION['hhash'], $conn);
+                        $image = getImage($_SESSION['hid'], $_SESSION['hhash'], $conn, $_SESSION['hqid']);
                         ?>
  
         <div class="questionbox">
@@ -696,7 +645,7 @@
             ?>
             
             
-                <img class="questionimage" src="data:image/jpeg;base64,<?php echo $image;?>"></img>
+                <img class="questionimage" src="data:image/jpeg;base64,<?php echo(base64_encode($image));?>"></img>
             <?php
                     }
             ?>
