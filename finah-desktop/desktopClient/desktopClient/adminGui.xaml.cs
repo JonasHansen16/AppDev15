@@ -24,6 +24,7 @@ namespace sprint_1_def
         private int amount;
         private int currentPage;
         private List<User> _allusers = new List<User>();
+        List<User> currentUsers = new List<User>();
 
 
 
@@ -47,6 +48,7 @@ namespace sprint_1_def
 
         private void sendGetAmountUsersRequest()
         {
+            int pages;
             try
             {
 
@@ -72,14 +74,17 @@ namespace sprint_1_def
             {
                 if (amount % 10 == 0)
                 {
-                    int pages = amount / 10;
+                    pages = amount / 10;
                 }
                 else
                 {
-                    int pages = amount / 10 + 1;
+                    pages = amount / 10 + 1;
                 }
 
-                PageLabel.Content = (currentPage + 1) + " / " + amount;
+                if (pages < currentPage)
+                    currentPage = currentPage - 1;
+
+                PageLabel.Content = (currentPage + 1) + " / " + pages;
 
 
             }
@@ -96,7 +101,7 @@ namespace sprint_1_def
             else
                 PreviousButton.IsEnabled = true;
 
-            if (currentPage == amount)
+            if ((currentPage+1) >= (double)((amount / 10.0 )))
                 NextButton.IsEnabled = false;
             else
                 NextButton.IsEnabled = true;
@@ -114,6 +119,7 @@ namespace sprint_1_def
 
 
             usergrid.ItemsSource = userGridList;
+            sendGetAmountUsersRequest();
 
 
 
@@ -121,13 +127,43 @@ namespace sprint_1_def
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadUsers(currentPage++);
+           currentUsers = _allusers;
+
+            LoadUsers(++currentPage);
+            for (int i = 0; i < currentUsers.Count; i++)
+            {
+                for (int j = 0; j < _allusers.Count; j++)
+                {
+                    if (CompareUsers(currentUsers[i], _allusers[j]))
+                    {
+                        _allusers.RemoveAt(j);
+                        break;
+                    }
+
+                }
+
+
+            }
+            List<GridUser> userGridList = new List<GridUser>();
+            for (int i = 0; i < _allusers.Count; i++)
+            {
+                GridUser gridUser = new GridUser(_allusers[i].Name, _allusers[i].LastName, _allusers[i].Email, _allusers[i].Occupation, _allusers[i].UserName, _allusers[i].Id);
+                userGridList.Add(gridUser);
+            }
+
+
+            usergrid.ItemsSource = userGridList;
+
+
+
 
         }
 
         private void PreviousButton_Click(object sender, RoutedEventArgs e)
         {
-            LoadUsers(currentPage--);
+            currentUsers.Clear();
+            LoadUsers(--currentPage);
+            
         }
 
         private void sendActivateRequest()
@@ -145,7 +181,32 @@ namespace sprint_1_def
                 result = response.Content.ReadAsAsync<bool>().Result;
 
                 if (result == true)
+                {
+
+                    sendGetAmountUsersRequest();
                     LoadUsers(currentPage);
+                    for (int i = 0; i < currentUsers.Count; i++)
+                    {
+                        for (int j = 0; j < _allusers.Count; j++)
+                        {
+                            if (CompareUsers(currentUsers[i], _allusers[j]))
+                            {
+                                _allusers.RemoveAt(j);
+                                break;
+                            }
+
+                        }
+
+
+                    }
+                    List<GridUser> userGridList = new List<GridUser>();
+                    for (int i = 0; i < _allusers.Count; i++)
+                    {
+                        GridUser gridUser = new GridUser(_allusers[i].Name, _allusers[i].LastName, _allusers[i].Email, _allusers[i].Occupation, _allusers[i].UserName, _allusers[i].Id);
+                        userGridList.Add(gridUser);
+                    }
+                    usergrid.ItemsSource = userGridList;
+                }
                 else
                     MessageBox.Show("Error Opgetreden tijdens activeren, probeer het later opnieuw");
 
@@ -173,7 +234,31 @@ namespace sprint_1_def
                 result = response.Content.ReadAsAsync<bool>().Result;
 
                 if (result == true)
+                {
+                    sendGetAmountUsersRequest();
                     LoadUsers(currentPage);
+                    for (int i = 0; i < currentUsers.Count; i++)
+                    {
+                        for (int j = 0; j < _allusers.Count; j++)
+                        {
+                            if (CompareUsers(currentUsers[i], _allusers[j]))
+                            {
+                                _allusers.RemoveAt(j);
+                                break;
+                            }
+
+                        }
+
+
+                    }
+                    List<GridUser> userGridList = new List<GridUser>();
+                    for (int i = 0; i < _allusers.Count; i++)
+                    {
+                        GridUser gridUser = new GridUser(_allusers[i].Name, _allusers[i].LastName, _allusers[i].Email, _allusers[i].Occupation, _allusers[i].UserName, _allusers[i].Id);
+                        userGridList.Add(gridUser);
+                    }
+                    usergrid.ItemsSource = userGridList;
+                }
                 else
                     MessageBox.Show("Error opgetreden tijdens weigeren van de user, probeer het later opnieuw");
 
@@ -198,7 +283,14 @@ namespace sprint_1_def
             sendDenyRequest();
         }
 
+        private bool CompareUsers(User user1, User user2)
+        {
+            if (user1.Id == user2.Id)
+                return true;
 
+            else
+                return false;
+        }
 
 
 
