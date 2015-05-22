@@ -274,10 +274,24 @@ namespace nah_backend.Controllers
         private void filterLists(List<Question> ql, List<List<Answer>> lal)
         {
             // Filter out all the answers which do not have a corresponding question and all the answers which do not have a corresponding help request
-            foreach (List<Answer> la in lal)
-                foreach (Answer a in la)
-                    if (!contains(ql, a) || !anyHelp(lal, a))
-                        la.Remove(a);
+
+            for (int i = 0; i < lal.Count; i++)
+            {
+                for (int j = 0; j < lal[i].Count; j++)
+                {
+                    if (!contains(ql, lal[i][j]) || !anyHelp(lal, lal[i][j]))
+                    {
+                        lal[i].Remove(lal[i][j]);
+                        j--;
+                    }
+                }
+            }
+
+             //   foreach (List<Answer> la in lal)
+              //      foreach (Answer a in la)
+                //        if (!contains(ql, a) || !anyHelp(lal, a))
+                  //          la.Remove(a);
+            
         }
 
         /// <summary>
@@ -290,10 +304,19 @@ namespace nah_backend.Controllers
         /// as the passed answer request help, false otherwise.</returns>
         private bool anyHelp(List<List<Answer>> lal, Answer a)
         {
-            foreach (List<Answer> la in lal)
-                foreach (Answer curr in la)
-                    if (curr.QuestionID == a.QuestionID && curr.Help)
+            for (int i = 0; i < lal.Count; i++)
+            
+                for (int j = 0; j < lal[i].Count; j++)
+                
+                    if (lal[i][j].QuestionID == a.QuestionID && lal[i][j].Help)
                         return true;
+                
+            
+
+               // foreach (List<Answer> la in lal)
+                 //   foreach (Answer curr in la)
+                   //     if (curr.QuestionID == a.QuestionID && curr.Help)
+                     //       return true;
 
             return false;
         }
@@ -306,9 +329,14 @@ namespace nah_backend.Controllers
         /// <returns>True if the questionlist contains the answer, false otherwise.</returns>
         private bool contains(List<Question> ql, Answer a)
         {
-            foreach (Question q in ql)
-                if (q.Id == a.QuestionID)
+            for (int i = 0; i < ql.Count; i++)
+            
+                if (ql[i].Id == a.QuestionID)
                     return true;
+            
+              //  foreach (Question q in ql)
+                //    if (q.Id == a.QuestionID)
+                  //      return true;
 
             return false;
         }
