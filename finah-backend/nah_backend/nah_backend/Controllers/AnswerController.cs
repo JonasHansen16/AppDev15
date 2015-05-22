@@ -24,7 +24,6 @@ namespace nah_backend.Controllers
             "AND client.hash = @Hash " +
             "AND client.id = answer.clientid " +
             "AND answer.final = 1 " +
-            "GROUP BY answer.id " +
             "; ";
 
         // POST api/answer/Reset

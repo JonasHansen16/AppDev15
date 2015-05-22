@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>FillIn vragenlijst</title>
+        <title>nah-web vragenlijst</title>
         <link rel="stylesheet" href="../layout/main.css">
         <link rel="stylesheet" href="../layout/light.css">
     </head>
