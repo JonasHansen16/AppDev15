@@ -254,7 +254,7 @@
         function setDone($id, $hash){
             require '../db/db.php';
             
-            $url = $APIHOST . 'api/client/Done/';
+            $url = $APIHOST . 'api/client/SetDone/';
             
             try{
                 $result = rest_helper($url, array('id' => $id, 'hash' => $hash));
