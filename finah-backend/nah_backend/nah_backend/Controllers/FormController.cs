@@ -699,7 +699,7 @@ namespace nah_backend.Controllers
         private void clientDBInsertMod(ClientExp input)
         {
             input.Hash = stringDBMod(input.Hash, DatabaseData.Client.Hash.maxlen);
-            input.Function = stringDBMod(input.Hash, DatabaseData.Client.Function.maxlen);
+            input.Function = stringDBMod(input.Function, DatabaseData.Client.Function.maxlen);
         }
 
         /// <summary>
