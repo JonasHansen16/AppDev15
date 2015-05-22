@@ -113,7 +113,16 @@ namespace nah_backend.Controllers
                 return false;
 
             // And then we insert the new copy into the database
-            return formDBInsert(fo, usfo.US.Id, qid);
+            usfo.FO.ClientList = formDBInsert(fo, usfo.US.Id, qid);
+            //and return false if it was not successful
+            if (usfo.FO.ClientList == null)
+                return false;
+
+            // If the form was successfully inserted, we send a mail to the user informing him of this.
+            sendMail(usfo.FO, usfo.US);
+
+            // Everything has succeeded. We return true.
+            return true;
         }
 
         /// <summary>
@@ -485,7 +494,10 @@ namespace nah_backend.Controllers
             {   // we make sure the data fits the database.
                 formDBInsertMod(usfoqu.FO);
                 // And finally we try to insert the data into the database.
-                success = formDBInsert(usfoqu.FO, usfoqu.US.Id, usfoqu.QU.Id);
+                usfoqu.FO.ClientList = formDBInsert(usfoqu.FO, usfoqu.US.Id, usfoqu.QU.Id);
+                // If something went wrong while inserting the data, return false.
+                if (usfoqu.FO.ClientList == null)
+                    return false;
             }
 
             // If the form was successfully inserted, we send a mail to the user informing him of this.
@@ -713,8 +725,8 @@ namespace nah_backend.Controllers
         /// <param name="toInsert">The form to insert.</param>
         /// <param name="uid">The id of the user who is inserting the form.</param>
         /// <param name="qid">The id of the questionnaire the clients of the form should fill in.</param>
-        /// <returns>True if the form was successfully inserted, false otherwise.</returns>
-        private bool formDBInsert(Form toInsert, int uid, int qid)
+        /// <returns>A list of inserted clients or null if an error occurs.</returns>
+        private List<ClientExp> formDBInsert(Form toInsert, int uid, int qid)
         {
             // Open connection and set parameters
             SqlConnection connection = DatabaseAccessProvider.GetConnection();
@@ -743,7 +755,7 @@ namespace nah_backend.Controllers
             // If an error occurs, we return false
             catch (SqlException)
             {
-                return false;
+                return null;
             }
             finally
             {
@@ -752,15 +764,15 @@ namespace nah_backend.Controllers
 
             // If we did not find our form, return false
             if (fid == -1)
-                return false;
+                return null;
 
             // Else, insert all our clients
             foreach (ClientExp cl in toInsert.ClientList)
                 if (!clientDBInsert(cl, fid))
-                    return false;
+                    return null;
 
-            // Else we return true
-            return true;
+            // Get a list of all the inserted clients and return it.
+            return clientsDB(fid);
         }
 
         /// <summary>
