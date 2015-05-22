@@ -239,6 +239,32 @@ h2{
     margin-bottom: 20px;
 }
 
+.startfigure{
+    border: 2px;
+    border-style: solid;
+    padding: 20px;
+    padding-top: 0px;
+    margin-bottom: 20px;
+    padding-bottom: 25px;
+}
+
+.startimage{
+    display: block;
+    margin: auto;
+}
+
+.startcaption{
+    float: right;
+    font-weight: bold;
+    font-size: 20pt;
+}
+
+.startcaptionleft{
+    float: left;
+    font-weight: bold;
+    font-size: 20pt;
+}
+
 .progresstext{
     float: right;
     maximum-width: 100px;
@@ -356,5 +382,11 @@ label > input:checked + div{ /* Div when selected */
     
     h1{
         font-size: 40px;
+    }
+}
+
+@media screen and (max-width: 1575px) {
+    .startimage{
+        width: 70%;
     }
 }

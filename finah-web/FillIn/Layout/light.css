@@ -53,6 +53,10 @@ main{
     border-color: white;
 }
 
+.startimage{
+    border-color: black;
+}
+
 .questionbox{
     background: white;
     border-color: white;

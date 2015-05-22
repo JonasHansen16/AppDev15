@@ -531,7 +531,7 @@
             <div class="titlecontainer">
                 <a href="../">
                     <h1>
-                        Fancy Medisch Bedrijf
+                        ernah
                     </h1>
                 </a>
             </div>        
@@ -605,17 +605,31 @@
                         Na dat u de vraag hebt gelezen, is het de bedoeling dat u het 
                         meest gepaste van de vijf antwoorden kiest. Dit doet u door
                         simpelweg op het antwoord te klikken. Het huidig gekozen
-                        antwoord zal in een andere kleur komen te staan. Wees gerust,
+                        antwoord zal een blauwe omkadering krijgen. Wees gerust,
                         indien u per ongeluk op het verkeerde antwoord klikt, kan u
                         dit nog altijd veranderen door simpelweg op een ander antwoord
                         te klikken.
                     </p>
+                    <figure class="startfigure">
+                        <figcaption class="startcaptionleft">Voorbeeld</figcaption>
+                        <figcaption class="startcaption">Voorbeeld</figcaption>
+                        <img src="../res/answerexample.png" alt="antwoordvoorbeeld" class="startimage">
+                        <figcaption class="startcaption">Voorbeeld</figcaption>
+                        <figcaption class="startcaptionleft">Voorbeeld</figcaption>
+                    </figure>
                     <p class="starttext">
                         Indien u aangeeft dat iets hinderlijk is voor u of uw 
                         mantelzorger, dan krijgt u ook de mogelijkheid om te vragen dat
                         hier aan gewerkt moet worden. U kan dit aangeven net zoals u een
                         vraag beantwoordt. Standaard staat dit op 'Nee'.
                     </p>
+                    <figure class="startfigure">
+                        <figcaption class="startcaptionleft">Voorbeeld</figcaption>
+                        <figcaption class="startcaption">Voorbeeld</figcaption>
+                        <img src="../res/helpexample.png" alt="antwoordvoorbeeld" class="startimage">
+                        <figcaption class="startcaption">Voorbeeld</figcaption>
+                        <figcaption class="startcaptionleft">Voorbeeld</figcaption>
+                    </figure>
                     <p class="starttext">
                         Om een vraag in te dienen klikt u simpelweg op de knop 'Volgende
                         vraag'. Indien u per ongeluk een vergissing heeft gemaakt, geen
