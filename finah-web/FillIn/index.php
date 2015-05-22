@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>FillIn</title>
+        <title>nah-web</title>
         <link rel="stylesheet" href="./layout/main.css">
         <link rel="stylesheet" href="./layout/dark.css">
     </head>

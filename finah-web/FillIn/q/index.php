@@ -6,7 +6,7 @@
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>FillIn vragenlijst</title>
+        <title>nah-web vragenlijst</title>
         <link rel="stylesheet" href="../layout/main.css">
         <link rel="stylesheet" href="../layout/light.css">
     </head>
@@ -254,7 +254,7 @@
         function setDone($id, $hash){
             require '../db/db.php';
             
-            $url = $APIHOST . 'api/client/Done/';
+            $url = $APIHOST . 'api/client/SetDone/';
             
             try{
                 $result = rest_helper($url, array('id' => $id, 'hash' => $hash));

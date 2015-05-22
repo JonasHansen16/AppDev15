@@ -19,7 +19,8 @@ namespace nah_backend.Controllers
             "( " +
             "    SELECT ISNULL(MAX(answer.qid), 0) AS id " +
             "    FROM client, answer " +
-            "    WHERE client.id = answer.clientid " +
+            "    WHERE client.id = @Id AND client.hash = @Hash " +
+            "    AND client.id = answer.clientid " +
             "    AND answer.final = 1 " +
             ") AS lastanswer " +
             "WHERE client.id = @Id AND client.hash = @Hash " +

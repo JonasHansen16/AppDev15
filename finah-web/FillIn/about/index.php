@@ -7,7 +7,7 @@ and open the template in the editor.
 <html>
     <head>
         <meta charset="UTF-8">
-        <title>About FillIn</title>
+        <title>Over nah-web</title>
         <link rel="stylesheet" href="../layout/main.css">
         <link rel="stylesheet" href="../layout/dark.css">
     </head>
@@ -31,7 +31,7 @@ and open the template in the editor.
             <div class="titlecontainer">
                 <a href="../">
                     <h1>
-                        Fancy Medisch Bedrijf
+                        ernah
                     </h1>
                 </a>
             </div>
