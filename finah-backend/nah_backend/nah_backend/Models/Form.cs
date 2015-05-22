@@ -14,8 +14,9 @@ namespace nah_backend.Models
         public bool Completed { get; set; }
         public bool CheckedReport { get; set; }
         public List<ClientExp> ClientList { get; set; }
+        public int Repeats { get; set; }
 
-        public Form(int id = 0, string memo = "", string category = "", string relation = "", bool completed = false, bool checkedreport = false, List<ClientExp> clientlist = null)
+        public Form(int id = 0, string memo = "", string category = "", string relation = "", bool completed = false, bool checkedreport = false, List<ClientExp> clientlist = null, int repeats = 0)
         {
             if (clientlist == null)
                 clientlist = new List<ClientExp>();
@@ -27,6 +28,7 @@ namespace nah_backend.Models
             Completed = completed;
             CheckedReport = checkedreport;
             ClientList = clientlist;
+            Repeats = repeats;
         }
     }
 }
