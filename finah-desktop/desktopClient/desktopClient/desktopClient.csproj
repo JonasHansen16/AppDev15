@@ -34,9 +34,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MigraDoc.DocumentObjectModel">
+      <HintPath>..\..\..\..\..\..\..\Desktop\PROJECT\MigraDoc.DocumentObjectModel.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.Rendering">
+      <HintPath>..\..\..\..\..\..\..\Desktop\PROJECT\MigraDoc.Rendering.dll</HintPath>
+    </Reference>
+    <Reference Include="MigraDoc.RtfRendering">
+      <HintPath>..\..\..\..\..\..\..\Desktop\PROJECT\MigraDoc.RtfRendering.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\..\..\..\..\..\Desktop\PROJECT\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting">
+      <HintPath>..\..\..\..\..\..\..\Desktop\PROJECT\PdfSharp.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -81,6 +96,7 @@
     <Compile Include="OverviewForms.xaml.cs">
       <DependentUpon>OverviewForms.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PdfReportGenerator.cs" />
     <Compile Include="Question.cs" />
     <Compile Include="QuestionList.cs" />
     <Compile Include="Questionnaire.cs" />

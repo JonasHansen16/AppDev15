@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -23,6 +24,7 @@ namespace sprint_1_def
     {
         private List<ReportGrid> repGrid = new List<ReportGrid>();
         private User _user;
+        private Report report = null;
 
         public ReportGUI(User user, Form form)
         {
@@ -75,6 +77,7 @@ namespace sprint_1_def
                 
                 HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetReport"].ConnectionString, usfo);
                 result = response.Content.ReadAsAsync<Report>().Result;
+                report = result;
                 result.ClientList = new List<ClientExp>(result.ClientList);
                 result.QuestionList = new List<Question>(result.QuestionList);
                 List<List<Answer>> temp = new List<List<Answer>>();
@@ -156,6 +159,36 @@ namespace sprint_1_def
             {
                 e.Cancel = true;
             }
+        }
+
+        private void PdfButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(report == null)
+            {
+                MessageBox.Show("Geen rapport beschikbaar");
+                return;
+            }
+            string path;
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah");
+            
+           if(!Directory.Exists(path))
+           {
+               Directory.CreateDirectory(path);
+           }
+                
+            path = System.IO.Path.Combine(path, ReportIDLabel.Content + ".pdf");
+            PdfReportGenerator pdfgeneration = new PdfReportGenerator();
+            try
+            {
+                pdfgeneration.reportToPdf(report, (int)ReportIDLabel.Content, path);
+                MessageBox.Show("Rapport aangemaakt op plaats " + path);
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show("Er is iets fout gegaan tijdens het maken van de PDF" + ex);
+            }
+           
+
         }
 
        

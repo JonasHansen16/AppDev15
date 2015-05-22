@@ -207,8 +207,9 @@ namespace sprint_1_def
                 client = new Client(_forms[formsGrid.SelectedIndex].ClientList[1].Id, _forms[formsGrid.SelectedIndex].ClientList[1].Hash);
             }
             var window = new vraag(client);
-            window.Show();
+            
             this.Close();
+            window.Show();
 
         }
 

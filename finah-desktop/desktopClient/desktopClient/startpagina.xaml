@@ -1,7 +1,7 @@
 ﻿<Window x:Class="sprint_1_def.startpagina"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="startpagina" Height="660" Width="1010">
+        Title="Startpagina" Height="660" Width="1010" WindowStartupLocation="CenterScreen">
 
     <Grid Background="LightBlue" >
         <Image x:Name="image"  HorizontalAlignment="Left" Height="100" Margin="440,52,0,0" VerticalAlignment="Top" Width="100" RenderTransformOrigin="-0.105,0.209" ToolTip="userimage" >

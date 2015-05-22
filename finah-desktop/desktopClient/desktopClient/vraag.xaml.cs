@@ -37,15 +37,39 @@ namespace sprint_1_def
         public vraag(Client client)
         {
             InitializeComponent();
+            _client = client;
+            string path;
+            
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path += "\\Questions"; 
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = System.IO.Path.Combine(path, _client.Id + ".txt");
+            string pathanswers = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Answers");
+            pathanswers = System.IO.Path.Combine(pathanswers, _client.Id + ".txt");
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+                File.Delete(pathanswers);
+            }
+           
             SendRequest(client);
             buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
             allQuestions = new QuestionList();           
             answer = new Answer();
-            _client = client;
+            
             
             GetQuestionList();
             _allAnswers = new List<Answer>();
+            _allAnswers.Add(new Answer());
             
            
 
@@ -65,6 +89,7 @@ namespace sprint_1_def
             {
                 if (buttons[i] == b)
                 {
+                    answer.Score = i + 1;
                     selectedAnswer = i + 1;
                     i = 7;
                 }
@@ -204,6 +229,7 @@ namespace sprint_1_def
             writeAnswerToTextFile();
             if (currentQuestion < allQuestions.Questions.Count-1)
             {
+                answer.QuestionId = allQuestions.Questions[currentQuestion].Id;
                 _allAnswers.Add(answer);
                 currentQuestion++;               
                 answer = new Answer();
@@ -214,20 +240,25 @@ namespace sprint_1_def
                     bool result;
                     List<Answer> finalAllAnswers = new List<Answer>();
                     Answer currentAnswer = new Answer();
-                    StreamReader reader = new StreamReader("../../users/"+_client.Id+".txt", true);
-                    while (!reader.Peek().Equals(""))
-                    {
+                    string path;
+                    path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Answers");
+                    path = System.IO.Path.Combine(path, _client.Id + ".txt");
+                    
+                    string[] all = System.IO.File.ReadAllLines(path);
+                    int j =0;
+                    
 
-                        currentAnswer.QuestionId = Convert.ToInt32(reader.ReadLine());
-                        currentAnswer.Score = Convert.ToInt32(reader.ReadLine());
-                        currentAnswer.Help = Convert.ToBoolean(reader.ReadLine());
-                        finalAllAnswers.Add(currentAnswer);
-                    }
+
                     CLANL clanl = new CLANL();
-                    clanl.ANL = finalAllAnswers;
+                    clanl.ANL = _allAnswers;
                     clanl.CL = _client;
                     HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendAnswers"].ConnectionString, clanl);
                     result = response.Content.ReadAsAsync<bool>().Result;
+                    
+
+                   
+
+                   
 
                     if (result == false)
                     {
@@ -238,7 +269,8 @@ namespace sprint_1_def
                     }
                     else
                     {
-                        File.Delete("../../users/"+_client.Id+".txt");
+                        if(File.Exists(path))
+                        File.Delete(path);
                         HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, _client);
                         result = checkresponse.Content.ReadAsAsync<bool>().Result;
                         if (result == true)
@@ -275,9 +307,16 @@ namespace sprint_1_def
 
         private void writeAnswerToTextFile()
         {
-            
-            
-            StreamWriter userWriter = new StreamWriter("../../users/"+_client.Id+".txt", true);
+
+            string path;
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Answers");
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = System.IO.Path.Combine(path, _client.Id + ".txt");
+            StreamWriter userWriter = new StreamWriter(path, true);
 
             userWriter.WriteLine(answer.QuestionId);
             userWriter.WriteLine(answer.Score);
@@ -288,16 +327,31 @@ namespace sprint_1_def
 
         private void GetQuestionList()
         {
-            Question question = new Question();
-            StreamReader reader = new StreamReader("../../questions/Questionnaire"+_client.Id+".txt", true);
-            while (!reader.Peek().Equals(""))
+            Question question;
+            string path;
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Questions");
+            path = System.IO.Path.Combine(path, _client.Id + ".txt");
+
+            
+
+            
+             
+
+
+            string [] all = System.IO.File.ReadAllLines(path);
+
+            for (int i = 0; i < all.Length; i++)
             {
-                
-                question.Id = Convert.ToInt32(reader.ReadLine());
-                question.Text = reader.ReadLine();
-                question.Title = reader.ReadLine();
+                all[i].Trim();
+                question = new Question();
+                question.Id = Convert.ToInt32(all[i]);
+                i++;
+                question.Text = all[i];
+                i++;
+                question.Title = all[i];
                 allQuestions.Questions.Add(question);
             }
+            
         }
 
         //converts byte array to image
@@ -338,8 +392,16 @@ namespace sprint_1_def
         private void WriteLocal(QuestionList allQuestions)
         {
 
+            string path;
+            path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Questions");
 
-            StreamWriter userWriter = new StreamWriter("/../../Questions/Questionnaire"+_client.Id+".txt", true);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            path = System.IO.Path.Combine(path, _client.Id + ".txt");
+            StreamWriter userWriter = new StreamWriter(path, true);
             for (int i = 0; i < allQuestions.Questions.Count; i++)
             {
                 userWriter.WriteLine(allQuestions.Questions[i].Id);

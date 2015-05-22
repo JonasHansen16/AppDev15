@@ -21,6 +21,7 @@
         <Label x:Name="function1Label_Copy"  Content="Functie:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="673,114,0,0"/>
         <Label x:Name="Age1Label_Copy" Content="Leeftijd: &lt;" HorizontalAlignment="Left" Margin="673,145,0,0" VerticalAlignment="Top"/>
         <DataGrid x:Name="ReportDataGrid"  HorizontalAlignment="Left" Margin="83,176,0,0" VerticalAlignment="Top" Height="337" Width="824" ColumnWidth="150" AutoGeneratingColumn="OnAutoGeneratingColumn"/>
+        <Button x:Name="PdfButton" Content="PDF" HorizontalAlignment="Left" Margin="83,523,0,0" VerticalAlignment="Top" Width="75" Click="PdfButton_Click"/>
 
     </Grid>
 </Window>

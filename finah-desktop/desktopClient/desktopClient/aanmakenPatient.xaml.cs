@@ -78,7 +78,7 @@ namespace sprint_1_def
         }
         private String ControlerenAllesIngevuld()
         {
-            if (CommentTextBox.Text.Length == 0 || RelationTextBox.Text.Length == 0 || CategoryTextBox.Text.Length == 0 || AgeCareComboBox.SelectedValue == "" || AgeClientComboBox.SelectedValue == "")
+            if (CommentTextBox.Text.Length == 0 || RelationTextBox.Text.Length == 0 || CategoryTextBox.Text.Length == 0 || Convert.ToString(AgeCareComboBox.SelectedValue) == "" || AgeClientComboBox.SelectedValue.ToString() == "")
             {
                 return "NIET OK";
             }
