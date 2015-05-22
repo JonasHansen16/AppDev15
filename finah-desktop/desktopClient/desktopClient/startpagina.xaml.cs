@@ -31,6 +31,8 @@ namespace sprint_1_def
                 AdminButton.Visibility = Visibility.Visible;
             else
                 AdminButton.Visibility = Visibility.Hidden;
+
+            
         }
         
         private void RapportAanvraagButton_Click(object sender, RoutedEventArgs e)
@@ -64,46 +66,7 @@ namespace sprint_1_def
             this.Close();
         }
 
-        private void SendRequest(Client client)
-        {
-            QuestionList result = new QuestionList();
-            //get all Questions
-            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["AllQuestions"].ConnectionString, client);
-            result.Questions = response.Content.ReadAsAsync<List<Question>>().Result;
-
-            if (result.Questions.Equals(null))
-                QuestionsFailure();
-            else
-                WriteLocal(result);
-
-
-        }
-
-        private void QuestionsFailure()
-        {
-            MessageBox.Show("Geen vragen beschikbaar");
-        }
-
-        //This function writes a questionlist to local device
-        private void WriteLocal(QuestionList allQuestions)
-        {
-            
-            
-            StreamWriter userWriter = new StreamWriter("/../../Questions/Questionnaire.txt", true);
-            for (int i = 0; i < allQuestions.Questions.Count; i++ )
-            {
-                userWriter.WriteLine(allQuestions.Questions[i].Id);
-                userWriter.WriteLine(allQuestions.Questions[i].Text);
-                userWriter.WriteLine(allQuestions.Questions[i].Title);
-            }
-            userWriter.Close();
-            
-        }
-
-        private void ConnectionFailure()
-        {
-            MessageBox.Show("Geen connectie met de database");
-        }
+        
 
         
     }

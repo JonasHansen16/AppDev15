@@ -29,7 +29,7 @@ namespace sprint_1_def
        
         private Button[] buttons;
         private Answer answer;
-        private Client client;
+        private Client _client;
         private QuestionList allQuestions;
         private List<Answer> _allAnswers;
         
@@ -37,13 +37,13 @@ namespace sprint_1_def
         public vraag(Client client)
         {
             InitializeComponent();
+            SendRequest(client);
             buttons = new Button[] { answer1Button, answer2Button, answer3Button, answer4Button, answer5Button, yesButton, noButton };
 
             allQuestions = new QuestionList();           
             answer = new Answer();
-            client = new Client();
-            client.Id = 1;
-            client.Hash = "abcdefgh";
+            _client = client;
+            
             GetQuestionList();
             _allAnswers = new List<Answer>();
             
@@ -138,7 +138,7 @@ namespace sprint_1_def
             questionNumberTextBlock.Content = "Vraag " + allQuestions.Questions[currentQuestion].Id + allQuestions.Questions.Count;
             questionTextBlock.Text = allQuestions.Questions[currentQuestion].Text;
             CLID clid = new CLID();
-            clid.CL = client;
+            clid.CL = _client;
             clid.ID = allQuestions.Questions[currentQuestion].Id;
 
             HttpResponseMessage response =  ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetImage"].ConnectionString, clid );
@@ -214,7 +214,7 @@ namespace sprint_1_def
                     bool result;
                     List<Answer> finalAllAnswers = new List<Answer>();
                     Answer currentAnswer = new Answer();
-                    StreamReader reader = new StreamReader("../../users/"+client.Id+".txt", true);
+                    StreamReader reader = new StreamReader("../../users/"+_client.Id+".txt", true);
                     while (!reader.Peek().Equals(""))
                     {
 
@@ -225,7 +225,7 @@ namespace sprint_1_def
                     }
                     CLANL clanl = new CLANL();
                     clanl.ANL = finalAllAnswers;
-                    clanl.CL = client;
+                    clanl.CL = _client;
                     HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendAnswers"].ConnectionString, clanl);
                     result = response.Content.ReadAsAsync<bool>().Result;
 
@@ -238,8 +238,8 @@ namespace sprint_1_def
                     }
                     else
                     {
-                        File.Delete("../../users/"+client.Id+".txt");
-                        HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, client);
+                        File.Delete("../../users/"+_client.Id+".txt");
+                        HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, _client);
                         result = checkresponse.Content.ReadAsAsync<bool>().Result;
                         if (result == true)
                         {
@@ -249,7 +249,7 @@ namespace sprint_1_def
                         }
                         else
                         {
-                            HttpResponseMessage checkresponse2 = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAllUnanswered"].ConnectionString, client);
+                            HttpResponseMessage checkresponse2 = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAllUnanswered"].ConnectionString, _client);
                             allQuestions.Questions = checkresponse2.Content.ReadAsAsync<List<Question>>().Result;
                             currentQuestion = 0;
                             loadQuestion();
@@ -312,6 +312,47 @@ namespace sprint_1_def
             ImageSource imgSrc = biImg as ImageSource;
 
             return imgSrc;
+        }
+
+        private void SendRequest(Client client)
+        {
+            QuestionList result = new QuestionList();
+            //get all Questions
+            HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["AllQuestions"].ConnectionString, client);
+            result.Questions = response.Content.ReadAsAsync<List<Question>>().Result;
+
+            if (result.Questions.Count == 0)
+                QuestionsFailure();
+            else
+                WriteLocal(result);
+
+
+        }
+
+        private void QuestionsFailure()
+        {
+            MessageBox.Show("Geen vragen beschikbaar");
+        }
+
+        //This function writes a questionlist to local device
+        private void WriteLocal(QuestionList allQuestions)
+        {
+
+
+            StreamWriter userWriter = new StreamWriter("/../../Questions/Questionnaire.txt", true);
+            for (int i = 0; i < allQuestions.Questions.Count; i++)
+            {
+                userWriter.WriteLine(allQuestions.Questions[i].Id);
+                userWriter.WriteLine(allQuestions.Questions[i].Text);
+                userWriter.WriteLine(allQuestions.Questions[i].Title);
+            }
+            userWriter.Close();
+
+        }
+
+        private void ConnectionFailure()
+        {
+            MessageBox.Show("Geen connectie met de database");
         }
     }
 

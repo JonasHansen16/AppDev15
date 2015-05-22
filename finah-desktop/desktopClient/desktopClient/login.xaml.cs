@@ -29,8 +29,10 @@ namespace sprint_1_def
         private void registerButton_Click(object sender, RoutedEventArgs e)
         {
             var winRegisteren = new registeren();
-            winRegisteren.Show();
             this.Close();
+            winRegisteren.Show();
+
+            
         }
 
         private void logInButton_Click(object sender, RoutedEventArgs e)
@@ -101,7 +103,7 @@ namespace sprint_1_def
         /// </summary>
         private void LoginSuccess(User login)
         {
-            MessageBox.Show("Successvol Ingelogd");
+            MessageBox.Show("Successvol Ingelogd.");
             var winStart = new startpagina(login);
             winStart.Show();
             this.Close();
@@ -146,7 +148,7 @@ namespace sprint_1_def
 
             if (denied)
 
-                MessageBox.Show("Inloggen mislukt gebruiker is denied");
+                MessageBox.Show("Inloggen mislukt gebruiker is geweigerd.");
             else
                 UserActive(status);
 
