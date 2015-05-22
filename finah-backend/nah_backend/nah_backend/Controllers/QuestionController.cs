@@ -101,6 +101,22 @@ namespace nah_backend.Controllers
         /// This POST api function will allow the user of the API to
         /// get the next question a client has to fill in.
         /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>The next unanswered question of the client, or null if the client does not exist or has no remaining unanswered questions.</returns>
+        [AllowAnonymous]
+        [Route("api/question/Next")]
+        public Question Next(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return questionDBNext(client);
+        }
+
+        // POST api/question/Next
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// get the next question a client has to fill in.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>The next unanswered question of the client, or null if the client does not exist or has no remaining unanswered questions.</returns>
         [AllowAnonymous]
@@ -216,6 +232,24 @@ namespace nah_backend.Controllers
         /// last answer. To return to the previous question: call 
         /// api/question/NextQuestion after calling this API function.
         /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>True if the database was successfully updated, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/question/PreviousQuestion")]
+        public bool PreviousQuestion(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return PreviousQuestion(client);
+        }
+
+        // POST api/question/PreviousQuestion
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// return to the client's previous question by invalidating his
+        /// last answer. To return to the previous question: call 
+        /// api/question/NextQuestion after calling this API function.
+        /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>True if the database was successfully updated, false otherwise.</returns>
         [AllowAnonymous]
@@ -226,17 +260,16 @@ namespace nah_backend.Controllers
         }
 
         /// <summary>
-        /// This function will allow the user of the API to
-        /// set a client's start bit.
+        /// This function will invalidate
+        /// the client's last answer.
         /// </summary>
         /// <param name="client">The Client containing an id-hash combination.</param>
         /// <returns>True if the client was successfully updated, false otherwise.</returns>
         private bool questionDBPreviousQuestion(Client client)
         {
-            if(clientDBExists(client))
+            if(!clientDBExists(client))
                 return false;
             
-
             // Open connection and set parameters
             SqlConnection connection = DatabaseAccessProvider.GetConnection();
             SqlCommand insertCommand = new SqlCommand(_qPrevious, connection);
@@ -291,6 +324,23 @@ namespace nah_backend.Controllers
 
             // If the client does not exist, we return false
             return false;
+        }
+
+        // POST api/question/Image
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// return the image of a question.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <param name="qid">The id of the question.</param>
+        /// <returns>The image if the question exists and the client has access to it, null otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/question/Image")]
+        public byte[] Image(int id, string hash, int qid)
+        {
+            CLID clid = new CLID(new Client(id, hash), qid);
+            return Image(clid);
         }
 
         // POST api/question/Image
@@ -391,6 +441,22 @@ namespace nah_backend.Controllers
             }
                 
             return output;
+        }
+
+        // POST api/question/AllAnswered
+        /// <summary>
+        /// This POST api function will allow the user of the API to
+        /// check if all questions of a client have been answered or not.
+        /// </summary>
+        /// <param name="id">The id of the client.</param>
+        /// <param name="hash">The hash of the client.</param>
+        /// <returns>True if the client exists and has answered all questions, false otherwise.</returns>
+        [AllowAnonymous]
+        [Route("api/question/AllAnswered")]
+        public bool AllAnswered(int id, string hash)
+        {
+            Client client = new Client(id, hash);
+            return AllAnswered(client);
         }
 
         // POST api/question/AllAnswered

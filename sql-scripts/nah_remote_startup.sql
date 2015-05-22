@@ -93,7 +93,8 @@ CREATE TABLE form (
   category varchar(100) DEFAULT NULL,
   relation varchar(100) DEFAULT NULL,
   completed bit,
-  checkedreport bit
+  checkedreport bit,
+  repeats int DEFAULT 0
 );
 
 
