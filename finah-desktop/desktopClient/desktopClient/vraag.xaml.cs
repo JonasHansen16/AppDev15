@@ -277,7 +277,7 @@ namespace sprint_1_def
         {
             
             
-            StreamWriter userWriter = new StreamWriter("../../users/1.txt", true);
+            StreamWriter userWriter = new StreamWriter("../../users/"+_client.Id+".txt", true);
 
             userWriter.WriteLine(answer.QuestionId);
             userWriter.WriteLine(answer.Score);
@@ -289,7 +289,7 @@ namespace sprint_1_def
         private void GetQuestionList()
         {
             Question question = new Question();
-            StreamReader reader = new StreamReader("../../questions/Questionnaire.txt", true);
+            StreamReader reader = new StreamReader("../../questions/Questionnaire"+_client.Id+".txt", true);
             while (!reader.Peek().Equals(""))
             {
                 
@@ -339,7 +339,7 @@ namespace sprint_1_def
         {
 
 
-            StreamWriter userWriter = new StreamWriter("/../../Questions/Questionnaire.txt", true);
+            StreamWriter userWriter = new StreamWriter("/../../Questions/Questionnaire"+_client.Id+".txt", true);
             for (int i = 0; i < allQuestions.Questions.Count; i++)
             {
                 userWriter.WriteLine(allQuestions.Questions[i].Id);

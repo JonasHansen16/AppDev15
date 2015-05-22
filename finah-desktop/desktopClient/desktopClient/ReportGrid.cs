@@ -16,13 +16,9 @@ namespace sprint_1_def
         public int Id { get; set; }
         public bool Valid { get; set; }
 
-        public ReportGrid(string theme, int score1, bool hulp1, int score2, bool hulp2)
+        public ReportGrid()
         {
-            Theme = theme;
-            Score1 = score1;
-            Score2 = score2;
-            Help1 = hulp1;
-            Help2 = hulp2;
+            
 
         } 
 
