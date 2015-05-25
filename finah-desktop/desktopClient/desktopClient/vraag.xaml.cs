@@ -266,10 +266,22 @@ namespace sprint_1_def
                     result = checkresponse.Content.ReadAsAsync<bool>().Result;
                     if (result == true)
                     {
-                        MessageBox.Show("Vragenlijst succesvol afgerond");
-                        var window = new login();
-                        window.Show();
-                        this.Close();
+                        HttpResponseMessage doneResponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SetDone"].ConnectionString, _client);
+                        result = doneResponse.Content.ReadAsAsync<bool>().Result;
+                        if (result)
+                        {
+                            MessageBox.Show("Vragenlijst succesvol afgerond");
+                            var window = new login();
+                            window.Show();
+                            this.Close();
+                        }
+                        else
+                        {
+                            MessageBox.Show("Probleem met vervolledigen vragenlijst");
+                            var window = new login();
+                            window.Show();
+                            this.Close();
+                        }
                     }
                     else
                     {
