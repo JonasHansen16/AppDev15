@@ -102,22 +102,27 @@ namespace sprint_1_def
             confirmButton.IsEnabled = true;
 
             //antwoorden in answer zetten, 6 en 7 staan voor de antwoorden op hulpvraag
-            if (selectedAnswer == 6)
-            {
-                _allAnswers[currentQuestion].Help = false;
-                
-            }
-            else if (selectedAnswer == 7)
-            {
-                _allAnswers[currentQuestion].Help = true;
-                
-            }
-            else
-                _allAnswers[currentQuestion].Score = selectedAnswer;
+         
 
 
             if (b.Background != System.Windows.Media.Brushes.Purple)
                 changeAnswersToBeginState(b);
+            if (selectedAnswer == 6)
+            {
+                _allAnswers[currentQuestion].Help = true;
+
+            }
+            else if (selectedAnswer == 7)
+            {
+                _allAnswers[currentQuestion].Help = false;
+
+            }
+            else
+            {
+                _allAnswers[currentQuestion].Score = selectedAnswer;
+                _allAnswers[currentQuestion].Help = false;
+                noButton.Background = System.Windows.Media.Brushes.Purple;
+            }
 
             b.Background = System.Windows.Media.Brushes.Purple;
 
