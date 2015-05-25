@@ -74,6 +74,7 @@ namespace sprint_1_def
            
 
             currentQuestion = 0;
+            
 
             loadQuestion();
         }
@@ -98,6 +99,7 @@ namespace sprint_1_def
             }
 
             b.Focusable = false;
+            confirmButton.IsEnabled = true;
 
             //antwoorden in answer zetten, 6 en 7 staan voor de antwoorden op hulpvraag
             if (selectedAnswer == 6)
@@ -155,6 +157,7 @@ namespace sprint_1_def
             HttpResponseMessage response =  ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetImage"].ConnectionString, clid );
             byteImage = response.Content.ReadAsAsync<byte[]>().Result;
             questionImage.Source = ByteToImage(byteImage);
+            confirmButton.IsEnabled = false;
             
 
         }
