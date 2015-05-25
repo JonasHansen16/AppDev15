@@ -84,32 +84,34 @@ namespace sprint_1_def
             Button b = ((Button)e.Source);
             int selectedAnswer = 0;
             
+            
             //achterhalen welk antwoord geselecteerd is
             for (int i = 0; i < 7; i++)
             {
                 if (buttons[i] == b)
                 {
-                    answer.Score = i + 1;
+                    
                     selectedAnswer = i + 1;
+                    
                     i = 7;
                 }
             }
 
-            
+            b.Focusable = false;
 
             //antwoorden in answer zetten, 6 en 7 staan voor de antwoorden op hulpvraag
             if (selectedAnswer == 6)
             {
-                answer.Help = false;
+                _allAnswers[currentQuestion].Help = false;
                 
             }
             else if (selectedAnswer == 7)
             {
-                answer.Help = true;
+                _allAnswers[currentQuestion].Help = true;
                 
             }
             else
-                answer.Score = selectedAnswer;
+                _allAnswers[currentQuestion].Score = selectedAnswer;
 
 
             if (b.Background != System.Windows.Media.Brushes.Purple)
@@ -140,27 +142,11 @@ namespace sprint_1_def
 
             changeAnswersToBeginState(null);
 
-            if (currentAnswer != 0) //als er voor die vraag nog niks is ingevuld
-            {
-                buttons[currentAnswer - 1].Background = System.Windows.Media.Brushes.Purple;
-            }
-            else
-                helpStackPanel.Visibility = Visibility.Hidden;
-
-            if (currentHelpAnswer == false)
-            {
-                yesButton.Background = System.Windows.Media.Brushes.Purple;
-                helpStackPanel.Visibility = Visibility.Visible;
-            }
-            else if (currentHelpAnswer == true)
-            {
-                noButton.Background = System.Windows.Media.Brushes.Purple;
-                helpStackPanel.Visibility = Visibility.Visible;
-            }
+           
 
             //ophalen van vraaginhoud
             byte[] byteImage;
-            questionNumberTextBlock.Content = "Vraag " + allQuestions.Questions[currentQuestion].Id + allQuestions.Questions.Count;
+            questionNumberTextBlock.Content = "Vraag " + allQuestions.Questions[currentQuestion].Id+"/" + allQuestions.Questions.Count;
             questionTextBlock.Text = allQuestions.Questions[currentQuestion].Text;
             CLID clid = new CLID();
             clid.CL = _client;
@@ -178,6 +164,7 @@ namespace sprint_1_def
         {
 
             SolidColorBrush brush = new SolidColorBrush(System.Windows.Media.Color.FromRgb(56, 63, 228));
+            helpStackPanel.Visibility = Visibility.Hidden;
 
             if (sender != yesButton && sender != noButton)
             {
@@ -227,81 +214,85 @@ namespace sprint_1_def
         private void confirmButton_Click(object sender, RoutedEventArgs e)
         {
             writeAnswerToTextFile();
-            if (currentQuestion < allQuestions.Questions.Count-1)
+            _allAnswers[currentQuestion].QuestionId = allQuestions.Questions[currentQuestion].Id;
+            
+        
+
+            if (currentQuestion == allQuestions.Questions.Count -1)
             {
-                answer.QuestionId = allQuestions.Questions[currentQuestion].Id;
-                _allAnswers.Add(answer);
-                currentQuestion++;               
-                answer = new Answer();
-                loadQuestion();
+                bool result;
+                List<Answer> finalAllAnswers = new List<Answer>();
+                Answer currentAnswer = new Answer();
+                string path;
+                path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Answers");
+                path = System.IO.Path.Combine(path, _client.Id + ".txt");
 
-                if (currentQuestion == allQuestions.Questions.Count-1)
+                string[] all = System.IO.File.ReadAllLines(path);
+                int j = 0;
+
+
+
+                CLANL clanl = new CLANL();
+                clanl.ANL = _allAnswers;
+                clanl.CL = _client;
+                HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendAnswers"].ConnectionString, clanl);
+                result = response.Content.ReadAsAsync<bool>().Result;
+
+
+
+
+
+
+                if (result == false)
                 {
-                    bool result;
-                    List<Answer> finalAllAnswers = new List<Answer>();
-                    Answer currentAnswer = new Answer();
-                    string path;
-                    path = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "nah\\Answers");
-                    path = System.IO.Path.Combine(path, _client.Id + ".txt");
-                    
-                    string[] all = System.IO.File.ReadAllLines(path);
-                    int j =0;
-                    
-
-
-                    CLANL clanl = new CLANL();
-                    clanl.ANL = _allAnswers;
-                    clanl.CL = _client;
-                    HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendAnswers"].ConnectionString, clanl);
-                    result = response.Content.ReadAsAsync<bool>().Result;
-                    
-
-                   
-
-                   
-
-                    if (result == false)
+                    MessageBox.Show("Fout opgetreden tijdens het wegschrijven van de antwoorden naar de database");
+                    var window = new login();
+                    window.Show();
+                    this.Close();
+                }
+                else
+                {
+                    if (File.Exists(path))
+                        File.Delete(path);
+                    HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, _client);
+                    result = checkresponse.Content.ReadAsAsync<bool>().Result;
+                    if (result == true)
                     {
-                        MessageBox.Show("Fout opgetreden tijdens het wegschrijven van de antwoorden naar de database");
+                        MessageBox.Show("Vragenlijst succesvol afgerond");
                         var window = new login();
                         window.Show();
                         this.Close();
                     }
                     else
                     {
-                        if(File.Exists(path))
-                        File.Delete(path);
-                        HttpResponseMessage checkresponse = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["CheckAllAnswered"].ConnectionString, _client);
-                        result = checkresponse.Content.ReadAsAsync<bool>().Result;
-                        if (result == true)
-                        {
-                            var window = new login();
-                            window.Show();
-                            this.Close();
-                        }
-                        else
-                        {
-                            HttpResponseMessage checkresponse2 = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAllUnanswered"].ConnectionString, _client);
-                            allQuestions.Questions = checkresponse2.Content.ReadAsAsync<List<Question>>().Result;
-                            currentQuestion = 0;
-                            loadQuestion();
-                            _allAnswers = new List<Answer>();
-                            answer = new Answer();
-                        }
-
+                        HttpResponseMessage checkresponse2 = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["GetAllUnanswered"].ConnectionString, _client);
+                        allQuestions.Questions = checkresponse2.Content.ReadAsAsync<List<Question>>().Result;
+                        currentQuestion = 0;
+                        loadQuestion();
+                        _allAnswers = new List<Answer>();
+                        answer = new Answer();
                     }
-                    confirmButton.Content = "Bevestig vragenlijst";
+                    
 
 
                     
                 }
 
             }
-            else
+            if (currentQuestion < allQuestions.Questions.Count - 1)
             {
-                questionGrid.Visibility = Visibility.Hidden;
-                succesStackPanel.Visibility = Visibility.Visible;
+
+                currentQuestion++;
+                answer = new Answer();
+                _allAnswers.Add(answer);
+                loadQuestion();
+
+
+
+
+
             }
+            
 
         }
 
