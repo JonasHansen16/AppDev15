@@ -92,6 +92,7 @@ namespace sprint_1_def
                 NextButton.IsEnabled = true;
 
             List<GridForm> gridForm = new List<GridForm>();
+            _forms = new List<Form>();
             USST usst = new USST();
             usst.US = user;
             usst.ST = currentPage * 10;
@@ -180,7 +181,7 @@ namespace sprint_1_def
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Fout Opgetreden" + ex);
+               
             }
             
                 
@@ -247,7 +248,16 @@ namespace sprint_1_def
             List<GridForm> gridForm = new List<GridForm>();
             for (int i = 0; i < _forms.Count; i++)
             {
+                
                 GridForm form = new GridForm(_forms[i].Id, _forms[i].Memo, _forms[i].Category, _forms[i].Relation, _forms[i].Completed);
+                if (_forms[i].ClientList.Count < 2) 
+                {
+                    form.C_Leeftijd = 10;
+                    form.C_Ingevuld = true;
+                    form.M_Ingevuld = true;
+                    form.M_Leeftijd = 10;
+                }
+               
                 for (int j = 0; j < _forms[i].ClientList.Count; j++)
                 {
                     if (_forms[i].ClientList[j].Function == "Client")
@@ -264,7 +274,7 @@ namespace sprint_1_def
                 gridForm.Add(form);
 
             }
-
+            
             formsGrid.ItemsSource = gridForm;
         }
 
@@ -274,7 +284,7 @@ namespace sprint_1_def
         private void RepeatFormButton_Click(object sender, RoutedEventArgs e)
         {
             USFO usfo = new USFO();
-            bool flag;
+            bool flag = false;
             try
             {
                 DataRowView Grdrow = ((FrameworkElement)sender).DataContext as DataRowView;
@@ -284,21 +294,24 @@ namespace sprint_1_def
                 HttpResponseMessage response = ApiConnection.genericRequest(System.Configuration.ConfigurationManager.ConnectionStrings["SendRepeat"].ConnectionString, usfo);
                 flag = response.Content.ReadAsAsync<bool>().Result;
 
-                if (!flag)
-                {
-                    MessageBox.Show("Fout opgetreden tijdens operatie");
-                }
-                else
-                {
-                    LoadForms(currentPage);
-                    LoadGrid();
-                }
+               
             }
 
             catch (Exception ex)
             {
                 MessageBox.Show("Error opgetreden tijdens connectie met de database " + ex);
             }
+
+            if (!flag)
+            {
+                MessageBox.Show("Fout opgetreden tijdens operatie");
+            }
+            else
+            {
+                LoadForms(currentPage);
+                LoadGrid();
+            }
+
        
         }
 

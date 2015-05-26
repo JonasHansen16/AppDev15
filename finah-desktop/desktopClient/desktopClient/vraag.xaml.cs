@@ -427,6 +427,18 @@ namespace sprint_1_def
         {
             MessageBox.Show("Geen connectie met de database");
         }
+
+        private void BackButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Close Application?", "Question", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+            {
+                //do no stuff
+            }
+            else
+            {
+                //do yes stuff
+            }
+        }
     }
 
 

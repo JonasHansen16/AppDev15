@@ -12,8 +12,8 @@
                 <Button x:Name="registerButton" Content="Registreren" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" RenderTransformOrigin="0.137,0.28" Canvas.Left="39" Canvas.Top="214" Click="registerButton_Click"/>
                 <PasswordBox x:Name="PasswordTextBox" HorizontalAlignment="Left" Height="23" VerticalAlignment="Top" Width="120" Canvas.Left="308" Canvas.Top="117" TabIndex="1"/>
                 <TextBox x:Name="logintextbox" HorizontalAlignment="Left" Height="23" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="308" Canvas.Top="66" TabIndex="0"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="120" Canvas.Top="73"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="139" Canvas.Top="124"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="120" Canvas.Top="73"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="139" Canvas.Top="124"/>
                 <Button x:Name="logInButton" Content="Login" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="413" Canvas.Top="214" Click="logInButton_Click"/>
             </Canvas>
         </GroupBox>

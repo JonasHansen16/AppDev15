@@ -11,14 +11,14 @@
             <Canvas Margin="103,28,97,23">
                 <TextBox x:Name="VoornaamTextBox" PreviewTextInput="nummers_PreviewTextInput" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="20" TabIndex="0" LostFocus="firstnamevalidation"/>
                 <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Voornaam:" VerticalAlignment="Top" Canvas.Left="75" Canvas.Top="30" PreviewTextInput="nummers_PreviewTextInput"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Achternaam:" VerticalAlignment="Top" Canvas.Left="64" Canvas.Top="69"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="61" Canvas.Top="107"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Achternaam:" VerticalAlignment="Top" Canvas.Left="64" Canvas.Top="69"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Wachtwoord:" VerticalAlignment="Top" Canvas.Left="61" Canvas.Top="107"/>
                 <PasswordBox x:Name="textBoxWachtwoord2" HorizontalAlignment="Left" Height="23"  VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="140" LostFocus="passwordvalidation" TabIndex="3"/>
                 <PasswordBox x:Name="textboxWachtwoord" HorizontalAlignment="Left" Height="23"  VerticalAlignment="Top" Width="120" Canvas.Left="178" Canvas.Top="100" TabIndex="2" LostFocus="passwordvalidation"/>
                 <TextBox x:Name="AchternaamTextBox" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" Canvas.Left="179" Canvas.Top="59" TabIndex="1" LostFocus="lastnamevalidation"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Wachtwoord Herhalen:" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="147"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Emailadres:" VerticalAlignment="Top" Canvas.Left="73" Canvas.Top="187"/>
-                <TextBlock HorizontalAlignment="Left" TextWrapping="Wrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="45" Canvas.Top="229"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Wachtwoord Herhalen:" VerticalAlignment="Top" Canvas.Left="10" Canvas.Top="147"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Emailadres:" VerticalAlignment="Top" Canvas.Left="73" Canvas.Top="187"/>
+                <TextBlock HorizontalAlignment="Left" TextWrapping="NoWrap" Text="Gebruikersnaam:" VerticalAlignment="Top" Canvas.Left="45" Canvas.Top="229"/>
 
                 <Button x:Name="aanvraagButton" Content="Aanvraag indienen" HorizontalAlignment="Left" VerticalAlignment="Top" Width="121" Canvas.Left="177" Canvas.Top="373" Click="aanvraagButton_Click" TabIndex="8"/>
                 <TextBox x:Name="EmailTextBox1" HorizontalAlignment="Left" Height="23" TextWrapping="NoWrap" Text="" VerticalAlignment="Top" Width="120" RenderTransformOrigin="1.373,8.878" Canvas.Left="178" Canvas.Top="177" TabIndex="4" LostFocus="emailvalidation"/>

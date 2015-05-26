@@ -28,7 +28,6 @@
                 </StackPanel>
             </Border>
             <Image x:Name="questionImage" Margin="711,100,99,212"/>
-            <Button x:Name="restartButton" Content="Herstart vragenlijst" Height="40" Margin="24,36,753,371" Click="restartButton_Click" Foreground="White" Background="#FFBFBFBF"/>
             <Button x:Name="answer1Button" Content="Verloopt &#10;naar wens" Height="90" Margin="68,164,792,193" Background="LightGray" Foreground="#FFFDF4F4" HorizontalContentAlignment="Center" VerticalAlignment="Center" Padding="7" Width="90" Tag="1" Click="selectAnswer"/>
             <Label x:Name="questionNumberTextBlock" Content="Vraag 1/20" Height="40" Margin="689,36,160,371"  FontSize="16" Foreground="White"/>
             <Button x:Name="confirmButton" Content="Bevestig" HorizontalAlignment="Left" Margin="822,412,0,-26" VerticalAlignment="Top" Width="128" Height="61" Click="confirmButton_Click"/>

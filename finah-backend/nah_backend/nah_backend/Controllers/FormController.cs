@@ -42,7 +42,7 @@ namespace nah_backend.Controllers
             "AND questionlist.qid = question.id " +
             ";";
 
-        private string _qFormInsert = "INSERT INTO form (airid, userid, memo, category, relation, completed, checkedreport) VALUES (@Aid, @Userid, @Memo, @Category, @Relation, 0, 0);";
+        private string _qFormInsert = "INSERT INTO form (airid, userid, memo, category, relation, completed, checkedreport,  repeats) VALUES (@Aid, @Userid, @Memo, @Category, @Relation, 0, 0,  @Repeat);";
 
         private string _qLatestForm = "SELECT TOP(1) id FROM form WHERE userid = @Uid ORDER BY id DESC;";
 
@@ -99,6 +99,15 @@ namespace nah_backend.Controllers
 
             // If the user has access to the form, we get its data
             Form fo = getForm(usfo.FO.Id);
+            // We also get its clients
+            fo.ClientList = clientsDB(usfo.FO.Id);
+            // We generate new hashes for the clients
+            for (int i = 0; i < fo.ClientList.Count; i++)
+            {
+                fo.ClientList[i].Hash = generateHash();
+                clientDBInsertMod(fo.ClientList[i]);
+
+            }
             // If for some reason the form was not found, we return false            
             if (fo == null)
                 return false;
@@ -764,6 +773,7 @@ namespace nah_backend.Controllers
             insertCommand.Parameters.AddWithValue("@Memo", toInsert.Memo);
             insertCommand.Parameters.AddWithValue("@Category", toInsert.Category);
             insertCommand.Parameters.AddWithValue("@Relation", toInsert.Relation);
+            insertCommand.Parameters.AddWithValue("@Repeat", toInsert.Repeats);
             
             SqlCommand selectCommand = new SqlCommand(_qLatestForm, connection);
             selectCommand.Parameters.AddWithValue("@Uid", uid);
