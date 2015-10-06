@@ -22,7 +22,7 @@ namespace Imagesazure
             {
                 SqlCommand insertCommand = new SqlCommand(_qImageInsert, client);
                 insertCommand.Parameters.AddWithValue("@Img", GetImage(i));
-                insertCommand.Parameters.AddWithValue("@id", i);
+                insertCommand.Parameters.AddWithValue("@id", i + 3);
                 insertCommand.ExecuteNonQuery();
             }
             
